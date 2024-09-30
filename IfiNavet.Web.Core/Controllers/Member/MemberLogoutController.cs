@@ -23,6 +23,7 @@ public class LogoutController : RenderController
     /// <summary>
     /// Hijacks the route and signs out the user
     /// </summary>
+    /// <exception cref="NotImplementedException">Should never be used async index() will always take priority</exception>
     /// <returns>Root page</returns>
     [NonAction]
     public sealed override IActionResult Index() => throw new NotImplementedException();
