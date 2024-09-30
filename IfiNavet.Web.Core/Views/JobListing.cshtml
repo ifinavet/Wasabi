@@ -1,0 +1,73 @@
+@inherits UmbracoViewPage<IfiNavet.Web.Core.ViewModels.JobListings.JobListingViewModel>;
+@{
+    Layout = "master.cshtml";
+
+    JobListing jobListing = Model.JobListing;
+}
+
+<h1 class="center primary">@Umbraco.GetDictionaryValue("jobListing")</h1>
+<div class="container margin-bottom--large">
+    <div class="row natural-height">
+        <div class="col-xs-12 col-md-8 card">
+            <h2 class="job-title primary center">@Model.Company.Name</h2>
+            <div class="row center-xs">
+                <div class="col-xs-6 col-sm-5 event-meta job-meta">
+                    <span class="icon-clock2 icon-large"></span>
+                    <span class="sr-only">@Umbraco.GetDictionaryValue("jobApplicationDeadline")</span>
+                    <span>@jobListing.Deadline.ToShortDateString()</span>
+                </div>
+                <div class="col-xs-6 col-sm-5 event-meta job-meta">
+                    <div class="job-type-icon job-type-icon--@jobListing.JobType.ToLower()"></div>
+                    <span class="sr-only">@Umbraco.GetDictionaryValue("jobType")</span>
+                    <span>@Umbraco.GetDictionaryValue(jobListing.JobType)</span>
+                </div>
+            </div>
+            <a class="btn btn--accent" href="@jobListing.ApplicationUrl">@Umbraco.GetDictionaryValue("jobApplyCTA")</a>
+            <div class="spacer"></div>
+            @jobListing.JobDescription
+        </div>
+        <aside class="col-xs-12 col-sm-6 col-md-4">
+            <div class="company-card">
+                <div class="company-photo">
+                    <div class="round-frame">
+                        <img src="@Model.Company.CompanyLogo.Url()" alt="@Model.Company.Name">
+                    </div>
+                </div>
+                <div class="company-info">
+                    <h2>@Model.Company.Name</h2>
+                    <p>@Model.Company.CompanyDescription</p>
+                </div>
+                <h2 class="h3">
+                    @Umbraco.GetDictionaryValue("jobContactHeader")
+                </h2>
+                <div class="job-listing-contact-list">
+                    <ul>
+                        @foreach (ContactInfo? item in jobListing.ContactInfo)
+                        {
+                            <li class="contact-item">
+                                <div>
+                                    <strong>@item.ContactName</strong>
+                                </div>
+                                <div>
+                                    <a href="mailto:@item.EMail">@item.EMail</a>
+                                </div>
+                                <div>
+                                    <a href="tel:@item.ContactPhoneNumber">@item.ContactPhoneNumber</a>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </aside>
+    </div>
+</div>
+
+@if (Model.JobListings?.Hits?.Any() == true)
+{
+    <div class="container">
+        <h2 class="primary">@Umbraco.GetDictionaryValue("jobRelatedHeader") @Model.Company.Name</h2>
+        <div class="spacer"></div>
+        @await Html.PartialAsync("JobListings/JobListingsSearchResult", Model.JobListings)
+    </div>
+}

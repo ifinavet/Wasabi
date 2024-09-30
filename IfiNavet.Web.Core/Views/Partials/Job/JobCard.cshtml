@@ -1,0 +1,23 @@
+@inherits UmbracoViewPage<JobListing>
+@{
+    Company? employer = Model.Employer as Company;
+    string logoUrl = employer.CompanyLogo.Url();
+}
+
+<div class="job-card">
+    <div class="job-card-top">
+        <div class="job-type job-type--@Model.JobType?.ToLower()">@Umbraco.GetDictionaryValue(Model.JobType ?? string.Empty)</div>
+        <div class="job-company-logo">
+            <img src="@logoUrl" alt="@employer?.Name">
+        </div>
+    </div>
+    <div class="job-card-bottom">
+        <div>
+            <h3 class="job-title">@Model.Name</h3>
+            <div class="job-teaser">
+                <p>@Model.JobTeaser</p>
+            </div>
+        </div>
+        <a href="@Model.Url()" class="btn">@Umbraco.GetDictionaryValue("jobReadMore")</a>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+@inherits UmbracoViewPage;
+@{
+    Layout = null;
+
+    var navetLogo = Model.Root().Value<Image>("Logo")!;
+}
+
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>@Model.Name</title>
+    @await RenderSectionAsync("Head", false)
+</head>
+<body>
+<!-- Header -->
+<header>
+    <div class="nav-wrapper">
+        <div class="nav-bar">
+            <a class="logo" href="/">
+                <img src="@navetLogo.Url()" alt="@navetLogo.AlternativeText"/>
+            </a>
+            <nav class="navigation" id="menu">
+                @await Html.PartialAsync("Navigation")
+            </nav>
+        </div>
+    </div>
+</header>
+
+<!-- Body -->
+<main id="app">
+    @RenderBody()
+</main>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-information container footer-split">
+        <div>
+            @Model.Root().Value("FooterInformation")
+        </div>
+        <div class="footer-link">
+            <a href="/personvernerklaering">Personvernerklæring</a>
+            <a href="/vedtekter">Vedtekter</a>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

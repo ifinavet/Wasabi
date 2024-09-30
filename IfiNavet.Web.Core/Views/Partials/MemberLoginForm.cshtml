@@ -1,0 +1,44 @@
+@inherits UmbracoViewPage<IfiNavet.Web.Core.ViewModels.MemberLoginViewModel>
+@using IfiNavet.Web.Core.Controllers.Member
+@model IfiNavet.Web.Core.ViewModels.MemberLoginViewModel
+
+@using (Html.BeginUmbracoForm<MemberLoginController>(nameof(MemberLoginController.Submit)))
+{
+    @Html.ValidationSummary(true)
+
+    <div class="form-input">
+        @Html.LabelFor(m => m.LoginName, Umbraco.GetDictionaryValue("memberEmailUsername"), new { name = "username", @class = "form-label" })
+        @Html.TextBoxFor(m => m.LoginName)
+        @Html.ValidationMessageFor(m => m.LoginName)
+    </div>
+    <div class="form-input">
+        @Html.LabelFor(m => m.Password, Umbraco.GetDictionaryValue("password"), new { name = "password", @class = "form-label" })
+        @if (Model.ResetPassword != null)
+        {
+            <a href="@Model.ResetPassword.Url()">
+                @Umbraco.GetDictionaryValue("memberForgotPassword")
+            </a>
+        }
+        @Html.PasswordFor(m => m.Password)
+        @Html.ValidationMessageFor(m => m.Password)
+    </div>
+
+    if (Model.SignUp != null)
+    {
+        <a href="@Model.SignUp.Url()">
+            @Model.SignUp.Name?
+        </a>
+    }
+
+    <div class="form-input">
+        <button id="login-submit"
+                type="submit"
+                class="btn">
+            @Umbraco.GetDictionaryValue("login")
+        </button>
+        @if (TempData["Status"] != null)
+        {
+            <p class="form-validation-error">@TempData["Status"]</p>
+        }
+    </div>
+}

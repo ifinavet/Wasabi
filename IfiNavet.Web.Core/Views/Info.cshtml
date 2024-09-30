@@ -1,0 +1,43 @@
+@inherits UmbracoViewPage<Info>
+@{
+    Layout = "master.cshtml";
+
+    StudentMember contactPerson = (StudentMember)Model.ContactPerson!;
+}
+
+<div class="container">
+    <h1 class="primary center">@Model.Title</h1>
+    <div class="row">
+        <div class="col-xs-12 col-md-8 card">
+            @Model.Main
+        </div>
+        <div class="col-xs-12 col-sm-8 col-md-4">
+            <aside>
+                @if (Model.ContactPerson != null)
+                {
+                    <div class="contact-card contact-card--big">
+                        <div class="contact-photo">
+                            <div class="round-frame">
+                                @if (contactPerson.ProfileImage != null)
+                                {
+                                    <img src="@contactPerson.ProfileImage.Url()" alt="@contactPerson.Name @Umbraco.GetDictionaryValue("contactProfileImage")" />
+                                }
+                            </div>
+                        </div>
+                        <div class="contact-personalia">
+                            <h2>@contactPerson.NavetVerv</h2>
+                            <p>@contactPerson.Name</p>
+                            <a href="mailto:@Model.ContactPerson.Value("email")">@Model.ContactPerson.Value("email")</a>
+                        </div>
+                    </div>
+                }
+                @foreach (EditorialBlock asideContent in Model.SidebarContent)
+                {
+                    <div class="content-aside">
+                        @asideContent.Content
+                    </div>
+                }
+            </aside>
+        </div>
+    </div>
+</div>
