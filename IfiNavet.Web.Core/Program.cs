@@ -1,3 +1,4 @@
+using IfiNavet.Web.Core.Services.Events;
 using IfiNavet.Web.Core.Services.JobListings;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,8 +20,10 @@ builder.Services
         options.Cookie.HttpOnly = true;
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     })
-    .AddTransient<IJobListingSearchService, JobListingSearchService>();
+    .AddTransient<IJobListingSearchService, JobListingSearchService>()
+    .AddTransient<IEventSearchService, EventSearchService>();
 
+    
 var app = builder.Build();
 
 await app.BootUmbracoAsync();
