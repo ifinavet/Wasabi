@@ -11,4 +11,9 @@ public class StartPageViewModel : PublishedContentWrapped
     }
 
     public StartPage StartPageModel { get; set; }
+    public Company? Partner { get; set; }
+    
+    public JobListing[] JobListings { get; set; }
+    
+    public Event[] Events { get; set; }
 }

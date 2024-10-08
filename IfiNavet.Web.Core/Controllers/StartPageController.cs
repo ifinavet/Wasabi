@@ -1,7 +1,10 @@
+using IfiNavet.Web.Core.Services.Events;
+using IfiNavet.Web.Core.Services.JobListings;
 using IfiNavet.Web.Core.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.Common.Controllers;
 using Umbraco.Cms.Web.Common.PublishedModels;
@@ -11,23 +14,40 @@ namespace IfiNavet.Web.Core.Controllers;
 public class StartPageController : RenderController
 {
     private readonly IPublishedValueFallback _publishedValueFallback;
+    private readonly IJobListingSearchService _jobListingSearchService;
+    private readonly IEventSearchService _eventSearchService;
 
     public StartPageController(
         ILogger<RenderController> logger,
         ICompositeViewEngine compositeViewEngine,
         IUmbracoContextAccessor umbracoContextAccessor,
-        IPublishedValueFallback publishedValueFallback)
+        IPublishedValueFallback publishedValueFallback,
+        IJobListingSearchService jobListingSearchService,
+        IEventSearchService eventSearchService)
         : base(logger, compositeViewEngine, umbracoContextAccessor)
     {
         _publishedValueFallback = publishedValueFallback;
+        _jobListingSearchService = jobListingSearchService;
+        _eventSearchService = eventSearchService;
     }
     
     public override IActionResult Index()
     {
-        var startPageModel = new StartPage(CurrentPage!, _publishedValueFallback);
-        var startPageViewModel = new StartPageViewModel(CurrentPage!, _publishedValueFallback)
+        StartPage startPageModel = new StartPage(CurrentPage!, _publishedValueFallback);
+        
+        // Fetches job listings based on query. Returns all if query is empty
+        JobListing[] hits = _jobListingSearchService.GetJobListings("").OfType<JobListing>().Where(x => x.IsVisible())
+            .OrderBy(x => x.Deadline).Take(3).ToArray();
+        
+        // TODO! FIX
+        Event[] events = _eventSearchService.GetAllEvents().OfType<Event>().Where(x => x.IsVisible()).ToArray();
+        
+        StartPageViewModel startPageViewModel = new StartPageViewModel(CurrentPage!, _publishedValueFallback)
         {
-            StartPageModel = startPageModel
+            StartPageModel = startPageModel,
+            Partner = (Company)startPageModel.Partner,
+            JobListings = hits,
+            Events = events
         };
 
         return CurrentTemplate(startPageViewModel);
