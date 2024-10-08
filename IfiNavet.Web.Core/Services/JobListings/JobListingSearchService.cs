@@ -23,10 +23,8 @@ public class JobListingSearchService(
     public IEnumerable<IPublishedContent?> GetJobListings(string queryString)
     {
         if (!examineManager.TryGetIndex(Constants.UmbracoIndexes.ExternalIndexName, out IIndex? index))
-        {
             throw new InvalidOperationException(
                 $"No index found with name {Constants.UmbracoIndexes.ExternalIndexName}");
-        }
 
         IBooleanOperation? query = index
             .Searcher

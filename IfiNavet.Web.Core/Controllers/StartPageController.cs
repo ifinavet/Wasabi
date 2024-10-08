@@ -39,7 +39,6 @@ public class StartPageController : RenderController
         JobListing[] hits = _jobListingSearchService.GetJobListings("").OfType<JobListing>().Where(x => x.IsVisible())
             .OrderBy(x => x.Deadline).Take(3).ToArray();
         
-        // TODO! FIX
         Event[] events = _eventSearchService.GetAllEvents().OfType<Event>().Where(x => x.IsVisible()).ToArray();
         
         StartPageViewModel startPageViewModel = new StartPageViewModel(CurrentPage!, _publishedValueFallback)
