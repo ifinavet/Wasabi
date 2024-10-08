@@ -7,6 +7,11 @@ namespace Ifinavet.Web.Core.CustomIndexing;
 
 public class ConfigureExternalIndexOptions : IConfigureNamedOptions<LuceneDirectoryIndexOptions>
 {
+    /// <summary>
+    /// Updates all eventDates fields to be a DateTime type instead of default text
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="options"></param>
     public void Configure(string name, LuceneDirectoryIndexOptions options)
     {
         if (name.Equals(Constants.UmbracoIndexes.ExternalIndexName))
@@ -15,6 +20,11 @@ public class ConfigureExternalIndexOptions : IConfigureNamedOptions<LuceneDirect
         }
     }
 
+    /// <summary>
+    /// Not needed to update field type
+    /// </summary>
+    /// <param name="options"></param>
+    /// <exception cref="NotImplementedException"></exception>
     public void Configure(LuceneDirectoryIndexOptions options)
     {
         throw new System.NotImplementedException();
