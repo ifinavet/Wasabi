@@ -3,7 +3,7 @@ using Examine.Lucene;
 using Microsoft.Extensions.Options;
 using Umbraco.Cms.Core;
 
-namespace Ifinavet.Web.Core.CustomIndexing;
+namespace Ifinavet.Web.Core.Helpers.CustomIndexing;
 
 public class ConfigureExternalIndexOptions : IConfigureNamedOptions<LuceneDirectoryIndexOptions>
 {
@@ -21,7 +21,7 @@ public class ConfigureExternalIndexOptions : IConfigureNamedOptions<LuceneDirect
     }
 
     /// <summary>
-    /// Not needed to update field type
+    /// Not needed inorder to update the field type
     /// </summary>
     /// <param name="options"></param>
     /// <exception cref="NotImplementedException"></exception>
