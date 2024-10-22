@@ -1,16 +1,15 @@
 @inherits UmbracoViewPage<IfiNavet.Web.Core.ViewModels.StartPageViewModel>
 @{
     Layout = "master.cshtml";
-
     StartPage data = Model.StartPageModel;
     Company? partner = Model.Partner;
-    JobListing[] upcomingJobs = Model.JobListings;
-    Event[] upcomingEvents = Model.Events[..3];
+    JobListing[] upcomingJobs = Model.JobListings[..Math.Min(3, Model.JobListings.Length)]; // Getting upcoming jobs, allowing upto 3, but if less then just show them
+    Event[] upcomingEvents = Model.Events[..Math.Min(3, Model.Events.Length)]; // Allow upto 3 events, but allow less
 }
 
 <!-- Event carousel -->
 <div>
-    @foreach(Event upcomingEvent in upcomingEvents)
+    @foreach (Event upcomingEvent in upcomingEvents)
     {
         <p>@upcomingEvent.Name, @upcomingEvent.EventDate</p>
     }
@@ -22,9 +21,9 @@
         <div class="row">
             @foreach (JobListing job in upcomingJobs)
             {
-            <div class="">
-                @{ await Html.RenderPartialAsync("Job/JobCard", job); }
-            </div>
+                <div class="">
+                    @{ await Html.RenderPartialAsync("Job/JobCard", job); }
+                </div>
             }
         </div>
         <div class="row center">
@@ -40,9 +39,6 @@
     <div class="container">
         <div class="row">
             <div class="about-content col-xs-12 col-sm-8">
-                <style>
-                    div.task:before { content: attr(data-task-owner)"'s task - " ; }
-                </style>
                 @data.About
             </div>
         </div>
@@ -72,7 +68,6 @@
 }
 
 <!-- Board members -->
-
 <div class="board-members">
     <div class="board-members board-members-header">
         <div class="container">
@@ -83,7 +78,7 @@
         @{
             foreach (StudentMember member in data.BoardMembers)
             {
-                string memberEmail = (member.Value("Email") ?? "") as string ?? string.Empty;
+                string memberEmail = (string)member.Value("Email") ?? String.Empty;
                 string memberImg = (member.ProfileImage ?? Umbraco.Media(1303)!).Url();
                 <div class="board-member col-xs-12 col-sm-4 col-md-3">
                     <div class="board-member-photo">

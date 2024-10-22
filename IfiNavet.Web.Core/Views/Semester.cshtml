@@ -1,5 +1,32 @@
+@inherits UmbracoViewPage<IfiNavet.Web.Core.ViewModels.SemesterViewModel>
 @{
     Layout = "master.cshtml";
+
+    string initalMonth = DateTime.Now.ToString("MM");
+    IGrouping<string, Event>[] months = Model.MonthGroups;
+    if (months != null && months.All(m => m.Key != initalMonth))
+    {
+        initalMonth = months.First().Key;
+    }
 }
 
-<h1>Semester</h1>
+@if (months == null)
+{
+    <p>Det er foreløpig ingen arrangementer</p>
+}
+else
+{
+    @foreach (IGrouping<string,Event> month in months)
+    {
+        var style = initalMonth == month.Key ? "red" : "inital"; // Testing
+        <h1 style="color: @style">@month.Key</h1>
+        @foreach(var element in month)
+        {
+            <p>@element.Name</p>
+            <p>@element.EventDate</p>
+            <a href=@element.Url()>Til arrangement</a>
+        }
+    }
+}
+
+

@@ -37,7 +37,7 @@ public class StartPageController : RenderController
         
         // Fetches job listings based on query. Returns all if query is empty
         JobListing[] hits = _jobListingSearchService.GetJobListings("").OfType<JobListing>().Where(x => x.IsVisible())
-            .OrderBy(x => x.Deadline).Take(3).ToArray();
+            .OrderBy(x => x.Deadline).ToArray();
         
         Event[] events = _eventSearchService.GetAllEvents().OfType<Event>().Where(x => x.IsVisible()).ToArray();
         

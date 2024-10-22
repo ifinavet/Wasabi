@@ -20,8 +20,8 @@ builder.Services
         options.Cookie.HttpOnly = true;
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     })
-    .AddTransient<IJobListingSearchService, JobListingSearchService>()
-    .AddTransient<IEventSearchService, EventSearchService>();
+    .AddTransient<IJobListingSearchService, JobListingSearchService>() // Adding the job filter and search
+    .AddTransient<IEventSearchService, EventSearchService>(); // Adding events filter and search
 
     
 var app = builder.Build();
