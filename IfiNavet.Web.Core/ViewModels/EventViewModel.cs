@@ -16,6 +16,6 @@ public class EventViewModel : Event
     public int AmountOfAttendees { get; set; }
     public bool IsCurrentMemberAttending { get; set; }
     public Company HostingCompany { get; set; }
-    public StudentMember[] Organizers { get; set; }
-    public string ExternalURL { get; set; }
+    public StudentMember?[]? Organizers { get; set; }
+    public string ExternalUrl { get; set; }
 }

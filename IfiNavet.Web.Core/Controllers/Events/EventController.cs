@@ -27,7 +27,7 @@ public class EventController : RenderController
         IUmbracoContextAccessor umbracoContextAccessor,
         IPublishedValueFallback publishedValueFallback,
         IMemberManager memberManager,
-        IJobListingSearchService IJobListingSearchService,
+        IJobListingSearchService jobListingSearchService,
         IVariationContextAccessor variationContextAccessor,
         ServiceContext serviceContext,
         IContentService contentService
@@ -35,33 +35,51 @@ public class EventController : RenderController
         : base(logger, compositeViewEngine, umbracoContextAccessor)
     {
         _publishedValueFallback = publishedValueFallback;
-        _jobListingSearchService = IJobListingSearchService;
+        _jobListingSearchService = jobListingSearchService;
         _memberManager = memberManager;
         _serviceContext = serviceContext;
         _variationContextAccessor = variationContextAccessor;
         _contentService = contentService;
     }
-
+    
     [NonAction]
     public sealed override IActionResult Index()
     {
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// Handles the event page.
+    ///
+    /// Making sure the event opens on time
+    /// Checking if current member is registered
+    /// Getting related job listings to the event.
+    /// Getting all the information about the event and organizer 
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns>A viewmodel with the information for the event</returns>
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         Event model = new(CurrentPage!, _publishedValueFallback);
 
         // Auto open registration, adjusted for timezone
         TimeZoneInfo cetZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
-        DateTime dateTimeCET = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, cetZone);
-        bool isRegistrationOpen = model.RegistrationDate > dateTimeCET;
+        DateTime dateTimeCet = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, cetZone);
+        bool isRegistrationOpen = model.RegistrationDate > dateTimeCet;
 
-        // TODO! Check if current member is attending the event.
+        // TODO! OK for now, future figure out how to improve the speed.
+        // Checks if the current member is registered to the event
         MemberIdentityUser? currentMember = await _memberManager.GetCurrentMemberAsync();
+        bool isCurrentMemberAttending = false;
+        if (currentMember != null && isRegistrationOpen)
+        {
+            int currentUserId = int.Parse(currentMember.Id);
+            isCurrentMemberAttending = model.Children<Attendee>()!.Any(a =>
+                a.AttendingMember!.Id == currentUserId);
+        }
 
         // Related job to the event
-        string companyUdi = _contentService.GetById(model.HostingCompany.Id)!.GetUdi().ToString();
+        string companyUdi = _contentService.GetById(model.HostingCompany!.Id)!.GetUdi().ToString();
         IEnumerable<IPublishedContent> relatedJobListing =
             _jobListingSearchService.GetJobListingsByCompanyUdi(companyUdi);
 
@@ -74,10 +92,10 @@ public class EventController : RenderController
                 },
                 IsRegistrationOpen = isRegistrationOpen,
                 AmountOfAttendees = model.Children.Count(),
-                IsCurrentMemberAttending = false, // Temp value
+                IsCurrentMemberAttending = isCurrentMemberAttending,
                 HostingCompany = (Company)model.HostingCompany,
                 Organizers = model.Organizer?.Select(static x => x as StudentMember).ToArray(),
-                ExternalURL = model.ExternalUrl ?? string.Empty
+                ExternalUrl = model.ExternalUrl ?? string.Empty
             };
 
         return CurrentTemplate(viewModel);
