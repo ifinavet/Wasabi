@@ -21,12 +21,16 @@ public class LogoutController : RenderController
     }
 
     /// <summary>
-    /// Hijacks the route and signs out the user
+    ///     Hijacks the route and signs out the user
     /// </summary>
     /// <exception cref="NotImplementedException">Should never be used async index() will always take priority</exception>
     /// <returns>Root page</returns>
     [NonAction]
-    public sealed override IActionResult Index() => throw new NotImplementedException();
+    public sealed override IActionResult Index()
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         await _memberSignInManager.SignOutAsync();

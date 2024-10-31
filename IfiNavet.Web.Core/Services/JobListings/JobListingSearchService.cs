@@ -14,8 +14,8 @@ public class JobListingSearchService(
     : IJobListingSearchService
 {
     /// <summary>
-    /// Fetching job listings based on query.
-    /// If query is empty, returns all published job listings
+    ///     Fetching job listings based on query.
+    ///     If query is empty, returns all published job listings
     /// </summary>
     /// <param name="queryString">Search query</param>
     /// <returns>IEnumerable of the job listings within the specified parameters</returns>
@@ -43,7 +43,7 @@ public class JobListingSearchService(
     }
 
     /// <summary>
-    /// Fetches all job listings by same company
+    ///     Fetches all job listings by same company
     /// </summary>
     /// <param name="companyUdi">Company UDI</param>
     /// <returns>IEnumerable of the job listings</returns>
@@ -63,6 +63,6 @@ public class JobListingSearchService(
             .Execute()
             .Select(x => x.Id);
 
-        foreach (string hit in hits) yield return  umbracoHelper.Content(hit);
+        foreach (string hit in hits) yield return umbracoHelper.Content(hit);
     }
 }

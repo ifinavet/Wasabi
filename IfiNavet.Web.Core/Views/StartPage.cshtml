@@ -78,7 +78,7 @@
         @{
             foreach (StudentMember member in data.BoardMembers)
             {
-                string memberEmail = (string)member.Value("Email") ?? String.Empty;
+                string memberEmail = (string)member.Value("Email") ?? string.Empty;
                 string memberImg = (member.ProfileImage ?? Umbraco.Media(1303)!).Url();
                 <div class="board-member col-xs-12 col-sm-4 col-md-3">
                     <div class="board-member-photo">

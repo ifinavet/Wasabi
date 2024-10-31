@@ -9,15 +9,15 @@
 
 @if (Model is JObject && Model?.sections is not null)
 {
-    var oneColumn = ((ICollection)Model.sections).Count == 1;
+    bool oneColumn = ((ICollection)Model.sections).Count == 1;
 
     <div class="umb-grid">
         @if (oneColumn)
         {
-            foreach (var section in Model.sections)
+            foreach (dynamic? section in Model.sections)
             {
                 <div class="grid-section">
-                    @foreach (var row in section.rows)
+                    @foreach (dynamic? row in section.rows)
                     {
                         renderRow(row);
                     }
@@ -27,11 +27,11 @@
         else
         {
             <div class="row clearfix">
-                @foreach (var sec in Model.sections)
+                @foreach (dynamic? sec in Model.sections)
                 {
                     <div class="grid-section">
                         <div class="col-md-@sec.grid column">
-                            @foreach (var row in sec.rows)
+                            @foreach (dynamic? row in sec.rows)
                             {
                                 renderRow(row);
                             }
@@ -49,11 +49,11 @@
     {
         <div @RenderElementAttributes(row)>
             <div class="row clearfix">
-                @foreach (var area in row.areas)
+                @foreach (dynamic? area in row.areas)
                 {
                     <div class="col-md-@area.grid column">
                         <div @RenderElementAttributes(area)>
-                            @foreach (var control in area.controls)
+                            @foreach (dynamic? control in area.controls)
                             {
                                 if (control?.editor?.view != null)
                                 {
@@ -73,14 +73,14 @@
 
     public static HtmlString RenderElementAttributes(dynamic contentItem)
     {
-        var attrs = new List<string>();
+        List<string> attrs = new List<string>();
         JObject cfg = contentItem.config;
 
         if (cfg != null)
         {
-            foreach (var property in cfg.Properties())
+            foreach (JProperty property in cfg.Properties())
             {
-                var propertyValue = HttpUtility.HtmlAttributeEncode(property.Value.ToString());
+                string propertyValue = HttpUtility.HtmlAttributeEncode(property.Value.ToString());
                 attrs.Add(property.Name + "=\"" + propertyValue + "\"");
             }
         }
@@ -89,10 +89,10 @@
 
         if (style != null)
         {
-            var cssVals = new List<string>();
-            foreach (var property in style.Properties())
+            List<string> cssVals = new List<string>();
+            foreach (JProperty property in style.Properties())
             {
-                var propertyValue = property.Value.ToString();
+                string propertyValue = property.Value.ToString();
                 if (string.IsNullOrWhiteSpace(propertyValue) == false)
                 {
                     cssVals.Add(property.Name + ":" + propertyValue + ";");

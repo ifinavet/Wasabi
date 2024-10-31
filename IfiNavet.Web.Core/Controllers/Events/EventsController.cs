@@ -11,23 +11,22 @@ public class EventsController : RenderController
     private readonly IPublishedValueFallback _publishedValueFallback;
 
     public EventsController(
-        ILogger<RenderController> logger, 
-        ICompositeViewEngine compositeViewEngine, 
+        ILogger<RenderController> logger,
+        ICompositeViewEngine compositeViewEngine,
         IUmbracoContextAccessor umbracoContextAccessor,
         IPublishedValueFallback publishedValueFallback
-        )
+    )
         : base(logger, compositeViewEngine, umbracoContextAccessor)
     {
         _publishedValueFallback = publishedValueFallback;
     }
 
     /// <summary>
-    /// Redirects to current semester
+    ///     Redirects to current semester
     /// </summary>
     public override IActionResult Index()
     {
-        Umbraco.Cms.Web.Common.PublishedModels.Events eventsModel = new Umbraco.Cms.Web.Common.PublishedModels.Events(CurrentPage!, _publishedValueFallback);
+        Umbraco.Cms.Web.Common.PublishedModels.Events eventsModel = new(CurrentPage!, _publishedValueFallback);
         return Redirect(eventsModel.ActiveSemester!.Url());
-        
     }
 }

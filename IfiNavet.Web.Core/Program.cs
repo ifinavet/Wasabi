@@ -1,7 +1,7 @@
 using IfiNavet.Web.Core.Services.Events;
 using IfiNavet.Web.Core.Services.JobListings;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.CreateUmbracoBuilder()
     .AddBackOffice()
@@ -23,8 +23,8 @@ builder.Services
     .AddTransient<IJobListingSearchService, JobListingSearchService>() // Adding the job filter and search
     .AddTransient<IEventSearchService, EventSearchService>(); // Adding events filter and search
 
-    
-var app = builder.Build();
+
+WebApplication app = builder.Build();
 
 await app.BootUmbracoAsync();
 

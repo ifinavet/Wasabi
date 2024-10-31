@@ -15,7 +15,7 @@
                 </a>
                 @foreach (JobTypesFilter jobType in Model.JobTypes)
                 {
-                   <a class="btn @(jobType.IsActive ? "btn--accent" : "btn--primary") btn--inline"
+                    <a class="btn @(jobType.IsActive ? "btn--accent" : "btn--primary") btn--inline"
                        href="?jobType=@jobType.JobTypeAlias&query=@Model.QueryString">
                         @Umbraco.GetDictionaryValue(jobType.JobTypeAlias)
                     </a>

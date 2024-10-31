@@ -16,11 +16,11 @@
 }
 else
 {
-    @foreach (IGrouping<string,Event> month in months)
+    @foreach (IGrouping<string, Event> month in months)
     {
-        var style = initalMonth == month.Key ? "red" : "inital"; // Testing
+        string style = initalMonth == month.Key ? "red" : "inital"; // Testing
         <h1 style="color: @style">@month.Key</h1>
-        @foreach(var element in month)
+        @foreach (Event element in month)
         {
             <p>@element.Name</p>
             <p>@element.EventDate</p>
@@ -28,5 +28,3 @@ else
         }
     }
 }
-
-

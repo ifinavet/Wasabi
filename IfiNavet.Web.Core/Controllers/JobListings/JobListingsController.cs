@@ -1,5 +1,5 @@
-using IfiNavet.Web.Core.ViewModels.JobListings;
 using IfiNavet.Web.Core.Services.JobListings;
+using IfiNavet.Web.Core.ViewModels.JobListings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Umbraco.Cms.Core.Models.PublishedContent;
@@ -27,9 +27,8 @@ public class JobListingsController : RenderController
     }
 
     /// <summary>
-    /// GET: Job listings
-    ///
-    /// Hijacks route to fetch job listings and filter them based on search parameters and job type
+    ///     GET: Job listings
+    ///     Hijacks route to fetch job listings and filter them based on search parameters and job type
     /// </summary>
     /// <param name="query">Search query for job listing</param>
     /// <param name="jobType">Job listings types</param>
@@ -40,7 +39,7 @@ public class JobListingsController : RenderController
         IEnumerable<IPublishedContent> hits = _jobListingSearchService.GetJobListings(query);
         List<JobListing> filteredSearchResult = hits.OfType<JobListing>().ToList();
 
-        JobListingsViewModel viewModel = new JobListingsViewModel(CurrentPage!, _publishedValueFallback)
+        JobListingsViewModel viewModel = new(CurrentPage!, _publishedValueFallback)
         {
             QueryString = query,
             JobTypes = GetJobTypeFilters(filteredSearchResult, jobType),
@@ -60,7 +59,7 @@ public class JobListingsController : RenderController
     }
 
     /// <summary>
-    /// Filters job listings by job types
+    ///     Filters job listings by job types
     /// </summary>
     /// <param name="jobListings"></param>
     /// <param name="activeJobType"></param>

@@ -2,6 +2,7 @@ using IfiNavet.Web.Core.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Cms.Core.Cache;
 using Umbraco.Cms.Core.Logging;
+using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Security;
 using Umbraco.Cms.Core.Services;
@@ -10,6 +11,7 @@ using Umbraco.Cms.Infrastructure.Persistence;
 using Umbraco.Cms.Web.Common;
 using Umbraco.Cms.Web.Common.Security;
 using Umbraco.Cms.Web.Website.Controllers;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace IfiNavet.Web.Core.Controllers.Member;
 
@@ -51,7 +53,7 @@ public class MemberLoginController : SurfaceController
     {
         if (!ModelState.IsValid) return CurrentUmbracoPage();
 
-        var member = _memberService.GetByEmail(model.LoginName) ?? _memberService.GetByUsername(model.LoginName);
+        IMember? member = _memberService.GetByEmail(model.LoginName) ?? _memberService.GetByUsername(model.LoginName);
 
         switch (member)
         {
@@ -64,7 +66,8 @@ public class MemberLoginController : SurfaceController
                 return RedirectToCurrentUmbracoPage();
         }
 
-        var login = await _memberSignInManager.PasswordSignInAsync(member!.Username, model.Password, true, false);
+        SignInResult login =
+            await _memberSignInManager.PasswordSignInAsync(member!.Username, model.Password, true, false);
 
         if (login.Succeeded) return Redirect(redirectURL);
 

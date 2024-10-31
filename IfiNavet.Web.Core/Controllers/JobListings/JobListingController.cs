@@ -1,6 +1,6 @@
 using IfiNavet.Web.Core.Models.JobListings;
-using IfiNavet.Web.Core.ViewModels.JobListings;
 using IfiNavet.Web.Core.Services.JobListings;
+using IfiNavet.Web.Core.ViewModels.JobListings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Umbraco.Cms.Core.Models.PublishedContent;
@@ -32,11 +32,11 @@ public class JobListingController : RenderController
     }
 
     /// <summary>
-    /// Overrides default index to fetch other job listings form same company
+    ///     Overrides default index to fetch other job listings form same company
     /// </summary>
     public override IActionResult Index()
     {
-        JobListing jobListing = new JobListing(CurrentPage!, _publishedValueFallback);
+        JobListing jobListing = new(CurrentPage!, _publishedValueFallback);
 
         string companyUdi = _contentService.GetById(jobListing.Employer.Id).GetUdi().ToString();
 
@@ -51,7 +51,7 @@ public class JobListingController : RenderController
                 .ToList();
 
 
-        JobListingViewModel viewModel = new JobListingViewModel(CurrentPage!, _publishedValueFallback)
+        JobListingViewModel viewModel = new(CurrentPage!, _publishedValueFallback)
         {
             JobListing = jobListing,
             Company = jobListing.Employer as Company,

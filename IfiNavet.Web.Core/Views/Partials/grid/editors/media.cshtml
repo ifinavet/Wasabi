@@ -5,7 +5,7 @@
 
 @if (Model?.value is not null)
 {
-    var url = Model.value.image;
+    dynamic? url = Model.value.image;
 
     if (Model.editor.config != null && Model.editor.config.size != null)
     {
@@ -49,7 +49,7 @@
         }
     }
 
-    var altText = Model.value.altText ?? Model.value.caption ?? string.Empty;
+    dynamic altText = Model.value.altText ?? Model.value.caption ?? string.Empty;
 
     <img src="@url" alt="@altText">
 

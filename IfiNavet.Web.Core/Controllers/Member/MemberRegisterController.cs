@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Cms.Core.Cache;
 using Umbraco.Cms.Core.Logging;
@@ -21,10 +18,10 @@ namespace IfiNavet.Web.Core.Controllers.Member;
 
 public class MemberRegisterController : SurfaceController
 {
+    private readonly ICoreScopeProvider _coreScopeProvider;
     private readonly IMemberManager _memberManager;
     private readonly IMemberService _memberService;
     private readonly IMemberSignInManager _memberSignInManager;
-    private readonly ICoreScopeProvider _coreScopeProvider;
 
     public MemberRegisterController(
         IMemberManager memberManager,
@@ -50,10 +47,7 @@ public class MemberRegisterController : SurfaceController
     [ValidateUmbracoFormRouteString]
     public async Task<IActionResult> HandleRegisterMember([Bind(Prefix = "registerModel")] RegisterModel model)
     {
-        if (ModelState.IsValid == false)
-        {
-            return CurrentUmbracoPage();
-        }
+        if (ModelState.IsValid == false) return CurrentUmbracoPage();
 
         IdentityResult result = await RegisterMemberAsync(model);
         if (result.Succeeded)
@@ -61,10 +55,7 @@ public class MemberRegisterController : SurfaceController
             TempData["FormSuccess"] = true;
 
 
-            if (model.RedirectUrl.IsNullOrWhiteSpace() == false)
-            {
-                return Redirect(model.RedirectUrl!);
-            }
+            if (model.RedirectUrl.IsNullOrWhiteSpace() == false) return Redirect(model.RedirectUrl!);
 
 
             return RedirectToCurrentUmbracoPage();
@@ -75,7 +66,6 @@ public class MemberRegisterController : SurfaceController
 
 
     /// <summary>
-
     /// </summary>
     /// <param name="model">Register member model.</param>
     /// <param name="logMemberIn">Flag for whether to log the member in upon successful registration.</param>
@@ -85,14 +75,11 @@ public class MemberRegisterController : SurfaceController
         using ICoreScope scope = _coreScopeProvider.CreateCoreScope(autoComplete: true);
 
 
-        if (string.IsNullOrEmpty(model.Name) && string.IsNullOrEmpty(model.Email) == false)
-        {
-            model.Name = model.Email;
-        }
+        if (string.IsNullOrEmpty(model.Name) && string.IsNullOrEmpty(model.Email) == false) model.Name = model.Email;
 
         model.Username = model.UsernameIsEmail || model.Username == null ? model.Email : model.Username;
 
-        var identityUser =
+        MemberIdentityUser identityUser =
             MemberIdentityUser.CreateNew(model.Username, model.Email, model.MemberTypeAlias, true, model.Name);
         IdentityResult identityResult = await _memberManager.CreateAsync(
             identityUser,
@@ -100,25 +87,17 @@ public class MemberRegisterController : SurfaceController
 
         if (identityResult.Succeeded)
         {
-
             IMember? member = _memberService.GetByKey(identityUser.Key);
             if (member == null)
-            {
-
                 throw new InvalidOperationException($"Could not find a member with key: {member?.Key}.");
-            }
 
-            foreach (MemberPropertyModel property in model.MemberProperties.Where(p => p.Value != null).Where(property => member.Properties.Contains(property.Alias)))
-            {
+            foreach (MemberPropertyModel property in model.MemberProperties.Where(p => p.Value != null)
+                         .Where(property => member.Properties.Contains(property.Alias)))
                 member.Properties[property.Alias]?.SetValue(property.Value);
-            }
 
             _memberService.Save(member);
 
-            if (logMemberIn)
-            {
-                await _memberSignInManager.SignInAsync(identityUser, false);
-            }
+            if (logMemberIn) await _memberSignInManager.SignInAsync(identityUser, false);
         }
 
         return identityResult;

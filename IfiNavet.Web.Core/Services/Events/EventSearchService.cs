@@ -28,8 +28,8 @@ public class EventSearchService(
                 ["eventDate"],
                 DateTime.Today,
                 DateTime.MaxValue,
-                minInclusive: true,
-                maxInclusive: false)
+                true,
+                false)
             .OrderBy(new SortableField("eventDate", SortType.Long));
 
         IEnumerable<string> ids = query.Execute().Select(x => x.Id);
