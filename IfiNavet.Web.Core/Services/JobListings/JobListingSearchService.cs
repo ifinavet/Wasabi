@@ -63,6 +63,6 @@ public class JobListingSearchService(
             .Execute()
             .Select(x => x.Id);
 
-        foreach (string hit in hits) yield return umbracoHelper.Content(hit);
+        foreach (string hit in hits) yield return  umbracoHelper.Content(hit);
     }
 }

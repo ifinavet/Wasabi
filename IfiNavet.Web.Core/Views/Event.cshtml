@@ -1,7 +1,13 @@
-@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Event>
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<IfiNavet.Web.Core.ViewModels.EventViewModel>
 
 @{
     Layout = "master.cshtml";
 }
 
 <h1>@Model.Name</h1>
+
+<div class="container">
+    <h2 class="primary">@Umbraco.GetDictionaryValue("jobRelatedHeader") @Model.HostingCompany.Name</h2>
+    <div class="spacer"></div>
+    @await Html.PartialAsync("JobListings/JobListingsSearchResult", Model.JobListings)
+</div>

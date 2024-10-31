@@ -7,7 +7,8 @@ using Umbraco.Cms.Core.Security;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.Common.Controllers;
 using Umbraco.Cms.Web.Common.PublishedModels;
-using IfiNavet.Web.Core.Models;
+using IfiNavet.Web.Core.Models.JobListings;
+using Umbraco.Cms.Core.Services;
 
 namespace IfiNavet.Web.Core.Controllers.Events;
 
@@ -16,18 +17,29 @@ public class EventController : RenderController
     private readonly IPublishedValueFallback _publishedValueFallback;
     private readonly IJobListingSearchService _jobListingSearchService;
     private readonly IMemberManager _memberManager;
+    private readonly ServiceContext _serviceContext;
+    private readonly IVariationContextAccessor _variationContextAccessor;
+    private readonly IContentService _contentService;
 
     public EventController(
         ILogger<RenderController> logger,
         ICompositeViewEngine compositeViewEngine,
         IUmbracoContextAccessor umbracoContextAccessor,
         IPublishedValueFallback publishedValueFallback,
-        IMemberManager memberManager
+        IMemberManager memberManager,
+        IJobListingSearchService IJobListingSearchService,
+        IVariationContextAccessor variationContextAccessor,
+        ServiceContext serviceContext,
+        IContentService contentService
     )
         : base(logger, compositeViewEngine, umbracoContextAccessor)
     {
         _publishedValueFallback = publishedValueFallback;
+        _jobListingSearchService = IJobListingSearchService;
         _memberManager = memberManager;
+        _serviceContext = serviceContext;
+        _variationContextAccessor = variationContextAccessor;
+        _contentService = contentService;
     }
 
     [NonAction]
@@ -42,10 +54,17 @@ public class EventController : RenderController
         bool isRegistrationOpen = model.RegistrationDate > dateTimeCET;
 
         MemberIdentityUser? currentMember = await _memberManager.GetCurrentMemberAsync();
+
+        // Related job to the event
+        var companyUdi = _contentService.GetById(model.HostingCompany.Id)!.GetUdi().ToString();
+        var relatedJobListing = _jobListingSearchService.GetJobListingsByCompanyUdi(companyUdi);
         
-        EventViewModel viewModel = new EventViewModel()
+        EventViewModel viewModel = new EventViewModel(CurrentPage!, new PublishedValueFallback(_serviceContext, _variationContextAccessor))
         {
-            JobListings = null,
+            JobListings = new JobListingsSearchResultModel
+            {
+                Hits = relatedJobListing.ToList()
+            },
             IsRegistrationOpen = isRegistrationOpen,
             AmountOfAttendees = model.Children.Count(),
             IsCurrentMemberAttending = false, // Temp value
@@ -54,6 +73,6 @@ public class EventController : RenderController
             ExternalURL = model.ExternalUrl ?? string.Empty,
         };
 
-        return CurrentTemplate(CurrentPage);
+        return CurrentTemplate(viewModel);
     }
 }

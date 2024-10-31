@@ -63,11 +63,9 @@
     </div>
 </div>
 
-@if (Model.JobListings?.Hits?.Any() == true)
-{
-    <div class="container">
-        <h2 class="primary">@Umbraco.GetDictionaryValue("jobRelatedHeader") @Model.Company.Name</h2>
-        <div class="spacer"></div>
-        @await Html.PartialAsync("JobListings/JobListingsSearchResult", Model.JobListings)
-    </div>
-}
+
+<div class="container">
+    <h2 class="primary">@Umbraco.GetDictionaryValue("jobRelatedHeader") @Model.Company.Name</h2>
+    <div class="spacer"></div>
+    @await Html.PartialAsync("JobListings/JobListingsSearchResult", Model.JobListings)
+</div>
