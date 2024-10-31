@@ -14,6 +14,10 @@ using Umbraco.Cms.Web.Common.Security;
 using Umbraco.Cms.Web.Website.Controllers;
 using Umbraco.Cms.Web.Website.Models;
 
+//
+// TODO! Implement member registration
+//
+
 namespace IfiNavet.Web.Core.Controllers.Member;
 
 public class MemberRegisterController : SurfaceController

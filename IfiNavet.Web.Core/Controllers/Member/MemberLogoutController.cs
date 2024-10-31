@@ -31,6 +31,11 @@ public class LogoutController : RenderController
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    ///     Signs out the member
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns>Redirects the user to the landing page</returns>
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         await _memberSignInManager.SignOutAsync();

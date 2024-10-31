@@ -49,12 +49,12 @@ public class EventController : RenderController
     }
 
     /// <summary>
-    /// Handles the event page.
+    ///     Handles the event page.
     ///
-    /// Making sure the event opens on time
-    /// Checking if current member is registered
-    /// Getting related job listings to the event.
-    /// Getting all the information about the event and organizer 
+    ///     Making sure the event opens on time
+    ///     Checking if current member is registered
+    ///     Getting related job listings to the event.
+    ///     Getting all the information about the event and organizer 
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns>A viewmodel with the information for the event</returns>

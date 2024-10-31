@@ -25,7 +25,11 @@ public class SemesterController : RenderController
         _publishedValueFallback = publishedValueFallback;
         _umbracoHelper = umbracoHelper;
     }
-
+    
+    /// <summary>
+    ///     Gets the events for the semester, sorts them and groups them by month
+    /// </summary>
+    /// <returns>Viewmodel with all the events for the semeste</returns>
     public override IActionResult Index()
     {
         IGrouping<string, Event>[]? monthGroups = _umbracoHelper.Content(CurrentPage!.Id)?.Children.OfType<Event>()
