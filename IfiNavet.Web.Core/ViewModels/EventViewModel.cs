@@ -6,9 +6,6 @@ namespace IfiNavet.Web.Core.ViewModels;
 
 public class EventViewModel : Event
 {
-    private IPublishedContent? currentPage;
-    private PublishedValueFallback publishedValueFallback;
-
     public EventViewModel(IPublishedContent content, IPublishedValueFallback publishedValueFallback) : base(content, publishedValueFallback)
     {
     }

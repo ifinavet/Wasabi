@@ -53,6 +53,7 @@ public class EventController : RenderController
         DateTime dateTimeCET = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, cetZone);
         bool isRegistrationOpen = model.RegistrationDate > dateTimeCET;
 
+        // TODO! Check if current member is attending the event.
         MemberIdentityUser? currentMember = await _memberManager.GetCurrentMemberAsync();
 
         // Related job to the event
@@ -68,8 +69,8 @@ public class EventController : RenderController
             IsRegistrationOpen = isRegistrationOpen,
             AmountOfAttendees = model.Children.Count(),
             IsCurrentMemberAttending = false, // Temp value
-            HostingCompany = model.HostingCompany as Company,
-            Organizers = model.Organizer?.Select(x => x as StudentMember).ToArray(),
+            HostingCompany = (Company)model.HostingCompany,
+            Organizers = model.Organizer?.Select(static x => x as StudentMember).ToArray(),
             ExternalURL = model.ExternalUrl ?? string.Empty,
         };
 
