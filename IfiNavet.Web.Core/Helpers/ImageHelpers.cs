@@ -1,16 +1,19 @@
 using Umbraco.Cms.Core.Models.PublishedContent;
-using Umbraco.Cms.Web.Common.PublishedModels;
 using Umbraco.Cms.Web.Common;
+using Umbraco.Cms.Web.Common.PublishedModels;
 
 namespace IfiNavet.Web.Core.Helpers;
 
 public class ImageHelpers
 {
     private static UmbracoHelper UmbracoHelper => StaticServiceProvider.Instance.GetRequiredService<UmbracoHelper>();
+
     public static string GetProfileImageUrl(StudentMember studentMember, string? cropAlias = null)
     {
         if (studentMember.ProfileImage != null)
-            return (cropAlias != null ? studentMember.ProfileImage.GetCropUrl(cropAlias) : studentMember.ProfileImage.MediaUrl())!;
+            return (cropAlias != null
+                ? studentMember.ProfileImage.GetCropUrl(cropAlias)
+                : studentMember.ProfileImage.MediaUrl())!;
 
         IPublishedContent? placeHolder = UmbracoHelper.Media(Guid.Parse("2b4de618-f422-42ea-ad55-c499b2777dfb"));
         return placeHolder != null ? placeHolder.MediaUrl() : "data:,";

@@ -35,7 +35,7 @@ public class EventController : RenderController
         _memberManager = memberManager;
         _contentService = contentService;
     }
-    
+
     [NonAction]
     public sealed override IActionResult Index()
     {
@@ -44,11 +44,10 @@ public class EventController : RenderController
 
     /// <summary>
     ///     Handles the event page.
-    ///
     ///     Making sure the event opens on time
     ///     Checking if current member is registered
     ///     Getting related job listings to the event.
-    ///     Getting all the information about the event and organizer 
+    ///     Getting all the information about the event and organizer
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns>A viewmodel with the information for the event</returns>
@@ -78,16 +77,16 @@ public class EventController : RenderController
             _jobListingSearchService.GetJobListingsByCompanyUdi(companyUdi);
 
         EventViewModel viewModel = new(CurrentPage!, _publishedValueFallback)
+        {
+            JobListings = new JobListingsSearchResultModel
             {
-                JobListings = new JobListingsSearchResultModel
-                {
-                    Hits = relatedJobListing.ToList()
-                },
-                IsRegistrationOpen = isRegistrationOpen,
-                AmountOfAttendees = model.Children.Count(),
-                IsCurrentMemberAttending = isCurrentMemberAttending,
-                Organizers = model.Organizer?.Select(static x => x as StudentMember).ToArray(),
-            };
+                Hits = relatedJobListing.ToList()
+            },
+            IsRegistrationOpen = isRegistrationOpen,
+            AmountOfAttendees = model.Children.Count(),
+            IsCurrentMemberAttending = isCurrentMemberAttending,
+            Organizers = model.Organizer?.Select(static x => x as StudentMember).ToArray()
+        };
 
         return CurrentTemplate(viewModel);
     }

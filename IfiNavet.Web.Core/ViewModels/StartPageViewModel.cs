@@ -9,7 +9,7 @@ public class StartPageViewModel : StartPage
         : base(content, publishedValueFallback)
     {
     }
-    
+
     public Company? Partner { get; set; }
 
     public JobListing[] JobListings { get; set; }

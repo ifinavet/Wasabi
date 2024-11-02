@@ -10,7 +10,6 @@ using Umbraco.Cms.Core.Security;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Infrastructure.Persistence;
-using Umbraco.Cms.Web.Common.Filters;
 using Umbraco.Cms.Web.Common.Security;
 using Umbraco.Cms.Web.Website.Controllers;
 
@@ -41,7 +40,6 @@ public class MemberRegisterController : SurfaceController
     }
 
     /// <summary>
-    ///     
     /// </summary>
     /// <param name="model">Register member model.</param>
     /// <returns>Result of registration operation.</returns>
@@ -102,9 +100,9 @@ public class MemberRegisterController : SurfaceController
 
             if (domain == "ifinavet.no")
                 _memberService.AssignRole(member.Id, "NavetEventAdmins");
-            
+
             _memberService.Save(member);
-            
+
             // TODO! Send email to registrant to confirm email inorder to verify new member
 
             TempData["success"] = true;

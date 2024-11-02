@@ -73,7 +73,7 @@
 
     public static HtmlString RenderElementAttributes(dynamic contentItem)
     {
-        List<string> attrs = new List<string>();
+        List<string> attrs = new();
         JObject cfg = contentItem.config;
 
         if (cfg != null)
@@ -89,7 +89,7 @@
 
         if (style != null)
         {
-            List<string> cssVals = new List<string>();
+            List<string> cssVals = new();
             foreach (JProperty property in style.Properties())
             {
                 string propertyValue = property.Value.ToString();

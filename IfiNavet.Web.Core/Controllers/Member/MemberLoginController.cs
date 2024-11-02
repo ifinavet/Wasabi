@@ -7,7 +7,6 @@ using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Infrastructure.Persistence;
-using Umbraco.Cms.Web.Common.PublishedModels;
 using Umbraco.Cms.Web.Common.Security;
 using Umbraco.Cms.Web.Website.Controllers;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
@@ -16,8 +15,8 @@ namespace IfiNavet.Web.Core.Controllers.Member;
 
 public class MemberLoginController : SurfaceController
 {
-    private readonly IMemberSignInManager _memberSignInManager;
     private readonly IMemberService _memberService;
+    private readonly IMemberSignInManager _memberSignInManager;
 
     public MemberLoginController(
         IUmbracoContextAccessor umbracoContextAccessor,
@@ -36,7 +35,6 @@ public class MemberLoginController : SurfaceController
 
     /// <summary>
     ///     Logs member inn
-    ///
     ///     Checks if member is approved
     ///     Checks if member is banned
     /// </summary>

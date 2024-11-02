@@ -25,7 +25,7 @@ public class SemesterController : RenderController
         _publishedValueFallback = publishedValueFallback;
         _umbracoHelper = umbracoHelper;
     }
-    
+
     /// <summary>
     ///     Gets the events for the semester, sorts them and groups them by month
     /// </summary>
