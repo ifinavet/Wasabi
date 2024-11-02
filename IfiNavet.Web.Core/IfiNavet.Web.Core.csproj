@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Dyfort.Umbraco.AutoImageOptimize" Version="2.0.1" />
         <PackageReference Include="Umbraco.Cms" Version="13.5.2"/>
     </ItemGroup>
 
@@ -19,7 +20,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Helpers\"/>
         <Folder Include="Models\Generated\"/>
         <Folder Include="Views\Events\"/>
         <Folder Include="wwwroot\umbraco\assets\"/>
