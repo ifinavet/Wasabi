@@ -1,0 +1,19 @@
+@using IfiNavet.Web.Core.ViewModels
+@using Umbraco.Cms.Core.Security;
+@inject IMemberManager MemberManager;
+
+@{
+    Layout = "master.cshtml";
+}
+
+@if (MemberManager.IsLoggedIn())
+{
+    <p>Du er allerede logget inn med en bruker</p>
+    <p>
+        <a href="/logout/">Log ut</a>
+    </p>
+}
+else
+{
+    @await Html.PartialAsync("Member/MemberRegisterForm", new MemberRegisterViewModel())
+}

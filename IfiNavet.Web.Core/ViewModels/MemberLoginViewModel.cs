@@ -5,11 +5,13 @@ namespace IfiNavet.Web.Core.ViewModels;
 
 public class MemberLoginViewModel
 {
-    [Required] public string LoginName { get; set; }
+    [Required(ErrorMessage = "E-post adressen eller brukernavnet mangler.")]
+    public string LoginName { get; set; } = string.Empty;
 
-    [Required] public string Password { get; set; }
+    [Required(ErrorMessage = "Passordet mangler")] 
+    public string Password { get; set; } = string.Empty;
 
-    public IPublishedContent ResetPassword { get; set; }
+    public IPublishedContent ResetPassword { get; set; } 
 
     public IPublishedContent SignUp { get; set; }
 }

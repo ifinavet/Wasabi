@@ -4,11 +4,10 @@ using Umbraco.Cms.Core.Cache;
 using Umbraco.Cms.Core.Logging;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Routing;
-using Umbraco.Cms.Core.Security;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Infrastructure.Persistence;
-using Umbraco.Cms.Web.Common;
+using Umbraco.Cms.Web.Common.PublishedModels;
 using Umbraco.Cms.Web.Common.Security;
 using Umbraco.Cms.Web.Website.Controllers;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
@@ -17,61 +16,66 @@ namespace IfiNavet.Web.Core.Controllers.Member;
 
 public class MemberLoginController : SurfaceController
 {
-    private readonly IMemberManager _memberManager;
-    private readonly IMemberService _memberService;
     private readonly IMemberSignInManager _memberSignInManager;
-    private readonly UmbracoHelper _umbracoHelper;
+    private readonly IMemberService _memberService;
 
     public MemberLoginController(
-        IMemberManager memberManager,
-        IMemberService memberService,
         IUmbracoContextAccessor umbracoContextAccessor,
         IUmbracoDatabaseFactory databaseFactory,
-        UmbracoHelper umbracoHelper,
         ServiceContext services,
         AppCaches appCaches,
         IProfilingLogger profilingLogger,
         IPublishedUrlProvider publishedUrlProvider,
+        IMemberService memberService,
         IMemberSignInManager memberSignInManager)
         : base(umbracoContextAccessor, databaseFactory, services, appCaches, profilingLogger, publishedUrlProvider)
     {
-        _memberManager = memberManager;
-        _memberService = memberService;
         _memberSignInManager = memberSignInManager;
-        _umbracoHelper = umbracoHelper;
+        _memberService = memberService;
     }
 
     /// <summary>
     ///     Logs member inn
+    ///
+    ///     Checks if member is approved
+    ///     Checks if member is banned
     /// </summary>
-    /// <param name="model"></param>
-    /// <returns>Returns member to front page if successful logg inn</returns>
+    /// <param name="model">Model data from the from</param>
+    /// <param name="redirectUrl">Url to page user arrived from</param>
+    /// <returns>Returns member to the page they arrived from if successful logg inn</returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Submit(MemberLoginViewModel model,
-        [FromQuery(Name = "redirectURL")] string redirectURL)
+        [FromQuery(Name = "redirectURL")] string redirectUrl = "/")
     {
         if (!ModelState.IsValid) return CurrentUmbracoPage();
 
-        IMember? member = _memberService.GetByEmail(model.LoginName) ?? _memberService.GetByUsername(model.LoginName);
-
-        switch (member)
-        {
-            case null when model.Password == null:
-                TempData["Status"] = _umbracoHelper.GetDictionaryValue("memberInvalidLogin");
-                return CurrentUmbracoPage();
-            case { IsApproved: false }:
-                TempData["Status"] =
-                    "Før du kan logge inn, må du bekrefte e-postadressen din - sjekk e-posten din for instruksjoner om hvordan du gjør dette. Hvis du ikke finner denne e-posten, kan du bruke funksjonen for glemt passord for å motta en ny e-post.";
-                return RedirectToCurrentUmbracoPage();
-        }
+        string username = model.LoginName.Split("@").First();
 
         SignInResult login =
-            await _memberSignInManager.PasswordSignInAsync(member!.Username, model.Password, true, false);
+            await _memberSignInManager.PasswordSignInAsync(username, model.Password, true, true);
 
-        if (login.Succeeded) return Redirect(redirectURL);
+        if (login.IsNotAllowed)
+        {
+            TempData["Status"] =
+                "Før du kan logge inn, må du bekrefte e-postadressen din - sjekk e-posten din for instruksjoner om hvordan du gjør dette. Hvis du ikke finner denne e-posten, kan du bruke funksjonen for glemt passord for å motta en ny e-post.";
+            return CurrentUmbracoPage();
+        }
 
-        TempData["Status"] = _umbracoHelper.GetDictionaryValue("memberInvalidLogin");
-        return CurrentUmbracoPage();
+        if (!login.Succeeded)
+        {
+            TempData["Status"] = "Brukernavn eller passord er feil!";
+            return CurrentUmbracoPage();
+        }
+
+        IMember currentMember = _memberService.GetByUsername(model.LoginName.Split("@").First())!;
+        if (currentMember.GetValue<bool>("isBanned"))
+        {
+            TempData["Status"] =
+                "Din bruker er blitt utestengt. Du vil ha fått en e-post fra IFI-Navet sitt styre for hvorfor dette har skjedd.";
+            return CurrentUmbracoPage();
+        }
+
+        return Redirect(redirectUrl);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using IfiNavet.Web.Core.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Cms.Core.Cache;
 using Umbraco.Cms.Core.Logging;
@@ -12,11 +13,6 @@ using Umbraco.Cms.Infrastructure.Persistence;
 using Umbraco.Cms.Web.Common.Filters;
 using Umbraco.Cms.Web.Common.Security;
 using Umbraco.Cms.Web.Website.Controllers;
-using Umbraco.Cms.Web.Website.Models;
-
-//
-// TODO! Implement member registration
-//
 
 namespace IfiNavet.Web.Core.Controllers.Member;
 
@@ -25,7 +21,6 @@ public class MemberRegisterController : SurfaceController
     private readonly ICoreScopeProvider _coreScopeProvider;
     private readonly IMemberManager _memberManager;
     private readonly IMemberService _memberService;
-    private readonly IMemberSignInManager _memberSignInManager;
 
     public MemberRegisterController(
         IMemberManager memberManager,
@@ -42,68 +37,82 @@ public class MemberRegisterController : SurfaceController
     {
         _memberManager = memberManager;
         _memberService = memberService;
-        _memberSignInManager = memberSignInManager;
         _coreScopeProvider = coreScopeProvider;
     }
 
+    /// <summary>
+    ///     
+    /// </summary>
+    /// <param name="model">Register member model.</param>
+    /// <returns>Result of registration operation.</returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
-    [ValidateUmbracoFormRouteString]
-    public async Task<IActionResult> HandleRegisterMember([Bind(Prefix = "registerModel")] RegisterModel model)
+    public async Task<IActionResult> Submit(MemberRegisterViewModel model)
     {
-        if (ModelState.IsValid == false) return CurrentUmbracoPage();
+        const string successMessage =
+            "Kontoen din er opprettet, før du logger inn, vennligst sjekk e-posten din og klikk på lenken for å validere kontoen din og fullføre registreringsprosessen.";
 
-        IdentityResult result = await RegisterMemberAsync(model);
-        if (result.Succeeded)
+        if (!ModelState.IsValid)
         {
-            TempData["FormSuccess"] = true;
+            TempData["Status"] = "Se til at du har oppgitt all nødvendig informasjon.";
+            return CurrentUmbracoPage();
+        }
 
 
-            if (model.RedirectUrl.IsNullOrWhiteSpace() == false) return Redirect(model.RedirectUrl!);
+        string[] user = model.Email.Split("@");
+        string username = user.First();
+        string domain = user.Last();
 
-
+        if ((_memberService.GetByEmail(model.Email) ?? _memberService.GetByUsername(username)) != null)
+        {
+            // TODO! Send new email to user to verify account
+            TempData["status"] = successMessage;
             return RedirectToCurrentUmbracoPage();
         }
 
-        return CurrentUmbracoPage();
-    }
+        if (domain != "uio.no" && !domain.EndsWith(".uio.no") && domain != "ifinavet.no")
+        {
+            TempData["Status"] = "Du må registrere deg med en UiO e-post.";
+            return CurrentUmbracoPage();
+        }
 
-
-    /// <summary>
-    /// </summary>
-    /// <param name="model">Register member model.</param>
-    /// <param name="logMemberIn">Flag for whether to log the member in upon successful registration.</param>
-    /// <returns>Result of registration operation.</returns>
-    private async Task<IdentityResult> RegisterMemberAsync(RegisterModel model, bool logMemberIn = true)
-    {
-        using ICoreScope scope = _coreScopeProvider.CreateCoreScope(autoComplete: true);
-
-
-        if (string.IsNullOrEmpty(model.Name) && string.IsNullOrEmpty(model.Email) == false) model.Name = model.Email;
-
-        model.Username = model.UsernameIsEmail || model.Username == null ? model.Email : model.Username;
-
-        MemberIdentityUser identityUser =
-            MemberIdentityUser.CreateNew(model.Username, model.Email, model.MemberTypeAlias, true, model.Name);
+        MemberIdentityUser identityUser = MemberIdentityUser.CreateNew(
+            username,
+            model.Email,
+            "studentMember",
+            false,
+            model.FirstName + " " + model.LastName);
         IdentityResult identityResult = await _memberManager.CreateAsync(
             identityUser,
             model.Password);
 
         if (identityResult.Succeeded)
         {
-            IMember? member = _memberService.GetByKey(identityUser.Key);
-            if (member == null)
-                throw new InvalidOperationException($"Could not find a member with key: {member?.Key}.");
+            IMember member = _memberService.GetByKey(identityUser.Key)!;
 
-            foreach (MemberPropertyModel property in model.MemberProperties.Where(p => p.Value != null)
-                         .Where(property => member.Properties.Contains(property.Alias)))
-                member.Properties[property.Alias]?.SetValue(property.Value);
+            member.SetValue("firstName", model.FirstName);
+            member.SetValue("lastName", model.LastName);
+            member.SetValue("validateGUID", Guid.NewGuid().ToString("N"));
+            member.SetValue("semester", model.Semester);
+            member.SetValue("studieprogram", model.StudyProgram);
+            member.SetValue("preferredLanguage", model.PreferredLanguage);
+            member.SetValue("validateGUIDExpiry", DateTime.Now.AddDays(1));
 
+            _memberService.AssignRole(member.Id, "WebsiteRegistrations");
+
+            if (domain == "ifinavet.no")
+                _memberService.AssignRole(member.Id, "NavetEventAdmins");
+            
             _memberService.Save(member);
+            
+            // TODO! Send email to registrant to confirm email inorder to verify new member
 
-            if (logMemberIn) await _memberSignInManager.SignInAsync(identityUser, false);
+            TempData["success"] = true;
+            TempData["status"] = successMessage;
+            return RedirectToCurrentUmbracoPage();
         }
 
-        return identityResult;
+        TempData["Status"] = "Se til at du har oppgitt all nødvendig informasjon.";
+        return CurrentUmbracoPage();
     }
 }

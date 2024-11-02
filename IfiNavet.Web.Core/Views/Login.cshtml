@@ -3,4 +3,5 @@
     Layout = "master.cshtml";
 }
 
-@await Html.PartialAsync("MemberLoginForm", new MemberLoginViewModel())
+@await Html.PartialAsync("Member/MemberLoginForm", new MemberLoginViewModel())
+<a href="/profil/ny-bruker/">Lag ny bruker</a>

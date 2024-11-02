@@ -1,0 +1,103 @@
+@inherits UmbracoViewPage<IfiNavet.Web.Core.ViewModels.MemberRegisterViewModel>
+@using IfiNavet.Web.Core.Controllers.Member
+@using IfiNavet.Web.Core.Helpers
+@model IfiNavet.Web.Core.ViewModels.MemberRegisterViewModel
+
+
+@if (TempData["Success"] == null)
+{
+    using (Html.BeginUmbracoForm<MemberRegisterController>(nameof(MemberRegisterController.Submit)))
+    {
+        @Html.ValidationSummary(true)
+
+        <h1 class="h2">@Umbraco.GetDictionaryValue("memberSignUp")</h1>
+        
+        <div class="form-input">
+            @Html.LabelFor(
+                m => m.FirstName,
+                Umbraco.GetDictionaryValue("memberFirstname"),
+                new { name = "firstname", @class = "form-label" })
+            @Html.TextBoxFor(m => m.FirstName)
+            @Html.ValidationMessageFor(m => m.FirstName)
+        </div>
+        
+        <div class="form-input">
+            @Html.LabelFor(
+                m => m.LastName,
+                Umbraco.GetDictionaryValue("memberLastname"),
+                new { name = "lastname", @class = "form-label" })
+            @Html.TextBoxFor(m => m.LastName)
+            @Html.ValidationMessageFor(m => m.LastName)
+        </div>
+        
+        <div class="form-input">
+            @Html.LabelFor(
+                m => m.Email,
+                Umbraco.GetDictionaryValue("email"),
+                new { name = "email", @class = "form-label" })
+            @Html.TextBoxFor(m => m.Email)
+            @Html.ValidationMessageFor(m => m.Email)
+        </div>
+        
+        <div class="form-input" role="radiogroup" aria-labelledby="PreferredLanguageLabel">
+            <p class="form-label" id="PreferredLanguageLabel">@Umbraco.GetDictionaryValue("memberPreferredLanguage")</p>
+            @Html.RadioButtonFor(m => m.PreferredLanguage, "english", new { @id = "PreferredLanguageEnglish" })
+            @Html.Label("PreferredLanguageEnglish", Umbraco.GetDictionaryValue("languageEnglish"), new { @class = "form-label" })
+            @Html.RadioButtonFor(m => m.PreferredLanguage, "norwegian", new { @id = "PreferredLanguageNorwegian" })
+            @Html.Label("PreferredLanguageNorwegian", Umbraco.GetDictionaryValue("languageNorwegian"), new { @class = "form-label" })
+            @Html.ValidationMessageFor(m => m.PreferredLanguage)
+        </div>
+
+        <div class="form-input">
+            @Html.LabelFor(m => m.Semester, Umbraco.GetDictionaryValue("memberSemester"), new { name = "Semester", @class = "form-label" })
+            @Html.TextBoxFor(m => m.Semester, new { type = "number", min = "1", max = "10", step = "1", @value = "1" })
+            @Html.ValidationMessageFor(m => m.Semester)
+        </div>
+
+        <div class="form-input">
+            @Html.LabelFor(m => m.StudyProgram, Umbraco.GetDictionaryValue("memberStudyProgram"), new { @class = "form-label" })
+            @Html.DropDownListFor(m => m.StudyProgram, new SelectList(Studieprogram.StudieprogramList))
+            @Html.ValidationMessageFor(m => m.StudyProgram)
+        </div>
+
+        <div class="form-input">
+            @Html.LabelFor(
+                m => m.Password,
+                Umbraco.GetDictionaryValue("password"),
+                new
+                {
+                    name = "passwordLbl",
+                    @class = "form-label"
+                })
+            @Html.PasswordFor(m => m.Password)
+            @Html.ValidationMessageFor(m => m.Password)
+        </div>
+        
+        <div class="form-input">
+            @Html.LabelFor(
+                m => m.ConfirmPassword,
+                Umbraco.GetDictionaryValue("memberRepeatPassword"),
+                new { name = "passwordLbl", @class = "form-label" })
+            @Html.PasswordFor(m => m.ConfirmPassword)
+            @Html.ValidationMessageFor(m => m.ConfirmPassword)
+        </div>
+
+        <p>Når du registrerer en bruker på ifinavet.no så godtar du IFI-Navets <a href="/personvernerklaering" target="_blank">personvernerklæring</a></p>
+
+        <div class="form-input">
+            <button id="register-submit" type="submit" class="btn">
+                @Umbraco.GetDictionaryValue("memberSignUp")
+            </button>
+            @if (TempData["Status"] != null)
+            {
+                <p class="form-validation-error">@TempData["Status"]</p>
+            }
+        </div>
+    }
+}
+else
+{
+    <div class="controls">
+        <p>@TempData["Status"]</p>
+    </div>
+}
