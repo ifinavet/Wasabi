@@ -1,7 +1,7 @@
+@using IfiNavet.Web.Core.Helpers
 @inherits UmbracoViewPage<IfiNavet.Web.Core.ViewModels.StartPageViewModel>
 @{
     Layout = "master.cshtml";
-    StartPage data = Model.StartPageModel;
     Company? partner = Model.Partner;
     JobListing[] upcomingJobs = Model.JobListings[..Math.Min(3, Model.JobListings.Length)]; // Getting upcoming jobs, allowing upto 3, but if less then just show them
     Event[] upcomingEvents = Model.Events[..Math.Min(3, Model.Events.Length)]; // Allow upto 3 events, but allow less
@@ -39,7 +39,7 @@
     <div class="container">
         <div class="row">
             <div class="about-content col-xs-12 col-sm-8">
-                @data.About
+                @Model.About
             </div>
         </div>
     </div>
@@ -76,14 +76,13 @@
     </div>
     <div class="row container">
         @{
-            foreach (StudentMember member in data.BoardMembers)
+            foreach (StudentMember member in Model.BoardMembers)
             {
                 string memberEmail = (string)member.Value("Email") ?? string.Empty;
-                string memberImg = (member.ProfileImage ?? Umbraco.Media(1303)!).Url();
                 <div class="board-member col-xs-12 col-sm-4 col-md-3">
                     <div class="board-member-photo">
                         <div class="round-frame">
-                            <img src="@memberImg" alt="@member.Name" loading="lazy"/>
+                            <img src="@ImageHelpers.GetProfileImageUrl(member, "boardmember")?type=webp" alt="@member.Name" loading="lazy"/>
                         </div>
                     </div>
                     <div class="board-member-personalia">

@@ -1,14 +1,15 @@
+@using IfiNavet.Web.Core.Helpers
 @inherits UmbracoViewPage<JobListing>
+
 @{
-    Company? employer = Model.Employer as Company;
-    string logoUrl = employer.CompanyLogo.Url();
+    Company company = (Model.Employer as Company)!;
 }
 
 <div class="job-card">
     <div class="job-card-top">
         <div class="job-type job-type--@Model.JobType?.ToLower()">@Umbraco.GetDictionaryValue(Model.JobType ?? string.Empty)</div>
         <div class="job-company-logo">
-            <img src="@logoUrl" alt="@employer?.Name">
+            <img src="@ImageHelpers.GetCompanyImageUrl(company)" alt="@company.Name">
         </div>
     </div>
     <div class="job-card-bottom">

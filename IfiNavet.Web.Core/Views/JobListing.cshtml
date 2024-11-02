@@ -1,8 +1,6 @@
 @inherits UmbracoViewPage<IfiNavet.Web.Core.ViewModels.JobListings.JobListingViewModel>;
 @{
     Layout = "master.cshtml";
-
-    JobListing jobListing = Model.JobListing;
 }
 
 <h1 class="center primary">@Umbraco.GetDictionaryValue("jobListing")</h1>
@@ -14,17 +12,17 @@
                 <div class="col-xs-6 col-sm-5 event-meta job-meta">
                     <span class="icon-clock2 icon-large"></span>
                     <span class="sr-only">@Umbraco.GetDictionaryValue("jobApplicationDeadline")</span>
-                    <span>@jobListing.Deadline.ToShortDateString()</span>
+                    <span>@Model.Deadline.ToShortDateString()</span>
                 </div>
                 <div class="col-xs-6 col-sm-5 event-meta job-meta">
-                    <div class="job-type-icon job-type-icon--@jobListing.JobType.ToLower()"></div>
+                    <div class="job-type-icon job-type-icon--@Model.JobType.ToLower()"></div>
                     <span class="sr-only">@Umbraco.GetDictionaryValue("jobType")</span>
-                    <span>@Umbraco.GetDictionaryValue(jobListing.JobType)</span>
+                    <span>@Umbraco.GetDictionaryValue(Model.JobType)</span>
                 </div>
             </div>
-            <a class="btn btn--accent" href="@jobListing.ApplicationUrl">@Umbraco.GetDictionaryValue("jobApplyCTA")</a>
+            <a class="btn btn--accent" href="@Model.ApplicationUrl">@Umbraco.GetDictionaryValue("jobApplyCTA")</a>
             <div class="spacer"></div>
-            @jobListing.JobDescription
+            @Model.JobDescription
         </div>
         <aside class="col-xs-12 col-sm-6 col-md-4">
             <div class="company-card">
@@ -42,7 +40,7 @@
                 </h2>
                 <div class="job-listing-contact-list">
                     <ul>
-                        @foreach (ContactInfo? item in jobListing.ContactInfo)
+                        @foreach (ContactInfo? item in Model.ContactInfo)
                         {
                             <li class="contact-item">
                                 <div>

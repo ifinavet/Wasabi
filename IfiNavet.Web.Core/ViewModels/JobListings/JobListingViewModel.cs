@@ -4,10 +4,13 @@ using Umbraco.Cms.Web.Common.PublishedModels;
 
 namespace IfiNavet.Web.Core.ViewModels.JobListings;
 
-public class JobListingViewModel(IPublishedContent content, IPublishedValueFallback publishedValueFallback)
-    : PublishedContentWrapped(content, publishedValueFallback)
+public class JobListingViewModel : JobListing
 {
+    public JobListingViewModel(IPublishedContent content, IPublishedValueFallback publishedValueFallback)
+        : base(content, publishedValueFallback)
+    {
+    }
+
     public JobListingsSearchResultModel JobListings { get; set; }
-    public JobListing JobListing { get; set; }
     public Company Company { get; set; }
 }

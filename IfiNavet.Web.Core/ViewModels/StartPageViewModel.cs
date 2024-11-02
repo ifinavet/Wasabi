@@ -3,14 +3,13 @@ using Umbraco.Cms.Web.Common.PublishedModels;
 
 namespace IfiNavet.Web.Core.ViewModels;
 
-public class StartPageViewModel : PublishedContentWrapped
+public class StartPageViewModel : StartPage
 {
     public StartPageViewModel(IPublishedContent content, IPublishedValueFallback publishedValueFallback)
         : base(content, publishedValueFallback)
     {
     }
-
-    public StartPage StartPageModel { get; set; }
+    
     public Company? Partner { get; set; }
 
     public JobListing[] JobListings { get; set; }

@@ -18,8 +18,6 @@ public class EventController : RenderController
     private readonly IJobListingSearchService _jobListingSearchService;
     private readonly IMemberManager _memberManager;
     private readonly IPublishedValueFallback _publishedValueFallback;
-    private readonly ServiceContext _serviceContext;
-    private readonly IVariationContextAccessor _variationContextAccessor;
 
     public EventController(
         ILogger<RenderController> logger,
@@ -28,8 +26,6 @@ public class EventController : RenderController
         IPublishedValueFallback publishedValueFallback,
         IMemberManager memberManager,
         IJobListingSearchService jobListingSearchService,
-        IVariationContextAccessor variationContextAccessor,
-        ServiceContext serviceContext,
         IContentService contentService
     )
         : base(logger, compositeViewEngine, umbracoContextAccessor)
@@ -37,8 +33,6 @@ public class EventController : RenderController
         _publishedValueFallback = publishedValueFallback;
         _jobListingSearchService = jobListingSearchService;
         _memberManager = memberManager;
-        _serviceContext = serviceContext;
-        _variationContextAccessor = variationContextAccessor;
         _contentService = contentService;
     }
     
@@ -83,8 +77,7 @@ public class EventController : RenderController
         IEnumerable<IPublishedContent> relatedJobListing =
             _jobListingSearchService.GetJobListingsByCompanyUdi(companyUdi);
 
-        EventViewModel viewModel =
-            new(CurrentPage!, new PublishedValueFallback(_serviceContext, _variationContextAccessor))
+        EventViewModel viewModel = new(CurrentPage!, _publishedValueFallback)
             {
                 JobListings = new JobListingsSearchResultModel
                 {
@@ -93,9 +86,7 @@ public class EventController : RenderController
                 IsRegistrationOpen = isRegistrationOpen,
                 AmountOfAttendees = model.Children.Count(),
                 IsCurrentMemberAttending = isCurrentMemberAttending,
-                HostingCompany = (Company)model.HostingCompany,
                 Organizers = model.Organizer?.Select(static x => x as StudentMember).ToArray(),
-                ExternalUrl = model.ExternalUrl ?? string.Empty
             };
 
         return CurrentTemplate(viewModel);

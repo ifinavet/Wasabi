@@ -1,8 +1,9 @@
+@using Umbraco.Cms.Core.Models
 @inherits UmbracoViewPage;
 @{
     Layout = null;
 
-    Image navetLogo = Model.Root().Value<Image>("Logo")!;
+    MediaWithCrops navetLogo = Model.Root().Value<MediaWithCrops>("Logo")!;
 }
 
 <!DOCTYPE html>
@@ -20,7 +21,7 @@
     <div class="nav-wrapper">
         <div class="nav-bar">
             <a class="logo" href="/">
-                <img src="@navetLogo.Url()" alt="@navetLogo.AlternativeText"/>
+                <img src="@navetLogo.MediaUrl()" alt="Navet Logo"/>
             </a>
             <nav class="navigation" id="menu">
                 @await Html.PartialAsync("Navigation")

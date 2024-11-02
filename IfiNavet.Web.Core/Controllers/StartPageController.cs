@@ -42,7 +42,6 @@ public class StartPageController : RenderController
 
         StartPageViewModel startPageViewModel = new(CurrentPage!, _publishedValueFallback)
         {
-            StartPageModel = startPageModel,
             Partner = (Company)startPageModel.Partner,
             JobListings = hits,
             Events = events

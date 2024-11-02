@@ -16,6 +16,8 @@ public class JobListingController : RenderController
     private readonly IContentService _contentService;
     private readonly IJobListingSearchService _jobListingSearchService;
     private readonly IPublishedValueFallback _publishedValueFallback;
+    private readonly ServiceContext _serviceContext;
+    private readonly IVariationContextAccessor _variationContextAccessor;
 
     public JobListingController(
         ILogger<RenderController> logger,
@@ -23,12 +25,14 @@ public class JobListingController : RenderController
         IUmbracoContextAccessor umbracoContextAccessor,
         IPublishedValueFallback publishedValueFallback,
         IContentService contentService,
-        IJobListingSearchService jobListingSearchService
-    ) : base(logger, compositeViewEngine, umbracoContextAccessor)
+        IJobListingSearchService jobListingSearchService, ServiceContext serviceContext,
+        IVariationContextAccessor variationContextAccessor) : base(logger, compositeViewEngine, umbracoContextAccessor)
     {
         _publishedValueFallback = publishedValueFallback;
         _contentService = contentService;
         _jobListingSearchService = jobListingSearchService;
+        _serviceContext = serviceContext;
+        _variationContextAccessor = variationContextAccessor;
     }
 
     /// <summary>
@@ -38,7 +42,7 @@ public class JobListingController : RenderController
     {
         JobListing jobListing = new(CurrentPage!, _publishedValueFallback);
 
-        string companyUdi = _contentService.GetById(jobListing.Employer.Id).GetUdi().ToString();
+        string companyUdi = _contentService.GetById(jobListing.Employer!.Id)!.GetUdi().ToString();
 
         // Finds job listings by same company
         List<IPublishedContent>? relatedJobListings;
@@ -53,7 +57,6 @@ public class JobListingController : RenderController
 
         JobListingViewModel viewModel = new(CurrentPage!, _publishedValueFallback)
         {
-            JobListing = jobListing,
             Company = jobListing.Employer as Company,
             JobListings = new JobListingsSearchResultModel
             {
