@@ -13,6 +13,15 @@ public class EventSearchService(
     UmbracoHelper umbracoHelper)
     : IEventSearchService
 {
+    /// <summary>
+    ///     Retrieves all events from the external index.
+    /// </summary>
+    /// <returns>
+    ///     An <see cref="IEnumerable{IPublishedContent}" /> containing all events if found; otherwise, an empty enumerable.
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    ///     Thrown when no index is found with the specified name.
+    /// </exception>
     public IEnumerable<IPublishedContent?> GetAllEvents()
     {
         if (!examineManager.TryGetIndex(Constants.UmbracoIndexes.ExternalIndexName, out IIndex? index))

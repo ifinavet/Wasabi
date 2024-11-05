@@ -1,13 +1,26 @@
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Web.Common;
 using Umbraco.Cms.Web.Common.PublishedModels;
+using static Umbraco.Cms.Core.DependencyInjection.StaticServiceProvider;
 
 namespace IfiNavet.Web.Core.Helpers;
 
+/// <summary>
+///     Provides helper methods for retrieving image URLs for student members and companies.
+/// </summary>
 public class ImageHelpers
 {
-    private static UmbracoHelper UmbracoHelper => StaticServiceProvider.Instance.GetRequiredService<UmbracoHelper>();
+    private static UmbracoHelper UmbracoHelper => Instance.GetRequiredService<UmbracoHelper>();
 
+    /// <summary>
+    ///     Retrieves the profile image URL for a given student member.
+    /// </summary>
+    /// <param name="studentMember">The student member whose profile image URL is to be retrieved.</param>
+    /// <param name="cropAlias">An optional crop alias to get a specific cropped version of the image.</param>
+    /// <returns>
+    ///     The URL of the profile image if it exists; otherwise, the URL of a placeholder image.
+    ///     If neither is available, returns a data URL.
+    /// </returns>
     public static string GetProfileImageUrl(StudentMember studentMember, string? cropAlias = null)
     {
         if (studentMember.ProfileImage != null)
@@ -19,6 +32,14 @@ public class ImageHelpers
         return placeHolder != null ? placeHolder.MediaUrl() : "data:,";
     }
 
+    /// <summary>
+    ///     Retrieves the company image URL for a given company.
+    /// </summary>
+    /// <param name="company">The company whose image URL is to be retrieved.</param>
+    /// <returns>
+    ///     The URL of the company image if it exists; otherwise, the URL of a placeholder image.
+    ///     If neither is available, returns a data URL.
+    /// </returns>
     public static string GetCompanyImageUrl(Company company)
     {
         if (company.CompanyLogo != null)
