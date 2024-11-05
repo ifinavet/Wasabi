@@ -49,8 +49,7 @@ public class JobListingsController : RenderController
         // Filter by job type, if type is specified
         if (!string.IsNullOrWhiteSpace(jobType))
             filteredSearchResult = filteredSearchResult
-                .Where(x => x.JobType
-                    .Equals(jobType, StringComparison.InvariantCultureIgnoreCase))
+                .Where(x => x.JobType!.Equals(jobType, StringComparison.InvariantCultureIgnoreCase))
                 .ToList();
 
         viewModel.SearchResult = filteredSearchResult;
@@ -72,9 +71,10 @@ public class JobListingsController : RenderController
             .Select(g => g.Key)
             .Select(x => new JobTypesFilter
             {
-                JobTypeAlias = x,
-                IsActive = x.Equals(activeJobType, StringComparison.InvariantCultureIgnoreCase)
+                JobTypeAlias = x!,
+                IsActive = x!.Equals(activeJobType, StringComparison.InvariantCultureIgnoreCase)
             });
+
         return jobTypes;
     }
 }

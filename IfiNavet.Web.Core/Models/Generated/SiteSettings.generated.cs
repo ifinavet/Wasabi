@@ -66,6 +66,13 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string MasterEmailTemplate => this.Value<string>(_publishedValueFallback, "masterEmailTemplate");
 
 		///<summary>
+		/// New Semester Date
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "13.5.2+3431f76")]
+		[ImplementPropertyType("newSemesterDate")]
+		public virtual global::System.DateTime NewSemesterDate => this.Value<global::System.DateTime>(_publishedValueFallback, "newSemesterDate");
+
+		///<summary>
 		/// profileImagePlaceholder: Default profile image for members
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "13.5.2+3431f76")]

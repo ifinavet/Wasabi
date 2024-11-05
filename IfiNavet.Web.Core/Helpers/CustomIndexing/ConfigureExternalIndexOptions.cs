@@ -12,7 +12,7 @@ public class ConfigureExternalIndexOptions : IConfigureNamedOptions<LuceneDirect
     /// </summary>
     /// <param name="name"></param>
     /// <param name="options"></param>
-    public void Configure(string name, LuceneDirectoryIndexOptions options)
+    public void Configure(string? name, LuceneDirectoryIndexOptions options)
     {
         if (name.Equals(Constants.UmbracoIndexes.ExternalIndexName))
             options.FieldDefinitions.AddOrUpdate(new FieldDefinition("eventDate", FieldDefinitionTypes.DateTime));

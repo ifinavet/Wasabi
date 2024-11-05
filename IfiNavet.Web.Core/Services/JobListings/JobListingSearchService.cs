@@ -20,7 +20,7 @@ public class JobListingSearchService(
     /// <param name="queryString">Search query</param>
     /// <returns>IEnumerable of the job listings within the specified parameters</returns>
     /// <exception cref="InvalidOperationException">Throws error if External Index is not found</exception>
-    public IEnumerable<IPublishedContent?> GetJobListings(string queryString)
+    public IEnumerable<IPublishedContent> GetJobListings(string queryString)
     {
         if (!examineManager.TryGetIndex(Constants.UmbracoIndexes.ExternalIndexName, out IIndex? index))
             throw new InvalidOperationException(
@@ -39,7 +39,7 @@ public class JobListingSearchService(
         List<string> enumerable = ids.ToList();
         if (enumerable.IsNullOrEmpty()) yield break;
         foreach (string id in enumerable)
-            yield return umbracoHelper.Content(id);
+            yield return umbracoHelper.Content(id)!;
     }
 
     /// <summary>
@@ -63,6 +63,6 @@ public class JobListingSearchService(
             .Execute()
             .Select(x => x.Id);
 
-        foreach (string hit in hits) yield return umbracoHelper.Content(hit);
+        foreach (string hit in hits) yield return umbracoHelper.Content(hit)!;
     }
 }
