@@ -10,7 +10,6 @@ public class StartPageViewModel : StartPage
     {
     }
 
-    public Company? Partner { get; set; }
 
     public JobListing[] JobListings { get; set; }
 

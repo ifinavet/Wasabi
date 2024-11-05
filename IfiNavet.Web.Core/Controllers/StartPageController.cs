@@ -30,19 +30,20 @@ public class StartPageController : RenderController
         _eventSearchService = eventSearchService;
     }
 
+    /// <summary>
+    ///     Handles the request to render the start page.
+    /// </summary>
+    /// <returns>An <see cref="IActionResult" /> that renders the start page view.</returns>
     public override IActionResult Index()
     {
-        StartPage startPageModel = new(CurrentPage!, _publishedValueFallback);
-
-        // Fetches job listings based on query. Returns all if query is empty
         JobListing[] hits = _jobListingSearchService.GetJobListings("").OfType<JobListing>().Where(x => x.IsVisible())
-            .OrderBy(x => x.Deadline).ToArray();
+            .OrderBy(x => x.Deadline).Take(3).ToArray();
 
-        Event[] events = _eventSearchService.GetAllEvents().OfType<Event>().Where(x => x.IsVisible()).ToArray();
+        // Fetches all events and filters them to only include visible ones
+        Event[] events = _eventSearchService.GetAllEvents().OfType<Event>().Where(x => x.IsVisible()).Take(3).ToArray();
 
         StartPageViewModel startPageViewModel = new(CurrentPage!, _publishedValueFallback)
         {
-            Partner = (Company)startPageModel.Partner,
             JobListings = hits,
             Events = events
         };

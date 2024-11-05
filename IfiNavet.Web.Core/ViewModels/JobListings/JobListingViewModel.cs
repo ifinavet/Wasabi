@@ -12,5 +12,4 @@ public class JobListingViewModel : JobListing
     }
 
     public JobListingsSearchResultModel JobListings { get; set; }
-    public Company Company { get; set; }
 }

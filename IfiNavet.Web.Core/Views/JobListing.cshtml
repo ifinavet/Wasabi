@@ -1,13 +1,16 @@
+@using Umbraco.Cms.Core.Models.Blocks
 @inherits UmbracoViewPage<IfiNavet.Web.Core.ViewModels.JobListings.JobListingViewModel>;
 @{
     Layout = "master.cshtml";
+
+    Company company = (Model.Employer as Company)!;
 }
 
 <h1 class="center primary">@Umbraco.GetDictionaryValue("jobListing")</h1>
 <div class="container margin-bottom--large">
     <div class="row natural-height">
         <div class="col-xs-12 col-md-8 card">
-            <h2 class="job-title primary center">@Model.Company.Name</h2>
+            <h2 class="job-title primary center">@company.Name</h2>
             <div class="row center-xs">
                 <div class="col-xs-6 col-sm-5 event-meta job-meta">
                     <span class="icon-clock2 icon-large"></span>
@@ -15,7 +18,7 @@
                     <span>@Model.Deadline.ToShortDateString()</span>
                 </div>
                 <div class="col-xs-6 col-sm-5 event-meta job-meta">
-                    <div class="job-type-icon job-type-icon--@Model.JobType.ToLower()"></div>
+                    <div class="job-type-icon job-type-icon--@Model.JobType!.ToLower()"></div>
                     <span class="sr-only">@Umbraco.GetDictionaryValue("jobType")</span>
                     <span>@Umbraco.GetDictionaryValue(Model.JobType)</span>
                 </div>
@@ -28,31 +31,23 @@
             <div class="company-card">
                 <div class="company-photo">
                     <div class="round-frame">
-                        <img src="@Model.Company.CompanyLogo.Url()" alt="@Model.Company.Name">
+                        <img src="@company.CompanyLogo.Url()" alt="@company.Name">
                     </div>
                 </div>
                 <div class="company-info">
-                    <h2>@Model.Company.Name</h2>
-                    <p>@Model.Company.CompanyDescription</p>
+                    <h2>@company.Name</h2>
+                    <p>@company.CompanyDescription</p>
                 </div>
                 <h2 class="h3">
                     @Umbraco.GetDictionaryValue("jobContactHeader")
                 </h2>
                 <div class="job-listing-contact-list">
                     <ul>
-                        @foreach (ContactInfo? item in Model.ContactInfo)
+                        @foreach (BlockListItem block in Model.Value<IEnumerable<BlockListItem>>("ContactInfo")!)
                         {
-                            <li class="contact-item">
-                                <div>
-                                    <strong>@item.ContactName</strong>
-                                </div>
-                                <div>
-                                    <a href="mailto:@item.EMail">@item.EMail</a>
-                                </div>
-                                <div>
-                                    <a href="tel:@item.ContactPhoneNumber">@item.ContactPhoneNumber</a>
-                                </div>
-                            </li>
+                            IPublishedElement content = block.Content;
+
+                            @await Html.PartialAsync("blocklist/Components/" + content.ContentType.Alias, block)
                         }
                     </ul>
                 </div>
@@ -63,7 +58,7 @@
 
 
 <div class="container">
-    <h2 class="primary">@Umbraco.GetDictionaryValue("jobRelatedHeader") @Model.Company.Name</h2>
+    <h2 class="primary">@Umbraco.GetDictionaryValue("jobRelatedHeader") @company.Name</h2>
     <div class="spacer"></div>
     @await Html.PartialAsync("JobListings/JobListingsSearchResult", Model.JobListings)
 </div>

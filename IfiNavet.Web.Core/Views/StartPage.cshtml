@@ -2,12 +2,12 @@
 @inherits UmbracoViewPage<IfiNavet.Web.Core.ViewModels.StartPageViewModel>
 @{
     Layout = "master.cshtml";
-    Company? partner = Model.Partner;
-    JobListing[] upcomingJobs = Model.JobListings[..Math.Min(3, Model.JobListings.Length)]; // Getting upcoming jobs, allowing upto 3, but if less then just show them
-    Event[] upcomingEvents = Model.Events[..Math.Min(3, Model.Events.Length)]; // Allow upto 3 events, but allow less
+    Company? partner = Model.Partner as Company;
+    JobListing[] upcomingJobs = Model.JobListings;
+    Event[] upcomingEvents = Model.Events;
 }
 
-<!-- Event carousel -->
+<!-- Upcoming Events -->
 <div>
     @foreach (Event upcomingEvent in upcomingEvents)
     {
@@ -75,23 +75,21 @@
         </div>
     </div>
     <div class="row container">
-        @{
-            foreach (StudentMember member in Model.BoardMembers)
-            {
-                string memberEmail = (string)member.Value("Email") ?? string.Empty;
-                <div class="board-member col-xs-12 col-sm-4 col-md-3">
-                    <div class="board-member-photo">
-                        <div class="round-frame">
-                            <img src="@ImageHelpers.GetProfileImageUrl(member, "boardmember")?type=webp" alt="@member.Name" loading="lazy"/>
-                        </div>
-                    </div>
-                    <div class="board-member-personalia">
-                        <h3>@member.NavetVerv</h3>
-                        <div>@member.Name</div>
-                        <a href="mailto:@(memberEmail)">@memberEmail.</a>
+        @foreach (StudentMember member in Model.BoardMembers)
+        {
+            string memberEmail = member.Value<string>("Email") ?? string.Empty;
+            <div class="board-member col-xs-12 col-sm-4 col-md-3">
+                <div class="board-member-photo">
+                    <div class="round-frame">
+                        <img src="@ImageHelpers.GetProfileImageUrl(member, "boardMember")" alt="@member.Name" loading="lazy"/>
                     </div>
                 </div>
-            }
+                <div class="board-member-personalia">
+                    <h3>@member.NavetVerv</h3>
+                    <div>@member.Name</div>
+                    <a href="mailto:@(memberEmail)">@memberEmail.</a>
+                </div>
+            </div>
         }
     </div>
 </div>
