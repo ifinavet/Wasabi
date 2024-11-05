@@ -1,0 +1,16 @@
+@inherits UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>;
+@{
+    ContactInfo item = (ContactInfo)Model.Content;
+}
+
+<li class="contact-item">
+    <div>
+        <strong>@item.ContactName</strong>
+    </div>
+    <div>
+        <a href="mailto:@item.EMail">@item.EMail</a>
+    </div>
+    <div>
+        <a href="tel:@item.ContactPhoneNumber">@item.ContactPhoneNumber</a>
+    </div>
+</li>

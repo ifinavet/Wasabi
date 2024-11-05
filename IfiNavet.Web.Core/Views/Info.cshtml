@@ -31,12 +31,8 @@
                         </div>
                     </div>
                 }
-                @foreach (EditorialBlock asideContent in Model.SidebarContent)
-                {
-                    <div class="content-aside">
-                        @asideContent.Content
-                    </div>
-                }
+
+                @await Html.GetBlockListHtmlAsync(Model.SidebarContent)
             </aside>
         </div>
     </div>

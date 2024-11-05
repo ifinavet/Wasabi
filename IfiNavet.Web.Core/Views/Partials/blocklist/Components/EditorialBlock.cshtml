@@ -1,0 +1,6 @@
+@inherits UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>;
+@{
+    EditorialBlock content = (EditorialBlock)Model.Content;
+}
+
+@Html.Raw(content.Content)
