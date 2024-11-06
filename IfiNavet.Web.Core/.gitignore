@@ -483,3 +483,5 @@ appsettings-schema.*.json
 ## Custom files
 ##
 dev_secrets.json
+
+/uSync
