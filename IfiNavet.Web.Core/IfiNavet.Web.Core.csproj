@@ -8,6 +8,7 @@
 
     <ItemGroup>
         <PackageReference Include="Dyfort.Umbraco.AutoImageOptimize" Version="2.0.1"/>
+        <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
         <PackageReference Include="Umbraco.Cms" Version="13.5.2"/>
         <PackageReference Include="uSync" Version="13.2.5"/>
         <PackageReference Include="uSync.Migrations" Version="4.0.0-phase.5.1"/>

@@ -1,6 +1,6 @@
 using Umbraco.Cms.Core.Composing;
 
-namespace Ifinavet.Web.Core.Helpers.CustomIndexing;
+namespace Ifinavet.Web.Core.Services.CustomIndexing;
 
 public class ExamineComposer : IComposer
 {

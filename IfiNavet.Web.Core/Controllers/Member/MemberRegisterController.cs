@@ -1,4 +1,5 @@
-﻿using IfiNavet.Web.Core.ViewModels;
+﻿using IfiNavet.Web.Core.Services;
+using IfiNavet.Web.Core.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Cms.Core.Cache;
@@ -10,7 +11,6 @@ using Umbraco.Cms.Core.Security;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Infrastructure.Persistence;
-using Umbraco.Cms.Web.Common.Security;
 using Umbraco.Cms.Web.Website.Controllers;
 
 namespace IfiNavet.Web.Core.Controllers.Member;
@@ -20,6 +20,7 @@ public class MemberRegisterController : SurfaceController
     private readonly ICoreScopeProvider _coreScopeProvider;
     private readonly IMemberManager _memberManager;
     private readonly IMemberService _memberService;
+    private readonly IEmailService _emailService;
 
     public MemberRegisterController(
         IMemberManager memberManager,
@@ -30,13 +31,14 @@ public class MemberRegisterController : SurfaceController
         AppCaches appCaches,
         IProfilingLogger profilingLogger,
         IPublishedUrlProvider publishedUrlProvider,
-        IMemberSignInManager memberSignInManager,
-        ICoreScopeProvider coreScopeProvider)
+        ICoreScopeProvider coreScopeProvider,
+        IEmailService emailService)
         : base(umbracoContextAccessor, databaseFactory, services, appCaches, profilingLogger, publishedUrlProvider)
     {
         _memberManager = memberManager;
         _memberService = memberService;
         _coreScopeProvider = coreScopeProvider;
+        _emailService = emailService;
     }
 
     /// <summary>
@@ -86,11 +88,15 @@ public class MemberRegisterController : SurfaceController
 
         if (identityResult.Succeeded)
         {
+            using ICoreScope scope = _coreScopeProvider.CreateCoreScope(autoComplete: true);
+            
             IMember member = _memberService.GetByKey(identityUser.Key)!;
 
+            string newUserGuid = Guid.NewGuid().ToString("N");
+            
             member.SetValue("firstName", model.FirstName);
             member.SetValue("lastName", model.LastName);
-            member.SetValue("validateGUID", Guid.NewGuid().ToString("N"));
+            member.SetValue("validateGUID", newUserGuid);
             member.SetValue("semester", model.Semester);
             member.SetValue("studieprogram", model.StudyProgram);
             member.SetValue("preferredLanguage", model.PreferredLanguage);
@@ -102,10 +108,28 @@ public class MemberRegisterController : SurfaceController
                 _memberService.AssignRole(member.Id, "NavetEventAdmins");
 
             _memberService.Save(member);
+            
+            // Set up the info for the validation email
+            Dictionary<string, string> emailFields = new()
+            {
+                {"FIRSTNAME", model.FirstName},
+                {"LASTNAME", model.LastName},
+                {"EMAIL", model.Email},
+                {"VALIDATEGUID", newUserGuid},
+                {"DOMAIN", HttpContext.Request.Host.Value}
+            };
+            
+            // Sends verification email to registrant
+            bool emailSent = _emailService.SendEmail("Validate Registration Email", model.Email, emailFields);
+            TempData["success"] = emailSent;
+            
+            if (!emailSent)
+            {
+                TempData["status"] = "Det oppsto en feil, vennligst prøv igjen senere";
+                _memberService.Delete(member); // Delete the member to mitigate errors.
+                return RedirectToCurrentUmbracoPage();
+            }
 
-            // TODO! Send email to registrant to confirm email inorder to verify new member
-
-            TempData["success"] = true;
             TempData["status"] = successMessage;
             return RedirectToCurrentUmbracoPage();
         }

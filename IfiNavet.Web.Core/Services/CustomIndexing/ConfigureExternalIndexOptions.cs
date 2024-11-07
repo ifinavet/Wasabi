@@ -3,7 +3,7 @@ using Examine.Lucene;
 using Microsoft.Extensions.Options;
 using Umbraco.Cms.Core;
 
-namespace Ifinavet.Web.Core.Helpers.CustomIndexing;
+namespace Ifinavet.Web.Core.Services.CustomIndexing;
 
 public class ConfigureExternalIndexOptions : IConfigureNamedOptions<LuceneDirectoryIndexOptions>
 {

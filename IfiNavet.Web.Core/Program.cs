@@ -1,6 +1,3 @@
-using IfiNavet.Web.Core.Services.Events;
-using IfiNavet.Web.Core.Services.JobListings;
-
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.CreateUmbracoBuilder()
@@ -12,6 +9,9 @@ builder.CreateUmbracoBuilder()
     .AddAzureBlobImageSharpCache() // This configures the required services for the Image Sharp cache
     .Build();
 
+// Removing Excessive headers
+builder.WebHost.UseKestrel(options => options.AddServerHeader = false);
+
 // Makes sure UMB_SESSION cookie only gets stored when using HTTPS
 builder.Services
     .AddSession(options =>
@@ -19,12 +19,11 @@ builder.Services
         options.Cookie.Name = "UMB_SESSION";
         options.Cookie.HttpOnly = true;
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    })
-    .AddTransient<IJobListingSearchService, JobListingSearchService>() // Adding the job filter and search
-    .AddTransient<IEventSearchService, EventSearchService>(); // Adding events filter and search
-
+    });
 
 WebApplication app = builder.Build();
+app.UseXfo(options => options.SameOrigin());
+app.UseXContentTypeOptions();
 
 await app.BootUmbracoAsync();
 
