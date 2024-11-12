@@ -10,7 +10,6 @@ namespace IfiNavet.Web.Core.Controllers.Member;
 public class MemberValidateController : RenderController
 {
     private readonly IMemberService _memberService;
-    private readonly ILogger<RenderController> _logger;
     public MemberValidateController(
         ILogger<RenderController> logger,
         ICompositeViewEngine compositeViewEngine,
@@ -18,7 +17,6 @@ public class MemberValidateController : RenderController
         IMemberService memberService)
         : base(logger, compositeViewEngine, umbracoContextAccessor)
     {
-        _logger = logger;
         _memberService = memberService;
     }
 
@@ -43,8 +41,8 @@ public class MemberValidateController : RenderController
             return CurrentTemplate(CurrentPage);
         }
 
-        IMember? member = _memberService.GetByEmail(email);
-        string memberValidateGuid = member.GetValue<string>("validateGUID").ToLower();
+        IMember member = _memberService.GetByEmail(email)!;
+        string memberValidateGuid = member.GetValue<string>("validateGUID")!.ToLower();
         DateTime memberValidateGuidExpiry = member.GetValue<DateTime>("validateGUIDExpiry");
 
         if (memberValidateGuid == validateGuid &&

@@ -11,7 +11,7 @@ public class StartPageViewModel : StartPage
     }
 
 
-    public JobListing[] JobListings { get; set; }
+    public JobListing[]? JobListings { get; set; }
 
-    public Event[] Events { get; set; }
+    public Event[]? Events { get; set; }
 }

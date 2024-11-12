@@ -8,9 +8,9 @@ public class JobListingsViewModel(IPublishedContent content, IPublishedValueFall
 {
     public string QueryString { get; set; } = string.Empty;
 
-    public IEnumerable<JobListing> SearchResult { get; set; }
+    public IEnumerable<JobListing>? SearchResult { get; set; }
 
-    public IEnumerable<JobTypesFilter> JobTypes { get; set; }
+    public IEnumerable<JobTypesFilter>? JobTypes { get; set; }
 
     public bool IsFilteredByJobType { get; set; }
 }

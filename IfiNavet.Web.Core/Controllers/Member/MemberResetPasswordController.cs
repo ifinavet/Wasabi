@@ -114,6 +114,12 @@ public class MemberResetPasswordController : SurfaceController
             return CurrentUmbracoPage();
         }
 
+        if (email == null && resetToken == null)
+        {
+            TempData["status"] = "Det har oppstått en feil - prøv å be om et nytt passord på nytt.";
+            return CurrentUmbracoPage();
+        }
+
         IdentityResult validateNewPassword = _memberManager.ValidatePasswordAsync(model.NewPassword).Result;
         if (!validateNewPassword.Succeeded)
         {
@@ -121,8 +127,8 @@ public class MemberResetPasswordController : SurfaceController
             return CurrentUmbracoPage();
         }
 
-        IMember? member = _memberService.GetByEmail(email);
-        
+        IMember? member = _memberService.GetByEmail(email!);
+
         if (member == null)
         {
             TempData["status"] = "Ugyldig informasjon ble oppgtitt";
@@ -131,7 +137,7 @@ public class MemberResetPasswordController : SurfaceController
 
         DateTime memberValidateGuidExpiry = member.GetValue<DateTime>("validateGUIDExpiry");
 
-        if (resetToken != null && DateTime.Now < memberValidateGuidExpiry)
+        if (DateTime.Now < memberValidateGuidExpiry)
         {
             member.IsLockedOut = false;
             member.IsApproved = true;
@@ -139,9 +145,15 @@ public class MemberResetPasswordController : SurfaceController
             _memberService.Save(member);
 
             MemberIdentityUser? identityUser = await _memberManager.FindByIdAsync(member.Id.ToString());
-            _logger.LogInformation(identityUser.Id);
+
+            if (identityUser == null)
+            {
+                TempData["status"] = "Det oppsto en feil - prøv igjen senere.";
+                return CurrentUmbracoPage();
+            }
+
             IdentityResult passwordResetResult =
-                _memberManager.ResetPasswordAsync(identityUser, resetToken, model.NewPassword).Result;
+                _memberManager.ResetPasswordAsync(identityUser, resetToken!, model.NewPassword).Result;
 
             if (passwordResetResult.Succeeded) return Redirect("/login/");
 

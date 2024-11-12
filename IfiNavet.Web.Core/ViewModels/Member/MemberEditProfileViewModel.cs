@@ -10,5 +10,5 @@ public class MemberEditProfileViewModel : EditProfile
     {
     }
 
-    public MemberEditProfileFormViewModel FormViewModel { get; set; }
+    public MemberEditProfileFormViewModel? FormViewModel { get; set; }
 }

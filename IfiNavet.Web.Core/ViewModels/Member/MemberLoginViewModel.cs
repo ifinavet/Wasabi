@@ -10,8 +10,4 @@ public class MemberLoginViewModel
 
     [Required(ErrorMessage = "Passordet mangler")]
     public string Password { get; set; } = string.Empty;
-
-    public IPublishedContent ResetPassword { get; set; }
-
-    public IPublishedContent SignUp { get; set; }
 }

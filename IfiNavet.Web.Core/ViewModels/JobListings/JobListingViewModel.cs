@@ -11,5 +11,5 @@ public class JobListingViewModel : JobListing
     {
     }
 
-    public JobListingsSearchResultModel JobListings { get; set; }
+    public required JobListingsSearchResultModel JobListings { get; set; }
 }

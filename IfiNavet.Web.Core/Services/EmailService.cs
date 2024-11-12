@@ -72,8 +72,8 @@ public class EmailService : IEmailService
             MailMessage message = new()
             {
                 From = new MailAddress(_globalSettings.Smtp.From, "Ifinavet : Ifinavet.no"),
-                Subject = ReplaceFields(emailSubject, fields),
-                Body = ReplaceFields(emailBody, fields),
+                Subject = ReplaceFields(emailSubject!, fields),
+                Body = ReplaceFields(emailBody!, fields),
                 IsBodyHtml = true
             };
 
