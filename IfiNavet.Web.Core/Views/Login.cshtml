@@ -1,7 +1,6 @@
-@using IfiNavet.Web.Core.ViewModels
+@using IfiNavet.Web.Core.ViewModels.Member
 @{
     Layout = "master.cshtml";
 }
 
 @await Html.PartialAsync("Member/MemberLoginForm", new MemberLoginViewModel())
-<a href="/profil/ny-bruker/">Lag ny bruker</a>

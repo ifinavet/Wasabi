@@ -1,4 +1,4 @@
-using IfiNavet.Web.Core.ViewModels;
+using IfiNavet.Web.Core.ViewModels.Member;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Cms.Core.Cache;
 using Umbraco.Cms.Core.Logging;
@@ -50,27 +50,30 @@ public class MemberLoginController : SurfaceController
 
         string username = model.LoginName.Split("@").First();
 
-        SignInResult login =
-            await _memberSignInManager.PasswordSignInAsync(username, model.Password, true, true);
-
-        if (login.IsNotAllowed)
-        {
-            TempData["Status"] =
-                "Før du kan logge inn, må du bekrefte e-postadressen din - sjekk e-posten din for instruksjoner om hvordan du gjør dette. Hvis du ikke finner denne e-posten, kan du bruke funksjonen for glemt passord for å motta en ny e-post.";
-            return CurrentUmbracoPage();
-        }
+        SignInResult login = await _memberSignInManager.PasswordSignInAsync(username, model.Password, true, true);
 
         if (!login.Succeeded)
         {
-            TempData["Status"] = "Brukernavn eller passord er feil!";
+            TempData["status"] = "Brukernavn eller passord er feil!";
             return CurrentUmbracoPage();
         }
 
+        if (login.IsNotAllowed)
+        {
+            TempData["status"] =
+                "Før du kan logge inn, må du bekrefte e-postadressen din - " +
+                "sjekk e-posten din for instruksjoner om hvordan du gjør dette. " +
+                "Hvis du ikke finner denne e-posten, " +
+                "kan du bruke funksjonen for glemt passord for å motta en ny e-post.";
+            return CurrentUmbracoPage();
+        }
+        
         IMember currentMember = _memberService.GetByUsername(model.LoginName.Split("@").First())!;
         if (currentMember.GetValue<bool>("isBanned"))
         {
-            TempData["Status"] =
-                "Din bruker er blitt utestengt. Du vil ha fått en e-post fra IFI-Navet sitt styre for hvorfor dette har skjedd.";
+            TempData["status"] =
+                "Din bruker er blitt utestengt. " +
+                "Du vil ha fått en e-post fra IFI-Navet sitt styre for hvorfor dette har skjedd.";
             return CurrentUmbracoPage();
         }
 

@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
-namespace IfiNavet.Web.Core.ViewModels;
+namespace IfiNavet.Web.Core.ViewModels.Member;
 
 public class MemberLoginViewModel
 {
