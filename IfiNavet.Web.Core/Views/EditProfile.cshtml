@@ -1,6 +1,7 @@
-@inherits UmbracoViewPage<EditProfile>
+@inherits UmbracoViewPage<IfiNavet.Web.Core.ViewModels.Member.MemberEditProfileViewModel>
+
 @{
     Layout = "master.cshtml";
 }
-<h1>Hei!</h1>
-<h3>Her kommer muligheten for å redigere profilen din</h3>
+
+@await Html.PartialAsync("Member/MemberEditProfileForm", Model.FormViewModel)
