@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using static System.String;
 
-namespace IfiNavet.Web.Core.ViewModels;
+namespace IfiNavet.Web.Core.ViewModels.Member;
 
 public class MemberRegisterViewModel
 {
@@ -16,7 +16,7 @@ public class MemberRegisterViewModel
     public string Email { get; set; } = Empty;
 
     [Required(ErrorMessage = "Passord mangler")]
-    [StringLength(36, MinimumLength = 10, ErrorMessage = "Passordet må være melleom 10 og 36 krakterer")]
+    [StringLength(36, MinimumLength = 10, ErrorMessage = "Passordet må være melleom 10 og 36 karakterer")]
     public string Password { get; set; } = Empty;
 
     [Required(ErrorMessage = "Gjenta passord mangler")]
@@ -27,8 +27,8 @@ public class MemberRegisterViewModel
     public string StudyProgram { get; set; } = Empty;
 
     [Required(ErrorMessage = "Semester mangler")]
-    public int Semester { get; set; }
+    public int Semester { get; set; } = 1;
 
     [Required(ErrorMessage = "Foretrukket språk mangler")]
-    public string PreferredLanguage { get; set; } = Empty;
+    public string PreferredLanguage { get; set; } = "norwegian";
 }
