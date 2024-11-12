@@ -2,6 +2,12 @@
 
 @{
     Layout = "master.cshtml";
+    string description = Model.EventTeaser ?? Model.Root().Value<string>("metaDescription")!;
+}
+
+@section Head
+{
+    <meta name="description" content="@description"/>
 }
 
 <h1>@Model.Name</h1>

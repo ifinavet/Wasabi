@@ -1,5 +1,5 @@
 ﻿using IfiNavet.Web.Core.Services;
-using IfiNavet.Web.Core.ViewModels;
+using IfiNavet.Web.Core.ViewModels.Member;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Cms.Core.Cache;
@@ -42,37 +42,52 @@ public class MemberRegisterController : SurfaceController
     }
 
     /// <summary>
+    /// Registers a new member with the provided information from the form model.
     /// </summary>
-    /// <param name="model">Register member model.</param>
-    /// <returns>Result of registration operation.</returns>
+    /// <param name="model">The view model containing the member registration information.</param>
+    /// <returns>
+    /// An <see cref="IActionResult"/> that redirects to the current Umbraco page if the registration is successful,
+    /// or returns the current Umbraco page with an error message if the registration fails.
+    /// </returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Submit(MemberRegisterViewModel model)
     {
         const string successMessage =
-            "Kontoen din er opprettet, før du logger inn, vennligst sjekk e-posten din og klikk på lenken for å validere kontoen din og fullføre registreringsprosessen.";
+            "Kontoen din er opprettet, før du logger inn, " +
+            "vennligst sjekk e-posten din og klikk på lenken for å validere kontoen din og fullføre registreringsprosessen.";
 
         if (!ModelState.IsValid)
         {
-            TempData["Status"] = "Se til at du har oppgitt all nødvendig informasjon.";
+            TempData["status"] = "Se til at du har oppgitt all nødvendig informasjon.";
             return CurrentUmbracoPage();
         }
-
 
         string[] user = model.Email.Split("@");
         string username = user.First();
         string domain = user.Last();
 
+        // Check if member exists
         if ((_memberService.GetByEmail(model.Email) ?? _memberService.GetByUsername(username)) != null)
         {
-            // TODO! Send new email to user to verify account
+            Dictionary<string, string> fields = new()
+            {
+                { "FIRSTNAME", model.FirstName },
+                { "EMAIL", model.Email },
+                { "DOMAIN", HttpContext.Request.Host.Value }
+            };
+
+            // Sends verification email to 
+            _emailService.SendEmail("Already Registered", model.Email, fields);
+            
             TempData["status"] = successMessage;
             return RedirectToCurrentUmbracoPage();
         }
 
+        // Check if registrant is using correct domain
         if (domain != "uio.no" && !domain.EndsWith(".uio.no") && domain != "ifinavet.no")
         {
-            TempData["Status"] = "Du må registrere deg med en UiO e-post.";
+            TempData["status"] = "Du må registrere deg med en UiO e-post.";
             return CurrentUmbracoPage();
         }
 
@@ -82,6 +97,7 @@ public class MemberRegisterController : SurfaceController
             "studentMember",
             false,
             model.FirstName + " " + model.LastName);
+
         IdentityResult identityResult = await _memberManager.CreateAsync(
             identityUser,
             model.Password);
@@ -89,11 +105,11 @@ public class MemberRegisterController : SurfaceController
         if (identityResult.Succeeded)
         {
             using ICoreScope scope = _coreScopeProvider.CreateCoreScope(autoComplete: true);
-            
+
             IMember member = _memberService.GetByKey(identityUser.Key)!;
 
             string newUserGuid = Guid.NewGuid().ToString("N");
-            
+
             member.SetValue("firstName", model.FirstName);
             member.SetValue("lastName", model.LastName);
             member.SetValue("validateGUID", newUserGuid);
@@ -108,21 +124,21 @@ public class MemberRegisterController : SurfaceController
                 _memberService.AssignRole(member.Id, "NavetEventAdmins");
 
             _memberService.Save(member);
-            
+
             // Set up the info for the validation email
             Dictionary<string, string> emailFields = new()
             {
-                {"FIRSTNAME", model.FirstName},
-                {"LASTNAME", model.LastName},
-                {"EMAIL", model.Email},
-                {"VALIDATEGUID", newUserGuid},
-                {"DOMAIN", HttpContext.Request.Host.Value}
+                { "FIRSTNAME", model.FirstName },
+                { "LASTNAME", model.LastName },
+                { "EMAIL", model.Email },
+                { "VALIDATEGUID", newUserGuid },
+                { "DOMAIN", HttpContext.Request.Host.Value }
             };
-            
+
             // Sends verification email to registrant
             bool emailSent = _emailService.SendEmail("Validate Registration Email", model.Email, emailFields);
             TempData["success"] = emailSent;
-            
+
             if (!emailSent)
             {
                 TempData["status"] = "Det oppsto en feil, vennligst prøv igjen senere";
@@ -134,7 +150,7 @@ public class MemberRegisterController : SurfaceController
             return RedirectToCurrentUmbracoPage();
         }
 
-        TempData["Status"] = "Se til at du har oppgitt all nødvendig informasjon.";
+        TempData["status"] = "Se til at du har oppgitt all nødvendig informasjon.";
         return CurrentUmbracoPage();
     }
 }

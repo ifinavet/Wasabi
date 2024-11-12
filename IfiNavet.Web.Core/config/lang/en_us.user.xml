@@ -3,7 +3,7 @@
     <area alias="login">
         <key alias="greeting0">Produktiv Søndag!</key>
         <key alias="greeting1">Endelig mandag!</key>
-        <key alias="greeting2">Tirsdag=Bedpress dag?</key>
+        <key alias="greeting2">Tirsdag => Bedpress dag!</key>
         <key alias="greeting3">Onsdag?? Er vi halveis alt?!</key>
         <key alias="greeting4">Super Torsdag!</key>
         <key alias="greeting5">Fredag, snart helg?</key>

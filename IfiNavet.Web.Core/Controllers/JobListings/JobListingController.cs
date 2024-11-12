@@ -31,8 +31,11 @@ public class JobListingController : RenderController
     }
 
     /// <summary>
-    ///     Overrides default index to fetch other job listings form same company
+    /// Overrides the default index action to fetch other job listings from the same company.
     /// </summary>
+    /// <returns>
+    /// An <see cref="IActionResult"/> that renders the view with the job listing and related job listings.
+    /// </returns>
     public override IActionResult Index()
     {
         JobListing jobListing = new(CurrentPage!, _publishedValueFallback);

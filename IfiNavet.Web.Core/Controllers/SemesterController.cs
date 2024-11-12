@@ -32,8 +32,12 @@ public class SemesterController : RenderController
     /// <returns>Viewmodel with all the events for the semeste</returns>
     public override IActionResult Index()
     {
-        IGrouping<string, Event>[]? monthGroups = _umbracoHelper.Content(CurrentPage!.Id)?.Children.OfType<Event>()
-            .OrderBy(e => e.EventDate).GroupBy(e => e.EventDate.ToString("MM")).OrderBy(e => e.Key).ToArray();
+        IGrouping<string, Event>[]? monthGroups = _umbracoHelper
+            .Content(CurrentPage!.Id)?.Children.OfType<Event>()
+            .OrderBy(e => e.EventDate)
+            .GroupBy(e => e.EventDate.ToString("MM"))
+            .OrderBy(e => e.Key)
+            .ToArray();
 
         SemesterViewModel semesterViewModel = new(CurrentPage!, _publishedValueFallback)
         {
