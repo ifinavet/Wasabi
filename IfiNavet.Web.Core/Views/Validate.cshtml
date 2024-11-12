@@ -1,4 +1,14 @@
 @{
     Layout = "master.cshtml";
 }
-<h1>Valider</h1>
+<h1>Validering</h1>
+
+@if ((bool)TempData["success"]!)
+{
+    <a href="/login/">Logg inn</a>
+}
+else
+{
+    <a href="/">Gå til forsiden</a>
+}
+<p>@TempData["status"]</p>
