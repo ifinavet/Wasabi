@@ -21,8 +21,6 @@ public class MemberValidateController : RenderController
         _logger = logger;
         _memberService = memberService;
     }
-    
-    public sealed override IActionResult Index() => throw new NotImplementedException();
 
     /// <summary>
     /// Validates the member's email address using the provided email and validation GUID.
