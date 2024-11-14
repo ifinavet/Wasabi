@@ -37,7 +37,7 @@ jobs:
     runs-on: windows-latest
     needs: build
     environment:
-      name: 'Development'
+      name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write #This is required for requesting the JWT
@@ -51,15 +51,15 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D554B617A80A432AA577659E6EB3047B }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_B12F8750FD384D4D8C18EFB9BBC23BAD }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_B7AE42542D8548AAAB1DC9B4AFA520F7 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_A41A2CE5845C4C7CA4C6EA6923017C8B }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_8EDD71D435114979AE0A1E20418A95BC }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_45B6F26B80F04E938418B5C01CA0599A }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'ifinavet-core'
-          slot-name: 'Development'
+          slot-name: 'Production'
           package: .
           
