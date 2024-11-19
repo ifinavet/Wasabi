@@ -14,15 +14,15 @@ using the CMS Umbraco.
 To run the application, use the following command:
 
 ```sh
-  cd Ifinavet.Web.Core
-  dotnet build
-  dotnet run
+cd Ifinavet.Web.Core
+dotnet build
+dotnet run
 ```
 
 Alternatively:
 
 ```sh
-    dotnet run --project IfiNavet.Web.Core
+dotnet run --project IfiNavet.Web.Core
 ```
 
 ### Testing
@@ -40,7 +40,7 @@ Environment variables are marked with the notion `<ENVIROMENTVARIABLE_HERE>`, an
 manager like this:
 
 ```sh
-  dotnet user-secrets set "Umbraco:CMS:Global:Smtp:From": "hei@test.no" --project "PATH_TO_PROJECT\IfiNavet.Web.Core"
+dotnet user-secrets set "Umbraco:CMS:Global:Smtp:From": "hei@test.no" --project "PATH_TO_PROJECT\IfiNavet.Web.Core"
 ```
 
 For more info about secrets in .net visit the
