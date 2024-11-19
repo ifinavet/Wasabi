@@ -1,4 +1,4 @@
-# [`IfiNavet.Web.Core`](IfiNavet.Web.Core)
+# IfiNavet.Web.Core
 
 [`IfiNavet.Web.Core`](IfiNavet.Web.Core) is a web application built using Umbraco CMS. This project is designed to manage and deliver content efficiently using Umbraco's powerful content management features.
 
@@ -17,7 +17,6 @@ To run the application, use the following command:
 
 ```sh
 dotnet run --project IfiNavet.Web.Core
-
 ```
 
 ### Secure Session Management 🔒
@@ -32,24 +31,24 @@ The application removes excessive headers by configuring Kestrel in the [`Progra
 
 ### Development Settings
 
-To configure the application for development, update the `appsettings.Development.json` file. This file contains settings specific to the development environment, such as connection strings, logging levels, and other configurations.
+To configure the application for development, update the `appsettings.json` file. This file contains settings specific to the development environment, such as connection strings, logging levels, and other configurations.
 
 Make sure to adjust the settings according to your development environment needs.
 
 ## Project Structure 📂
 
--   **Views**: Contains the Razor views for rendering the UI.
--   **ViewModels**: Contains the view models used to pass data between the controllers and views.
--   **Services**: Contains the service classes that encapsulate business logic.
--   **Models**: Contains the data models used throughout the application.
--   **Helpers**: Contains helper classes and methods used across the application.
--   **Controllers**: Contains the controller classes that handle HTTP requests and responses.
+-   [`Views`](IfiNavet.Web.Core/Views): Contains the Razor views for rendering the UI.
+-   [`ViewModels`](IfiNavet.Web.Core/ViewModels): Contains the view models used to pass data between the controllers and views.
+-   [`Services`](IfiNavet.Web.Core/Services): Contains the service classes that encapsulate business logic.
+-   [`Models`](IfiNavet.Web.Core/Models): Contains the data models used throughout the application.
+-   [`Helpers`](IfiNavet.Web.Core/Helpers): Contains helper classes and methods used across the application.
+-   [`Controllers`](IfiNavet.Web.Core/Controllers): Contains the controller classes that handle HTTP requests and responses.
 
 ## Contributing 🤝
 
 We'd love your help to make this project even better! To contribute, please follow these steps:
 
-1. Fork the repository.
+1. Clone the repository.
 2. Create a new branch (`git checkout -b feature-branch`).
 3. Make your changes.
 4. Commit your changes (`git commit -m 'Add new feature'`).
@@ -66,11 +65,11 @@ If you find a bug, please let us know by creating an issue in the repository. Pr
 
 This project is licensed under the GNU Affero General Public License. See the [`LICENSE`](LICENSE) file for more details.
 
-For more information on the GNU AGPL, see <https://www.gnu.org/licenses/>.
-
 ## Contact 📧
 
 For any inquiries, please contact the project maintainers.
+
+E-mail: <web@ifinavet.no>
 
 ---
 
