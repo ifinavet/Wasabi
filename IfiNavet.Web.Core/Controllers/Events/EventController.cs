@@ -1,6 +1,6 @@
 using IfiNavet.Web.Core.Models.JobListings;
 using IfiNavet.Web.Core.Services.JobListings;
-using IfiNavet.Web.Core.ViewModels;
+using IfiNavet.Web.Core.ViewModels.Events;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Umbraco.Cms.Core.Models.PublishedContent;
@@ -58,7 +58,7 @@ public class EventController : RenderController
         // Auto open registration, adjusted for timezone
         TimeZoneInfo cetZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
         DateTime dateTimeCet = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, cetZone);
-        bool isRegistrationOpen = model.RegistrationDate > dateTimeCet;
+        bool isRegistrationOpen = model.RegistrationDate < dateTimeCet;
 
         // TODO! OK for now, future figure out how to improve the speed.
         // Checks if the current member is registered to the event
@@ -85,7 +85,7 @@ public class EventController : RenderController
             IsRegistrationOpen = isRegistrationOpen,
             AmountOfAttendees = model.Children.Count(),
             IsCurrentMemberAttending = isCurrentMemberAttending,
-            Organizers = model.Organizer?.Select(static x => x as StudentMember).ToArray()
+            Organizers = model.Organizer?.Select(static x => x as StudentMember).ToArray()!
         };
 
         return CurrentTemplate(viewModel);

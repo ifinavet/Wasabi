@@ -26,7 +26,6 @@
 
     <ItemGroup>
         <Folder Include="Models\Generated\"/>
-        <Folder Include="Views\Events\"/>
         <Folder Include="wwwroot\umbraco\assets\"/>
     </ItemGroup>
 
