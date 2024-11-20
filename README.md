@@ -1,6 +1,6 @@
 # Wasabi
 
-[`Wasabi`](Wasabi) Is the codebase for powering the website <ifinavet.no> and it is built on asp.net 8,
+[`Wasabi`](Wasabi) Is the codebase for powering the website <https://ifinavet.no> and it is built on asp.net 8,
 using the CMS Umbraco.
 
 > [!WARNING]  
