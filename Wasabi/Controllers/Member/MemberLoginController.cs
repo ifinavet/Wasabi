@@ -52,12 +52,6 @@ public class MemberLoginController : SurfaceController
 
         SignInResult login = await _memberSignInManager.PasswordSignInAsync(username, model.Password, true, true);
 
-        if (!login.Succeeded)
-        {
-            TempData["status"] = "Brukernavn eller passord er feil!";
-            return CurrentUmbracoPage();
-        }
-
         if (login.IsNotAllowed)
         {
             TempData["status"] =
@@ -65,6 +59,12 @@ public class MemberLoginController : SurfaceController
                 "sjekk e-posten din for instruksjoner om hvordan du gjør dette. " +
                 "Hvis du ikke finner denne e-posten, " +
                 "kan du bruke funksjonen for glemt passord for å motta en ny e-post.";
+            return CurrentUmbracoPage();
+        }
+        
+        if (!login.Succeeded)
+        {
+            TempData["status"] = "Brukernavn eller passord er feil!";
             return CurrentUmbracoPage();
         }
         

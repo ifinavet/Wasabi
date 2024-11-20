@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
-using NUglify.Helpers;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Security;
@@ -38,12 +37,6 @@ public class EventController : RenderController
         _contentService = contentService;
     }
 
-    [NonAction]
-    public sealed override IActionResult Index()
-    {
-        throw new NotImplementedException();
-    }
-
     /// <summary>
     ///     Handles the event page.
     ///     Making sure the event opens on time
@@ -52,8 +45,12 @@ public class EventController : RenderController
     ///     Getting all the information about the event and organizer
     /// </summary>
     /// <param name="cancellationToken"></param>
+    /// <param name="migrate">Set true if we want to migrate the attendees</param>
     /// <returns>A viewmodel with the information for the event</returns>
-    public async Task<IActionResult> Index(CancellationToken cancellationToken)
+    [HttpGet]
+    public async Task<IActionResult> Index(
+        [FromQuery(Name = "migrate")] bool migrate,
+        CancellationToken cancellationToken)
     {
         Event model = new(CurrentPage!, _publishedValueFallback);
 
@@ -62,14 +59,30 @@ public class EventController : RenderController
         DateTime dateTimeCet = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, cetZone);
         bool isRegistrationOpen = model.RegistrationDate < dateTimeCet;
 
+        if (migrate)
+        {
+            Console.WriteLine("Updated started");
+            foreach (Attendee attendee in model.Children<Attendee>()!)
+            {
+                if (attendee.MemberId != string.Empty)
+                    continue;
+
+                IContent a = _contentService.GetById(attendee.Id)!;
+                a.SetValue("memberId", attendee.AttendingMember!.Key);
+                _contentService.Save(a);
+            }
+
+            Console.WriteLine("Update done");
+        }
+
         // TODO! OK for now, future figure out how to improve the speed.
         // Checks if the current member is registered to the event
         MemberIdentityUser? currentMember = await _memberManager.GetCurrentMemberAsync();
         bool isCurrentMemberAttending = false;
         if (currentMember != null && isRegistrationOpen)
         {
-            isCurrentMemberAttending =
-                model.Children<Attendee>()!.Any(a => a.AttendingMember!.Id == int.Parse(currentMember.Id));
+            isCurrentMemberAttending = model.Children<Attendee>()!
+                .Any(a => a.MemberId == currentMember.Key.ToString());
         }
 
         // Related job to the event

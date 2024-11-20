@@ -51,7 +51,7 @@ public class MemberEditProfileController : SurfaceController
     {
         if (!ModelState.IsValid)
         {
-            TempData["Status"] = "Se til at du har oppgitt all nødvendig informasjon.";
+            TempData["status"] = "Se til at du har oppgitt all nødvendig informasjon.";
             return CurrentUmbracoPage();
         }
 

@@ -8,8 +8,7 @@
     string description = Model.EventTeaser ?? Model.Root().Value<string>("metaDescription")!;
 }
 
-@section Head
-{
+@section Head {
     <meta name="description" content="@description"/>
 }
 
@@ -19,16 +18,16 @@
 {
     <h3>Arrangmentet åpner for påmelding @Model.RegistrationDate.ToString("dddd dd.MM kl. HH:mm")</h3>
 }
-else if (!MemberManager.IsLoggedIn()) 
+else if (!MemberManager.IsLoggedIn())
 {
     <a href="/login/?redirectURL=@Model.Url()">Logg inn for å melde deg på</a>
 }
 else if (Model.IsCurrentMemberAttending)
 {
     <p>Du er påmeldt</p>
-    @*Form to unregister attendant*@
+    @await Html.PartialAsync("Event/EventUnregistrationForm")
 }
-else if (Model.AmountOfAttendees < Model.ParticipantLimit )
+else if (Model.AmountOfAttendees < Model.ParticipantLimit)
 {
     @await Html.PartialAsync("Event/EventRegistrationForm", new EventRegistrationFormViewModel())
 }
@@ -38,7 +37,7 @@ else
 }
 
 <div class="container">
-    <h2 class="primary">@Umbraco.GetDictionaryValue("jobRelatedHeader") @Model.HostingCompany.Name</h2>
+    <h2 class="primary">@Umbraco.GetDictionaryValue("jobRelatedHeader") @Model.HostingCompany?.Name</h2>
     <div class="spacer"></div>
     @await Html.PartialAsync("JobListings/JobListingsSearchResult", Model.JobListings)
 </div>
