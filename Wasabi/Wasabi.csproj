@@ -10,7 +10,7 @@
 
     <ItemGroup>
         <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
-        <PackageReference Include="Umbraco.Cms" Version="13.5.2"/>
+        <PackageReference Include="Umbraco.Cms" Version="14.3.1"/>
     </ItemGroup>
 
     <ItemGroup>
