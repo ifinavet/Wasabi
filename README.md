@@ -1,6 +1,6 @@
-# IfiNavet.Web.Core
+# Wasabi
 
-[`IfiNavet.Web.Core`](IfiNavet.Web.Core) Is the codebase for powering the website <ifinavet.no> and it is built on asp.net 8,
+[`Wasabi`](Wasabi) Is the codebase for powering the website <ifinavet.no> and it is built on asp.net 8,
 using the CMS Umbraco.
 
 > [!WARNING]  
@@ -14,7 +14,7 @@ using the CMS Umbraco.
 To run the application, use the following command:
 
 ```sh
-cd Ifinavet.Web.Core
+cd Wasabi
 dotnet build
 dotnet run
 ```
@@ -22,7 +22,7 @@ dotnet run
 Alternatively:
 
 ```sh
-dotnet run --project IfiNavet.Web.Core
+dotnet run --project Wasabi
 ```
 
 ### Testing
@@ -40,7 +40,7 @@ Environment variables are marked with the notion `<ENVIROMENTVARIABLE_HERE>`, an
 manager like this:
 
 ```sh
-dotnet user-secrets set "Umbraco:CMS:Global:Smtp:From": "hei@test.no" --project "PATH_TO_PROJECT\IfiNavet.Web.Core"
+dotnet user-secrets set "Umbraco:CMS:Global:Smtp:From": "hei@test.no" --project "PATH_TO_PROJECT\Wasabi"
 ```
 
 For more info about secrets in .net visit the
@@ -50,13 +50,12 @@ Make sure to adjust the settings according to your development environment needs
 
 ## Project Structure 📂
 
-- [`Views`](IfiNavet.Web.Core/Views): Contains the Razor views for rendering the UI.
-- [`ViewModels`](IfiNavet.Web.Core/ViewModels): Contains the view models used to pass data between the controllers and
-  views.
-- [`Services`](IfiNavet.Web.Core/Services): Contains the service classes that encapsulate business logic.
-- [`Models`](IfiNavet.Web.Core/Models): Contains the data models used throughout the application.
-- [`Helpers`](IfiNavet.Web.Core/Helpers): Contains helper classes and methods used across the application.
-- [`Controllers`](IfiNavet.Web.Core/Controllers): Contains the controller classes that handle HTTP requests and
+- [`Views`](Wasabi/Views): Contains the Razor views for rendering the UI.
+- [`ViewModels`](Wasabi/ViewModels): Contains the view models used to pass data between the controllers and views.
+- [`Services`](Wasabi/Services): Contains the service classes that encapsulate business logic.
+- [`Models`](Wasabi/Models): Contains the data models used throughout the application.
+- [`Helpers`](Wasabi/Helpers): Contains helper classes and methods used across the application.
+- [`Controllers`](Wasabi/Controllers): Contains the controller classes that handle HTTP requests and
   responses.
 
 ## Contributing 🤝
