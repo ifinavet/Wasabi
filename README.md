@@ -1,4 +1,4 @@
-# Wasabi
+# Wasabi 🍣
 
 [`Wasabi`](Wasabi) Is the codebase for powering the website <https://ifinavet.no> and it is built on asp.net 8,
 using the CMS Umbraco.
@@ -94,4 +94,4 @@ E-mail: <web@ifinavet.no>
 
 ---
 
-This project is developed and maintained by Ifi-Navet at the University of Oslo, Department of Informatics.
+This project is developed and maintained by the Student association Ifi-Navet at the University of Oslo, Department of Informatics.
