@@ -1,0 +1,26 @@
+@inherits UmbracoViewPage<Wasabi.ViewModels.Events.EventRegistrationFormViewModel>
+@using Wasabi.Controllers.Events
+@model Wasabi.ViewModels.Events.EventRegistrationFormViewModel
+
+@{ bool success = false; }
+
+@using (Html.BeginUmbracoForm<EventRegistrationController>(nameof(EventRegistrationController.Register), FormMethod.Post))
+{
+    <div>
+        @Html.LabelFor(m => m.Allergie, Umbraco.GetDictionaryValue("eventRegistrationAnyAllergies"), new { @name = "allergiesLbl", @class = "frmLabel" })
+        @Html.TextBoxFor(m => m.Allergie, new { @class = "allergies", placeholder = "Allergier" })
+        @Html.ValidationMessageFor(m => m.Allergie)
+    </div>
+
+    <button id="register-submit" type="submit" class="btn btn--rounded btn--shadow h2"
+            onclick="this.disabled = true; this.form.submit();">
+        @Umbraco.GetDictionaryValue("eventButtonSignUp")
+    </button>
+
+    <p>@TempData["status"]</p>
+}
+@if (success is false)
+{
+    <p>@TempData["Result"]</p>
+    <a href="/profil/endre-profil/">Trykk her for å oppdatere brukeren din</a>
+}

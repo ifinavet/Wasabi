@@ -1,0 +1,7 @@
+@inherits UmbracoViewPage<Wasabi.ViewModels.Member.MemberEditProfileViewModel>
+
+@{
+    Layout = "master.cshtml";
+}
+
+@await Html.PartialAsync("Member/MemberEditProfileForm", Model.FormViewModel)
