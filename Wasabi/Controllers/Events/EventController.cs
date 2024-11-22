@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Org.BouncyCastle.Crypto.Engines;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Security;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.Common.Controllers;
+using Umbraco.Cms.Web.Common.Filters;
 using Umbraco.Cms.Web.Common.PublishedModels;
 using Wasabi.Models.JobListings;
 using Wasabi.Services.JobListings;
@@ -35,6 +37,14 @@ public class EventController : RenderController
         _jobListingSearchService = jobListingSearchService;
         _memberManager = memberManager;
         _contentService = contentService;
+    }
+
+    [HttpGet]
+    [UmbracoMemberAuthorize("StudentMember", "NavetEventAdmins", "")]
+    public IActionResult EventAttendeeRegistration()
+    {
+        // Allowing only NavetEventAdmins to access the template 
+        return CurrentTemplate(CurrentPage);
     }
 
     /// <summary>
