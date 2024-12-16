@@ -1,5 +1,6 @@
 @using Umbraco.Cms.Core.Models
 @inherits UmbracoViewPage;
+
 @{
     Layout = null;
 
@@ -52,5 +53,7 @@
         </div>
     </div>
 </footer>
+
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -2,11 +2,17 @@
 @using Wasabi.Controllers.Member
 @using Wasabi.Helpers
 @model Wasabi.ViewModels.Member.MemberRegisterViewModel
+@inject IConfiguration Configuration
+@using Microsoft.Extensions.Configuration
 
+@{
+    const string formId = "member-register-form";
+    string reCaptchaSiteKey = Configuration["reCaptcha:reCaptchaSiteKey"]!;
+}
 
 @if (TempData["Success"] == null)
 {
-    using (Html.BeginUmbracoForm<MemberRegisterController>(nameof(MemberRegisterController.Submit)))
+    using (Html.BeginUmbracoForm<MemberRegisterController>(nameof(MemberRegisterController.Submit), null, new {id = formId}))
     {
         @Html.ValidationSummary(true)
 
@@ -83,6 +89,9 @@
         </div>
 
         <p>Når du registrerer en bruker på ifinavet.no så godtar du IFI-Navets <a href="/personvernerklaering" target="_blank">personvernerklæring</a></p>
+        
+        @Html.HiddenFor(m => m.CaptchaToken)
+        @ReCaptchaHelper.ReCaptchaScript(reCaptchaSiteKey, formId, nameof(Model.CaptchaToken))
 
         <div class="form-input">
             <button id="register-submit" type="submit" class="btn">

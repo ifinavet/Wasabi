@@ -3,7 +3,6 @@ using System.Net.Mail;
 using Microsoft.Extensions.Options;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Configuration.Models;
-using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Web.Common.PublishedModels;
 
 namespace Wasabi.Services;
@@ -46,7 +45,7 @@ public class EmailService : IEmailService
             _logger.LogDebug("SMTP is not configured");
             return false;
         }
-
+        
         SiteSettings? siteSettings =
             _contentQuery.ContentAtRoot().First(f => f.ContentType.Alias == "siteSettings") as SiteSettings;
 
