@@ -8,6 +8,7 @@ using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Infrastructure.Persistence;
 using Umbraco.Cms.Web.Common.Security;
 using Umbraco.Cms.Web.Website.Controllers;
+using Wasabi.Services;
 using Wasabi.ViewModels.Member;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
@@ -17,6 +18,7 @@ public class MemberLoginController : SurfaceController
 {
     private readonly IMemberService _memberService;
     private readonly IMemberSignInManager _memberSignInManager;
+    private readonly IGoogleReCaptchaService _googleReCaptchaService;
 
     public MemberLoginController(
         IUmbracoContextAccessor umbracoContextAccessor,
@@ -26,11 +28,13 @@ public class MemberLoginController : SurfaceController
         IProfilingLogger profilingLogger,
         IPublishedUrlProvider publishedUrlProvider,
         IMemberService memberService,
-        IMemberSignInManager memberSignInManager)
+        IMemberSignInManager memberSignInManager,
+        IGoogleReCaptchaService googleReCaptchaService)
         : base(umbracoContextAccessor, databaseFactory, services, appCaches, profilingLogger, publishedUrlProvider)
     {
         _memberSignInManager = memberSignInManager;
         _memberService = memberService;
+        _googleReCaptchaService = googleReCaptchaService;
     }
 
     /// <summary>
@@ -46,7 +50,17 @@ public class MemberLoginController : SurfaceController
     public async Task<IActionResult> Submit(MemberLoginViewModel model,
         [FromQuery(Name = "redirectURL")] string redirectUrl = "/")
     {
-        if (!ModelState.IsValid) return CurrentUmbracoPage();
+        if (!ModelState.IsValid || model.CaptchaToken is null) return CurrentUmbracoPage();
+
+        // Validates reCaptcha
+        bool captchaValid = await _googleReCaptchaService.VerifyCaptcha(model.CaptchaToken);
+        if (!captchaValid)
+        {
+            TempData["status"] =
+                "Captcha verifisering mislyktest. " +
+                "Dersom du ikke er en HackerBoi! - Last inn siden på nytt eller ta kontakt med IFI-Navet.";
+            return CurrentUmbracoPage();
+        }
 
         string username = model.LoginName.Split("@").First();
 
@@ -61,13 +75,13 @@ public class MemberLoginController : SurfaceController
                 "kan du bruke funksjonen for glemt passord for å motta en ny e-post.";
             return CurrentUmbracoPage();
         }
-        
+
         if (!login.Succeeded)
         {
             TempData["status"] = "Brukernavn eller passord er feil!";
             return CurrentUmbracoPage();
         }
-        
+
         IMember currentMember = _memberService.GetByUsername(model.LoginName.Split("@").First())!;
         if (currentMember.GetValue<bool>("isBanned"))
         {

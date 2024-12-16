@@ -10,6 +10,7 @@ public class RegisterSiteServiceComposer : IComposer
     {
         builder.Services.AddTransient<IJobListingSearchService, JobListingSearchService>(); // Adding the job filter and search
         builder.Services.AddTransient<IEventSearchService, EventSearchService>(); // Adding events filter and search
-        builder.Services.AddTransient<IEmailService, EmailService>();
+        builder.Services.AddTransient<IEmailService, EmailService>(); // Adding service to send emails for verification and password reset.
+        builder.Services.AddTransient<IGoogleReCaptchaService, GoogleReCaptchaService>(); // Adding captcha validation service
     }
 }

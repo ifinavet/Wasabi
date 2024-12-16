@@ -1,8 +1,16 @@
 @inherits UmbracoViewPage<Wasabi.ViewModels.Member.MemberLoginViewModel>
 @using Wasabi.Controllers.Member
 @model Wasabi.ViewModels.Member.MemberLoginViewModel
+@using Wasabi.Helpers
+@inject IConfiguration Configuration
+@using Microsoft.Extensions.Configuration
 
-@using (Html.BeginUmbracoForm<MemberLoginController>(nameof(MemberLoginController.Submit)))
+@{
+    const string formId = "member-login-form";
+    string reCaptchaSiteKey = Configuration["reCaptcha:reCaptchaSiteKey"]!;
+}
+
+@using (Html.BeginUmbracoForm<MemberLoginController>(nameof(MemberLoginController.Submit), null, new { id = formId }))
 {
     @Html.ValidationSummary(true)
 
@@ -11,13 +19,19 @@
         @Html.TextBoxFor(m => m.LoginName)
         @Html.ValidationMessageFor(m => m.LoginName)
     </div>
+
     <div class="form-input">
         @Html.LabelFor(m => m.Password, Umbraco.GetDictionaryValue("password"), new { name = "password", @class = "form-label" })
         <a href="/profil/tilbakestill-passord/">@Umbraco.GetDictionaryValue("memberForgotPassword")</a>
         @Html.PasswordFor(m => m.Password)
         @Html.ValidationMessageFor(m => m.Password)
     </div>
+
     <a href="/profil/ny-bruker/">Ny Bruker</a>
+
+    @Html.HiddenFor(m => m.CaptchaToken)
+    @ReCaptchaHelper.ReCaptchaScript(reCaptchaSiteKey, formId, nameof(Model.CaptchaToken))
+    
     <div class="form-input">
         <button id="login-submit" type="submit" class="btn">
             @Umbraco.GetDictionaryValue("login")
@@ -28,3 +42,4 @@
         }
     </div>
 }
+

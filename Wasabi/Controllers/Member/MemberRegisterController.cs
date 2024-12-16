@@ -21,6 +21,7 @@ public class MemberRegisterController : SurfaceController
     private readonly IMemberManager _memberManager;
     private readonly IMemberService _memberService;
     private readonly IEmailService _emailService;
+    private readonly IGoogleReCaptchaService _googleReCaptchaService;
 
     public MemberRegisterController(
         IMemberManager memberManager,
@@ -32,13 +33,15 @@ public class MemberRegisterController : SurfaceController
         IProfilingLogger profilingLogger,
         IPublishedUrlProvider publishedUrlProvider,
         ICoreScopeProvider coreScopeProvider,
-        IEmailService emailService)
+        IEmailService emailService, 
+        IGoogleReCaptchaService googleReCaptchaService)
         : base(umbracoContextAccessor, databaseFactory, services, appCaches, profilingLogger, publishedUrlProvider)
     {
         _memberManager = memberManager;
         _memberService = memberService;
         _coreScopeProvider = coreScopeProvider;
         _emailService = emailService;
+        _googleReCaptchaService = googleReCaptchaService;
     }
 
     /// <summary>
@@ -57,9 +60,19 @@ public class MemberRegisterController : SurfaceController
             "Kontoen din er opprettet, før du logger inn, " +
             "vennligst sjekk e-posten din og klikk på lenken for å validere kontoen din og fullføre registreringsprosessen.";
 
-        if (!ModelState.IsValid)
+        if (!ModelState.IsValid || model.CaptchaToken is null)
         {
             TempData["status"] = "Se til at du har oppgitt all nødvendig informasjon.";
+            return CurrentUmbracoPage();
+        }
+
+        // Validates reCaptcha
+        bool captchaValid = await _googleReCaptchaService.VerifyCaptcha(model.CaptchaToken);
+        if (!captchaValid)
+        {
+            TempData["status"] =
+                "Captcha verifisering mislyktest. " +
+                "Dersom du ikke er en HackerBoi! - Last inn siden på nytt eller ta kontakt med IFI-Navet.";
             return CurrentUmbracoPage();
         }
 
