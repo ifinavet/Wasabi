@@ -12,5 +12,6 @@ public class RegisterSiteServiceComposer : IComposer
         builder.Services.AddTransient<IEventSearchService, EventSearchService>(); // Adding events filter and search
         builder.Services.AddTransient<IEmailService, EmailService>(); // Adding service to send emails for verification and password reset.
         builder.Services.AddTransient<IGoogleReCaptchaService, GoogleReCaptchaService>(); // Adding captcha validation service
+        builder.Services.AddTransient<IImageService, ImageService>(); // Adding service to get company images and members image.
     }
 }

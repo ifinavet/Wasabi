@@ -1,4 +1,5 @@
-@using Wasabi.Helpers
+@using Wasabi.Services
+@inject IImageService ImageService
 @inherits UmbracoViewPage<Wasabi.ViewModels.StartPageViewModel>
 @{
     Layout = "master.cshtml";
@@ -7,7 +8,7 @@
     Event[] upcomingEvents = Model.Events;
 }
 
-<!-- Upcoming Events -->
+@* Upcoming Events *@
 <div>
     @foreach (Event upcomingEvent in upcomingEvents)
     {
@@ -15,7 +16,7 @@
     }
 </div>
 
-<!-- Job Listings -->
+@* Job Listings *@
 <div class="card card--featured">
     <div class="container">
         <div class="row">
@@ -34,7 +35,7 @@
     </div>
 </div>
 
-<!-- About Navet -->
+@* About Navet *@
 <div class="about">
     <div class="container">
         <div class="row">
@@ -45,7 +46,7 @@
     </div>
 </div>
 
-<!-- About Partner company -->
+@* About Partner company *@
 @if (partner != null)
 {
     <div class="partner card">
@@ -54,7 +55,7 @@
             <div class="row middle-xs center-xs start-md">
                 <div class="col-xs-12 col-md-4 center">
                     <div class="partner-logo">
-                        <img loading="lazy" src="@partner.CompanyLogo?.Url()" alt="@partner.Name logo"/>
+                        <img loading="lazy" src="@ImageService.GetCompanyImageUrl(partner)" alt="@partner.Name logo"/>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-8">
@@ -67,7 +68,7 @@
     </div>
 }
 
-<!-- Board members -->
+@* Board members *@
 <div class="board-members">
     <div class="board-members board-members-header">
         <div class="container">
@@ -81,7 +82,7 @@
             <div class="board-member col-xs-12 col-sm-4 col-md-3">
                 <div class="board-member-photo">
                     <div class="round-frame">
-                        <img src="@ImageHelpers.GetProfileImageUrl(member, "boardMember")" alt="@member.Name" loading="lazy"/>
+                        <img src="@ImageService.GetProfileImageUrl(member, "boardMember")" alt="@member.Name" loading="lazy"/>
                     </div>
                 </div>
                 <div class="board-member-personalia">

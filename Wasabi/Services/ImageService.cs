@@ -1,16 +1,22 @@
-using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Web.Common;
 using Umbraco.Cms.Web.Common.PublishedModels;
-using static Umbraco.Cms.Core.DependencyInjection.StaticServiceProvider;
 
-namespace Wasabi.Helpers;
+namespace Wasabi.Services;
 
-/// <summary>
-///     Provides helper methods for retrieving image URLs for student members and companies.
-/// </summary>
-public class ImageHelpers
+public interface IImageService
 {
-    private static UmbracoHelper UmbracoHelper => Instance.GetRequiredService<UmbracoHelper>();
+    public string GetProfileImageUrl(StudentMember studentMember, string? cropAlias = null);
+    public string GetCompanyImageUrl(Company company);
+}
+
+public class ImageService : IImageService
+{
+    private readonly UmbracoHelper _umbracoHelper;
+
+    public ImageService(UmbracoHelper umbracoHelper)
+    {
+        _umbracoHelper = umbracoHelper;
+    }
 
     /// <summary>
     ///     Retrieves the profile image URL for a given student member.
@@ -21,15 +27,15 @@ public class ImageHelpers
     ///     The URL of the profile image if it exists; otherwise, the URL of a placeholder image.
     ///     If neither is available, returns a data URL.
     /// </returns>
-    public static string GetProfileImageUrl(StudentMember studentMember, string? cropAlias = null)
+    public string GetProfileImageUrl(StudentMember studentMember, string? cropAlias = null)
     {
-        if (studentMember.ProfileImage != null)
+        if (studentMember.ProfileImage != null && !string.IsNullOrEmpty(studentMember.ProfileImage.MediaUrl()))
             return (cropAlias != null
                 ? studentMember.ProfileImage.GetCropUrl(cropAlias)
                 : studentMember.ProfileImage.MediaUrl())!;
 
-        IPublishedContent? placeHolder = UmbracoHelper.Media(Guid.Parse("2b4de618-f422-42ea-ad55-c499b2777dfb"));
-        return placeHolder != null ? placeHolder.MediaUrl() : "data:,";
+        string? placeHolder = _umbracoHelper.Media(1303)?.MediaUrl();
+        return placeHolder ?? "data:,";
     }
 
     /// <summary>
@@ -40,12 +46,12 @@ public class ImageHelpers
     ///     The URL of the company image if it exists; otherwise, the URL of a placeholder image.
     ///     If neither is available, returns a data URL.
     /// </returns>
-    public static string GetCompanyImageUrl(Company company)
+    public string GetCompanyImageUrl(Company company)
     {
         if (company.CompanyLogo != null)
             return company.CompanyLogo.MediaUrl();
 
-        IPublishedContent? placeHolder = UmbracoHelper.Media(Guid.Parse("ac7c0ac5-3d77-4b44-924e-8a5e319ff8bb\n"));
-        return placeHolder != null ? placeHolder.MediaUrl() : "data:,";
+        string? placeHolder = _umbracoHelper.Media(1339)?.MediaUrl();
+        return placeHolder ?? "data:,";
     }
 }
