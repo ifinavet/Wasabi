@@ -1,20 +1,16 @@
 @using Wasabi.Services
+@using Wasabi.ViewModels
 @inject IImageService ImageService
 @inherits UmbracoViewPage<Wasabi.ViewModels.StartPageViewModel>
 @{
     Layout = "master.cshtml";
     Company? partner = Model.Partner as Company;
-    JobListing[] upcomingJobs = Model.JobListings;
-    Event[] upcomingEvents = Model.Events;
+    JobListing[]? upcomingJobs = Model.JobListings;
+    Event[]? upcomingEvents = Model.Events;
 }
 
 @* Upcoming Events *@
-<div>
-    @foreach (Event upcomingEvent in upcomingEvents)
-    {
-        <p>@upcomingEvent.Name, @upcomingEvent.EventDate</p>
-    }
-</div>
+@await Html.PartialAsync("Carousel", upcomingEvents)
 
 @* Job Listings *@
 <div class="card card--featured">

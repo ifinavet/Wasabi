@@ -1,0 +1,67 @@
+@using Umbraco.Cms.Core.Security
+@inherits UmbracoViewPage;
+@inject IMemberManager _memberManager;
+
+@{
+    IMemberManager? member = _memberManager;
+}
+
+<header class="header">
+    <div class="nav-wrapper">
+        <div class="nav-bar">
+            <a class="logo" href="/">
+                <img src="@Url.Content("/assets/Images/Logo_main.webp")" alt="IFI-Navet"/>
+                <span class="divider"></span>
+                <img src="@Url.Content("/assets/Images/Logo_text.webp")" alt="IFI-Navet"/>
+            </a>
+            <nav class="main-text navigation" id="menu">
+                <ul>
+
+                    <li>
+                        <a href="/arrangementer/">Arrangementer</a>
+                    </li>
+                    <li>
+                        <a href="/stillingsannonser/">Stillingsannonser</a>
+                    </li>
+                    <li>
+                        <a href="/eksterne-arrangementer/">Eksterne arrangementer</a>
+                    </li>
+                    <li>
+                        <a href="/si-ifra/">Si ifra</a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle">Info</a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="/for-studenter/">For studenter</a>
+                            </li>
+                            <li>
+                                <a href="/for-bedrifter/">For bedrifter</a>
+                            </li>
+                        </ul>
+                    </li>
+                    @if (!member.IsLoggedIn())
+                    {
+                        <li>
+                            <a href="/login/?redirectURL=@Model.Url()">Logg inn</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle">Profil</a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="/profil/endre-profil/">@member.GetCurrentMemberAsync().Result!.Name</a>
+                                </li>
+                                <li>
+                                    <a href="/logout/">Logg ut</a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    </div>
+</header>
