@@ -1,4 +1,4 @@
-@import "../Settings/settings";
+@use "../Settings/settings";
 
 .primary {
   display: grid;
@@ -6,7 +6,7 @@
 }
 
 .main-sponsor {
-  background: $color-contrast-background;
+  background: settings.$color-contrast-background;
   
   h1 {
     font-family: sans-serif;

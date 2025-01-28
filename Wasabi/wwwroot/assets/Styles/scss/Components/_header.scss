@@ -1,9 +1,9 @@
-@import "../Settings/settings";
+@use "../Settings/settings";
 
 .header {
   padding: 0;
   margin: 0;
-  background-color: $color-primary;
+  background-color: settings.$color-primary;
   position: relative;
   z-index: 2;
   
@@ -23,7 +23,7 @@
       margin: 1.5rem 0;
       
       .divider {
-        border: solid 1px $color-white;
+        border: solid 1px settings.$color-white;
         margin: 0 2rem;
       }
       
@@ -44,7 +44,7 @@
       
       li a {
         margin: 0 1rem;
-        color: $color-contrast-background;
+        color: settings.$color-contrast-background;
         text-decoration: none;
         
         &:hover {
@@ -73,7 +73,7 @@
         list-style: none;
         padding: 5px 10px 10px 0;
         margin: 1rem -1rem;
-        background-color: $color-primary;
+        background-color: settings.$color-primary;
         width: max-content;
         
         li {

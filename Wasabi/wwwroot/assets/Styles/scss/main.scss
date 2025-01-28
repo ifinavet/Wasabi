@@ -1,8 +1,9 @@
-@import "./Settings/settings";
+@use "Settings/settings";
+@use "Components/header";
 
 body {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  background: $color-primary-background;
+  background: settings.$color-primary-background;
 }
