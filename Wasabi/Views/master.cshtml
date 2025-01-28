@@ -1,3 +1,4 @@
+@using System.Reflection
 @using Umbraco.Cms.Core.Models
 @inherits UmbracoViewPage;
 
@@ -19,29 +20,24 @@
         string description = Model.Value<string>("metaDescription") ?? Model.Root().Value<string>("metaDescription")!;
         <meta name="description" content="@description"/>
     }
+    
+    @* Main style *@
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/assets/Styles/css/main.css")?version=@Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId"/>
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/assets/Styles/css/Components/header.css")?version=@Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId"/>
+   
+    @* Page specific meta data *@
     @await RenderSectionAsync("Head", false)
 </head>
 <body>
-<!-- Header -->
-<header>
-    <div class="nav-wrapper">
-        <div class="nav-bar">
-            <a class="logo" href="/">
-                <img src="@navetLogo.MediaUrl()" alt="IFI-Navet"/>
-            </a>
-            <nav class="navigation" id="menu">
-                @await Html.PartialAsync("Navigation")
-            </nav>
-        </div>
-    </div>
-</header>
+@* Header *@
+@await Html.PartialAsync("Header", navetLogo)
 
-<!-- Body -->
+@* Body *@
 <main id="app">
     @RenderBody()
 </main>
 
-<!-- Footer -->
+@* Footer *@
 <footer>
     <div class="footer-information container footer-split">
         <div>

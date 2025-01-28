@@ -9,8 +9,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="AspNetCore.SassCompiler" Version="1.83.4" />
         <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
-        <PackageReference Include="Umbraco.Cms" Version="13.5.2"/>
+        <PackageReference Include="Umbraco.Cms" Version="13.5.3" />
     </ItemGroup>
 
     <ItemGroup>
@@ -23,6 +24,9 @@
 
     <ItemGroup>
         <Folder Include="Models\Generated\"/>
+        <Folder Include="wwwroot\assets\Font\" />
+        <Folder Include="wwwroot\assets\Images\" />
+        <Folder Include="wwwroot\assets\Styles\" />
         <Folder Include="wwwroot\umbraco\assets\"/>
     </ItemGroup>
 

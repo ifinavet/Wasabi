@@ -1,0 +1,14 @@
+@use "../Settings/settings";
+
+.primary {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
+
+.main-sponsor {
+  background: settings.$color-contrast-background;
+  
+  h1 {
+    font-family: sans-serif;
+  }
+}
