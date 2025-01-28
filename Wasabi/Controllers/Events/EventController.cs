@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
-using Org.BouncyCastle.Crypto.Engines;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Security;
@@ -43,8 +42,31 @@ public class EventController : RenderController
     [UmbracoMemberAuthorize("StudentMember", "NavetEventAdmins", "")]
     public IActionResult EventAttendeeRegistration()
     {
-        // Allowing only NavetEventAdmins to access the template 
-        return CurrentTemplate(CurrentPage);
+        Event model = new(CurrentPage, _publishedValueFallback);
+
+        List<AdministrationAttendee> attendees = [];
+
+        foreach (Attendee attendee in model.Children<Attendee>()!)
+        {
+            StudentMember? member = (StudentMember?)attendee.AttendingMember;
+            if (member is not null)
+                attendees.Add(new AdministrationAttendee
+                {
+                    FullName = member.FirstName + " " + member.LastName,
+                    Username = attendee.AttendingMember!.GetProperty("Username")!.GetValue()!.ToString()!,
+                    Allergies = attendee.Allergies,
+                    Email = attendee.AttendingMember!.GetProperty("Email")!.GetValue()!.ToString()!,
+                    PreferredLanguage = member.PreferredLanguage
+                });
+        }
+
+        EventAttendeeRegistrationViewModel viewModel = new(CurrentPage!, _publishedValueFallback)
+        {
+            EventId = model.Id,
+            Attendees = attendees
+        };
+
+        return CurrentTemplate(viewModel);
     }
 
     /// <summary>
@@ -72,7 +94,8 @@ public class EventController : RenderController
         if (migrate)
         {
             Console.WriteLine("Updated started");
-            foreach (Attendee attendee in model.Children<Attendee>()!)
+            foreach (Attendee attendee in model
+                         .Children<Attendee>()!)
             {
                 if (attendee.MemberId != string.Empty)
                     continue;
@@ -90,10 +113,8 @@ public class EventController : RenderController
         MemberIdentityUser? currentMember = await _memberManager.GetCurrentMemberAsync();
         bool isCurrentMemberAttending = false;
         if (currentMember != null && isRegistrationOpen)
-        {
             isCurrentMemberAttending = model.Children<Attendee>()!
                 .Any(a => a.MemberId == currentMember.Key.ToString());
-        }
 
         // Related job to the event
         string companyUdi = _contentService.GetById(model.HostingCompany!.Id)!.GetUdi().ToString();

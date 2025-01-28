@@ -1,14 +1,30 @@
-@inherits UmbracoViewPage<Event>
+@using Wasabi.ViewModels.Events
+@inherits UmbracoViewPage<Wasabi.ViewModels.Events.EventAttendeeRegistrationViewModel>
 
 @{
     Layout = "master.cshtml";
 }
 
-<h1>Hei!</h1>
-
-<ul>
-    @foreach (Attendee attendee in Model.Children<Attendee>()!)
+<table>
+    <tr>
+        <th>Brukernavn</th>
+        <th>Navn</th>
+        <th>Epost</th>
+        <th>Allergi</th>
+        <th>Språk</th>
+    </tr>
+    @foreach (AdministrationAttendee attendee in Model.Attendees)
     {
-        <li>@attendee.Name: @attendee.Allergies - @attendee.MemberId</li>
+        <tr>
+            <td>@attendee.Username</td>
+            <td>@attendee.FullName</td>
+            <td>@attendee.Email</td>
+            <td>@attendee.Allergies</td>
+            <td>@attendee.PreferredLanguage</td>
+        </tr>
     }
-</ul>
+</table>
+
+@section Scripts {
+
+}
