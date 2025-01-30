@@ -20,11 +20,11 @@
         string description = Model.Value<string>("metaDescription") ?? Model.Root().Value<string>("metaDescription")!;
         <meta name="description" content="@description"/>
     }
-    
+
     @* Main style *@
-    <link rel="stylesheet" type="text/css" href="@Url.Content("~/assets/Styles/css/main.css")?version=@Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId"/>
-    <link rel="stylesheet" type="text/css" href="@Url.Content("~/assets/Styles/css/Components/header.css")?version=@Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId"/>
-   
+    <link rel="stylesheet" type="text/css"
+          href="@Url.Content("~/assets/Styles/css/main.css")?version=@(Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId)"/>
+
     @* Page specific meta data *@
     @await RenderSectionAsync("Head", false)
 </head>
@@ -50,6 +50,6 @@
     </div>
 </footer>
 
-@await RenderSectionAsync("Scripts", required: false)
+@await RenderSectionAsync("Scripts", false)
 </body>
 </html>
