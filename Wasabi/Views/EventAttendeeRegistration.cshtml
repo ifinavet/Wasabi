@@ -3,24 +3,59 @@
 
 @{
     Layout = "master.cshtml";
+    Dictionary<string, bool> visibleColumns = Model.Columns;
+    Dictionary<string, string> englishToNorwegian = new()
+    {
+        { nameof(AdministrationAttendee.Username), "Brukernavn" },
+        { nameof(AdministrationAttendee.FullName), "Navn" },
+        { nameof(AdministrationAttendee.Email), "Epost" },
+        { nameof(AdministrationAttendee.Allergies), "Allergier" },
+        { nameof(AdministrationAttendee.PreferredLanguage), "Språk" }
+    };
 }
+
+<form action="@Model.Url()" method="get" aria-label="Visible Columns">
+    <div class="search-input-wrapper">
+        <input type="hidden" name="altTemplate" value="EventAttendeeRegistration">
+        @foreach (string column in visibleColumns.Keys)
+        {
+            <input type="checkbox" name="columns" value="@column" @(visibleColumns[column] ? "checked" : "")>
+            <label>@englishToNorwegian[column]</label>
+        }
+        <input type="submit"/>
+    </div>
+</form>
 
 <table>
     <tr>
-        <th>Brukernavn</th>
-        <th>Navn</th>
-        <th>Epost</th>
-        <th>Allergi</th>
-        <th>Språk</th>
+        @foreach (KeyValuePair<string, bool> column in visibleColumns.Where(column => column.Value))
+        {
+            <th>@englishToNorwegian[column.Key]</th>
+        }
     </tr>
     @foreach (AdministrationAttendee attendee in Model.Attendees)
     {
         <tr>
-            <td>@attendee.Username</td>
-            <td>@attendee.FullName</td>
-            <td>@attendee.Email</td>
-            <td>@attendee.Allergies</td>
-            <td>@attendee.PreferredLanguage</td>
+            @if (visibleColumns[nameof(attendee.FullName)])
+            {
+                <td>@attendee.FullName</td>
+            }
+            @if (visibleColumns[nameof(attendee.Username)])
+            {
+                <td>@attendee.Username</td>
+            }
+            @if (visibleColumns[nameof(attendee.Email)])
+            {
+                <td>@attendee.Email</td>
+            }
+            @if (visibleColumns[nameof(attendee.Allergies)])
+            {
+                <td>@attendee.Allergies</td>
+            }
+            @if (visibleColumns[nameof(attendee.PreferredLanguage)])
+            {
+                <td>@attendee.PreferredLanguage</td>
+            }
         </tr>
     }
 </table>

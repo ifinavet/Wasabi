@@ -40,12 +40,11 @@ public class EventController : RenderController
 
     [HttpGet]
     [UmbracoMemberAuthorize("StudentMember", "NavetEventAdmins", "")]
-    public IActionResult EventAttendeeRegistration()
+    public IActionResult EventAttendeeRegistration([FromQuery(Name = "columns")] HashSet<string> columns)
     {
         Event model = new(CurrentPage, _publishedValueFallback);
 
         List<AdministrationAttendee> attendees = [];
-
         foreach (Attendee attendee in model.Children<Attendee>()!)
         {
             StudentMember? member = (StudentMember?)attendee.AttendingMember;
@@ -65,6 +64,10 @@ public class EventController : RenderController
             EventId = model.Id,
             Attendees = attendees
         };
+
+        foreach (KeyValuePair<string, bool> column in viewModel.Columns)
+            viewModel.Columns[column.Key] = columns.Contains(column.Key);
+
 
         return CurrentTemplate(viewModel);
     }
