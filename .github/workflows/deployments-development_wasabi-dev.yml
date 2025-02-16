@@ -10,49 +10,42 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: deployments-development_wasabi 
   DOTNET_VERSION: '8.0.x'
   ASPNETCORE_ENVIRONMENT: 'Development'
-  PROJECT_NAME: 'Wasabi'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
       contents: read #This is required for actions/checkout
-
+    
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }} 
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Restore dependencies
-        run: dotnet restore
+      - name: Set up dependency caching for faster builds
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
 
       - name: Build with dotnet
-        run: dotnet build --configuration Development --no-restore
+        run: dotnet build --configuration Release 
 
-      - name: Publish project
-        run: |
-            dotnet publish "${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj" \
-            -c Development \
-            -o ./publish
-
-      - name: Set folder permissions
-        run: |
-            chmod -R 755 ./publish
-            if [ -d "./publish/App_Plugins" ]; then
-              chmod -R 777 ./publish/App_Plugins
-            fi
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: webapp 
-          path: ./publish
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
     runs-on: ubuntu-latest
@@ -68,8 +61,8 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: webapp
-          path: ./publish
+          name: .net-app 
+          path: ${{env.DOTNET_ROOT}}/myapp
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -84,5 +77,5 @@ jobs:
         with:
           app-name: 'wasabi-dev'
           slot-name: 'Production'
-          package: ./publish 
+          package: .
           
