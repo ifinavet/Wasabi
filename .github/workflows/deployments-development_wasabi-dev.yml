@@ -27,15 +27,6 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
           
-      - name: Install Dart Sass
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y curl
-          curl -L https://github.com/sass/dart-sass/releases/download/1.63.6/dart-sass-1.63.6-linux-x64.tar.gz -o dart-sass.tar.gz
-          sudo tar -xvzf dart-sass.tar.gz -C /usr/local/bin
-          sudo ln -s /usr/local/bin/dart-sass/sass /usr/local/bin/sass
-          echo "SASS_PATH=/usr/local/bin/sass" >> $GITHUB_ENV
-          
       - name: Set up dependency caching for faster builds
         uses: actions/cache@v3
         with:

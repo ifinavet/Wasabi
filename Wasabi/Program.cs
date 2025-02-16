@@ -21,11 +21,6 @@ builder.Services
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     });
 
-/*
-#if DEVELOPMENT
-builder.Services.AddSassCompiler();
-#endif
-*/
 
 WebApplication app = builder.Build();
 app.UseXfo(options => options.SameOrigin());
