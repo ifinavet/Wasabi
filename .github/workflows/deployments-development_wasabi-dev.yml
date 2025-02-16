@@ -10,7 +10,10 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_PACKAGE_PATH: '.'
+  AZURE_WEBAPP_NAME: deployments-development_wasabi 
+  DOTNET_VERSION: '8.0.x'
+  ASPNETCORE_ENVIRONMENT: 'Development'
+  PROJECT_NAME: 'Wasabi'
 
 jobs:
   build:
@@ -24,7 +27,7 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.x'
+          dotnet-version: ${{ env.DOTNET_VERSION }} 
 
       - name: Restore dependencies
         run: dotnet restore
@@ -32,21 +35,24 @@ jobs:
       - name: Build with dotnet
         run: dotnet build --configuration Development --no-restore
 
-      - name: dotnet publish
-        run: dotnet publish -c Development -o ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/myapp
-        
+      - name: Publish project
+        run: |
+            dotnet publish "${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj" \
+            -c Development \
+            -o ./publish
+
       - name: Set folder permissions
         run: |
-            chmod -R 755 ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/myapp
-            if [ -d "${{env.AZURE_WEBAPP_PACKAGE_PATH}}/myapp/App_Plugins" ]; then
-              chmod -R 777 ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/myapp/App_Plugins
+            chmod -R 755 ./publish
+            if [ -d "./publish/App_Plugins" ]; then
+              chmod -R 777 ./publish/App_Plugins
             fi
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: webapp 
-          path: ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/myapp
+          path: ./publish
 
   deploy:
     runs-on: ubuntu-latest
@@ -63,7 +69,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: webapp
-          path: ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/myapp
+          path: ./publish
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -78,5 +84,5 @@ jobs:
         with:
           app-name: 'wasabi-dev'
           slot-name: 'Production'
-          package: ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/myapp
+          package: ./publish 
           
