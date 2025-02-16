@@ -6,7 +6,7 @@ namespace Wasabi.Services;
 public interface IImageService
 {
     public string GetProfileImageUrl(StudentMember studentMember, string? cropAlias = null);
-    public string GetCompanyImageUrl(Company company);
+    public string GetCompanyImageUrl(Company? company);
 }
 
 public class ImageService : IImageService
@@ -46,7 +46,7 @@ public class ImageService : IImageService
     ///     The URL of the company image if it exists; otherwise, the URL of a placeholder image.
     ///     If neither is available, returns a data URL.
     /// </returns>
-    public string GetCompanyImageUrl(Company company)
+    public string GetCompanyImageUrl(Company? company)
     {
         if (company.CompanyLogo != null)
             return company.CompanyLogo.MediaUrl();

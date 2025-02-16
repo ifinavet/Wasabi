@@ -1,0 +1,93 @@
+@use "../Settings/settings" as *;
+
+
+@media (min-width: $breakpoint-sm) {
+  // Styles for small devices
+}
+
+@media (min-width: $breakpoint-md) {
+  // Styles for medium devices
+}
+
+@media (min-width: $breakpoint-lg) {
+  // Styles for large devices
+}
+
+@media (min-width: $breakpoint-xl) {
+  // Style for extra large devices
+  .page-container {
+    width: 100vw;
+    display: grid;
+    grid-template-columns: 3fr [content]6fr 3fr;
+
+    .event-header {
+      width: 100%;
+      grid-column-start: content;
+      color: $color-primary;
+      border-bottom: solid 1px $color-primary;
+      margin: 2rem 0 2rem 0;
+
+      * {
+        justify-self: center;
+
+      }
+    }
+
+    .content-container {
+      grid-column-start: content;
+      display: grid;
+      grid-template-columns: 4fr 2fr;
+      gap: 1rem;
+      min-width: calc($breakpoint-xl * 0.75);
+      max-width: calc($breakpoint-xl * 0.85);
+    }
+
+    .main {
+      max-width: 100%;
+    }
+
+    .aside {
+      max-width: 100%;
+
+      .company {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        .image-container {
+          width: 100%;
+
+
+          .image {
+            margin: auto;
+            height: 75%;
+            width: 75%;
+
+            img {
+              height: inherit;
+              width: 100%;
+            }
+
+          }
+        }
+      }
+    }
+  }
+
+  .meta-data-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    .meta-data-item {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      /*
+      .material-symbols-rounded {
+        font-variation-settings: 'opsz' 48;
+      }
+      */
+    }
+  }
+}

@@ -1,14 +1,46 @@
 @use "../Settings/settings";
 
-.primary {
+.leader {
+  width: 100vw;
+  min-height: 70vh;
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
 }
 
-.main-sponsor {
-  background: settings.$color-contrast-background;
-  
-  h1 {
-    font-family: sans-serif;
+.partner-container {
+  width: 50vw;
+  background-color: settings.$color-contrast-background;
+
+  .card-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 3rem;
+  }
+
+  .content {
+    display: flex;
+
+    .promo-description {
+      width: 40%;
+    }
+
+    .image {
+      height: 250px;
+      width: 250px;
+      padding: 2rem;
+      overflow: hidden;
+      clip-path: circle(2rem);
+
+      & > img {
+        width: 80%;
+      }
+
+      &:before {
+        content: "";
+        clip-path: circle(50rem);
+        background-color: settings.$color-contrast-background
+      }
+    }
   }
 }

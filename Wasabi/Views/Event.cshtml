@@ -1,45 +1,132 @@
-@using Wasabi.ViewModels.Events
 @using Umbraco.Cms.Core.Security
+@using Wasabi.Services
+@using Wasabi.ViewModels.Events
 @inherits UmbracoViewPage<Wasabi.ViewModels.Events.EventViewModel>
+@inject IImageService ImageService
 @inject IMemberManager MemberManager;
 
 @{
     Layout = "master.cshtml";
     string description = Model.EventTeaser ?? Model.Root().Value<string>("metaDescription")!;
+
+    bool isEventAdmin = MemberManager.IsMemberAuthorizedAsync(allowGroups: ["NavetEventAdmins"]).Result;
+
+    // Event meta data
+    int remainingAvailableSpots = Model.ParticipantLimit - Model.AmountOfAttendees;
+    string dayOfWeek = Model.EventDate.ToString("dddd");
+    dayOfWeek = char.ToUpper(dayOfWeek[0]) + dayOfWeek.Substring(1);
+
+    Company company = (Company)Model.HostingCompany!;
 }
 
 @section Head {
     <meta name="description" content="@description"/>
 }
 
-<h1>@Model.Name</h1>
 
-@if (!Model.IsRegistrationOpen)
-{
-    <h3>Arrangmentet åpner for påmelding @Model.RegistrationDate.ToString("dddd dd.MM kl. HH:mm")</h3>
-}
-else if (!MemberManager.IsLoggedIn())
-{
-    <a href="/login/?redirectURL=@Model.Url()">Logg inn for å melde deg på</a>
-}
-else if (Model.IsCurrentMemberAttending)
-{
-    <p>Du er påmeldt</p>
-    @await Html.PartialAsync("Event/EventUnregistrationForm")
-}
-else if (Model.AmountOfAttendees < Model.ParticipantLimit)
-{
-    @await Html.PartialAsync("Event/EventRegistrationForm", new EventRegistrationFormViewModel())
-}
-else
-{
-    <h3>Arrangementet er fult</h3>
-}
+<div class="page-container">
 
-<a href="@Model.Url()?altTemplate=EventAttendeeRegistration">Administer</a>
+    <div class="event-header">
+        <h1>@Model.Name</h1>
+    </div>
 
-<div class="container">
-    <h2 class="primary">@Umbraco.GetDictionaryValue("jobRelatedHeader") @Model.HostingCompany?.Name</h2>
-    <div class="spacer"></div>
-    @await Html.PartialAsync("JobListings/JobListingsSearchResult", Model.JobListings)
+    <div class="content-container">
+        <div class="main">
+            <div class="card card--main info">
+                <div class="meta-data-grid">
+                    <div class="meta-data-item">
+                        <span class="icon">
+                            <span class="material-symbols-rounded">
+                                event
+                            </span>
+                        </span>
+                        <span class="meta-data main-text">
+                            @dayOfWeek @Model.EventDate.ToString("dd.MM")<br/>@Model.EventDate.ToString("kl. HH:mm")
+                        </span>
+                    </div>
+                    <div class="meta-data-item">
+                        <span class="icon">
+                            <span class="material-symbols-rounded">
+                                map
+                            </span>
+                        </span>
+                        <span class="meta-data main-text">
+                            @Model.Location
+                        </span>
+                    </div>
+                    <div class="meta-data-item">
+                        <span class="icon">
+                            <span class="material-symbols-rounded">
+                                fork_spoon
+                            </span>
+                        </span>
+                        <span class="meta-data main-text">
+                            @Model.Food
+                        </span>
+                    </div>
+                    <div class="meta-data-item">
+                        <span class="icon">
+                            <span class="material-symbols-rounded">
+                                group
+                            </span>
+                        </span>
+                        <span class="meta-data main-text">
+                            @remainingAvailableSpots plasser igjen
+                        </span>
+                    </div>
+                </div>
+                <div class="registration-btn">
+                    @if (!Model.IsRegistrationOpen)
+                    {
+                        <p>Arrangmentet åpner for påmelding @Model.RegistrationDate.ToString("dddd dd.MM kl. HH:mm")</p>
+                    }
+                    else if (!MemberManager.IsLoggedIn())
+                    {
+                        <a href="/login/?redirectURL=@Model.Url()">Logg inn for å melde deg på</a>
+                    }
+                    else if (Model.IsCurrentMemberAttending)
+                    {
+                        <p>Du er påmeldt</p>
+                        @await Html.PartialAsync("Event/EventUnregistrationForm")
+                    }
+                    else if (Model.AmountOfAttendees < Model.ParticipantLimit)
+                    {
+                        @await Html.PartialAsync("Event/EventRegistrationForm", new EventRegistrationFormViewModel())
+                    }
+                    else
+                    {
+                        <h3>Arrangementet er fult</h3>
+                    }
+                </div>
+            </div>
+
+            @if (isEventAdmin)
+            {
+                <a href="@Model.Url()?altTemplate=EventAttendeeRegistration">Administer</a>
+            }
+
+            <div class="event-description">
+                @Model.EventDescription
+            </div>
+
+            <div class="container">
+                <h2 class="primary">@Umbraco.GetDictionaryValue("jobRelatedHeader") @Model.HostingCompany?.Name</h2>
+                <div class="spacer"></div>
+                @await Html.PartialAsync("JobListings/JobListingsSearchResult", Model.JobListings)
+            </div>
+        </div>
+        <div class="aside">
+            <div class="card company">
+                <div class="image-container">
+                    <div class="image">
+                        <img src="@ImageService.GetCompanyImageUrl(company)" alt="@company.Name">
+                    </div>
+                </div>
+                @company.CompanyDescription
+            </div>
+        </div>
+
+    </div>
+
+
 </div>

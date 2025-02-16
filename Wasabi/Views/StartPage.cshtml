@@ -1,6 +1,5 @@
-@using Wasabi.Services
-@using Wasabi.ViewModels
 @inject IImageService ImageService
+@using Wasabi.Services
 @inherits UmbracoViewPage<Wasabi.ViewModels.StartPageViewModel>
 @{
     Layout = "master.cshtml";
@@ -9,8 +8,37 @@
     Event[]? upcomingEvents = Model.Events;
 }
 
-@* Upcoming Events *@
-@await Html.PartialAsync("Carousel", upcomingEvents)
+<div class="leader">
+
+    @* About Partner company *@
+    <div class="partner-container">
+        <div class="partner">
+            <div class="card-header">
+                <div class="title">
+                    <h1 class="secondary-header">Hovedsamarbeidspartner @partner?.Name</h1>
+                </div>
+                <div class="sub-title">
+                    <h3>H24-V25</h3>
+                </div>
+            </div>
+            <div class="content">
+                <div class="image">
+                    <img loading="eager" src="@ImageService.GetCompanyImageUrl(partner)" alt="@partner?.Name logo"/>
+                </div>
+                <div class="promo-description">
+                    <h2>@partner?.Name</h2>
+                    @partner?.CompanyDescription
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    @* Upcoming Events *@
+    <div class="upcoming-events">
+
+    </div>
+</div>
 
 @* Job Listings *@
 <div class="card card--featured">
@@ -42,27 +70,6 @@
     </div>
 </div>
 
-@* About Partner company *@
-@if (partner != null)
-{
-    <div class="partner card">
-        <div class="container">
-            <h2 class="h1">@Umbraco.GetDictionaryValue("partner")</h2>
-            <div class="row middle-xs center-xs start-md">
-                <div class="col-xs-12 col-md-4 center">
-                    <div class="partner-logo">
-                        <img loading="lazy" src="@ImageService.GetCompanyImageUrl(partner)" alt="@partner.Name logo"/>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-md-8">
-                    <h2>@partner.Name</h2>
-                    @partner.CompanyDescription
-                </div>
-
-            </div>
-        </div>
-    </div>
-}
 
 @* Board members *@
 <div class="board-members">
@@ -78,7 +85,8 @@
             <div class="board-member col-xs-12 col-sm-4 col-md-3">
                 <div class="board-member-photo">
                     <div class="round-frame">
-                        <img src="@ImageService.GetProfileImageUrl(member, "boardMember")" alt="@member.Name" loading="lazy"/>
+                        <img src="@ImageService.GetProfileImageUrl(member, "boardMember")" alt="@member.Name"
+                             loading="lazy"/>
                     </div>
                 </div>
                 <div class="board-member-personalia">

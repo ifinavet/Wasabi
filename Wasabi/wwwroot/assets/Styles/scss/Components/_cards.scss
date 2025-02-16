@@ -1,0 +1,12 @@
+@use "../Settings/settings";
+
+.card {
+  border-radius: 15px;
+  padding: 2rem;
+  background-color: settings.$color-contrast-background;
+
+  &--main {
+    background-color: settings.$color-primary;
+    color: settings.$color-white;
+  }
+}

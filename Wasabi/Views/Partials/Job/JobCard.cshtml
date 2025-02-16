@@ -1,14 +1,15 @@
-@using Wasabi.Services
 @inject ImageService ImageService
+@using Wasabi.Services
 @inherits UmbracoViewPage<JobListing>
 
 @{
-    Company company = (Model.Employer as Company)!;
+    Company? company = (Model.Employer as Company)!;
 }
 
 <div class="job-card">
     <div class="job-card-top">
-        <div class="job-type job-type--@Model.JobType?.ToLower()">@Umbraco.GetDictionaryValue(Model.JobType ?? string.Empty)</div>
+        <div
+            class="job-type job-type--@Model.JobType?.ToLower()">@Umbraco.GetDictionaryValue(Model.JobType ?? string.Empty)</div>
         <div class="job-company-logo">
             <img src="@ImageService.GetCompanyImageUrl(company)" alt="@company.Name">
         </div>
