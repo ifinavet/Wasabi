@@ -9,6 +9,9 @@ on:
       - deployments/development
   workflow_dispatch:
 
+env:
+  AZURE_WEBAPP_PACKAGE_PATH: '.'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -30,7 +33,7 @@ jobs:
         run: dotnet build --configuration Development --no-restore
 
       - name: dotnet publish
-        run: dotnet publish -c Development -o ./Publish
+        run: dotnet publish -c Development -o ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/myapp
         
       - name: Set folder permissions
         run: |
@@ -43,7 +46,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: webapp 
-          path: ./Publish 
+          path: ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/myapp
 
   deploy:
     runs-on: ubuntu-latest
@@ -60,7 +63,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: webapp
-          path: ./Publish
+          path: ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/myapp
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -75,5 +78,5 @@ jobs:
         with:
           app-name: 'wasabi-dev'
           slot-name: 'Production'
-          package: .
+          package: ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/myapp
           
