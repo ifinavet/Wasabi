@@ -48,7 +48,7 @@ public class ImageService : IImageService
     /// </returns>
     public string GetCompanyImageUrl(Company? company)
     {
-        if (company.CompanyLogo != null)
+        if (company?.CompanyLogo != null)
             return company.CompanyLogo.MediaUrl();
 
         string? placeHolder = _umbracoHelper.Media(1339)?.MediaUrl();
