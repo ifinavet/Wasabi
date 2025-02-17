@@ -1,5 +1,5 @@
 @using Umbraco.Cms.Core.Security
-@inherits UmbracoViewPage;
+@inherits UmbracoViewPage<Wasabi.ViewModels.HeaderViewModel>
 @inject IMemberManager _memberManager;
 
 @{
@@ -43,7 +43,7 @@
                     @if (!member.IsLoggedIn())
                     {
                         <li>
-                            <a href="/login/?redirectURL=@Model.Url()">Logg inn</a>
+                            <a href="/login/?redirectURL=@Model.PageUrl">Logg inn</a>
                         </li>
                     }
                     else
