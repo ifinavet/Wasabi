@@ -1,9 +1,0 @@
-@use "Settings/settings";
-@use "Components/header";
-
-body {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  background: settings.$color-primary-background;
-}

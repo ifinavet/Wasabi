@@ -1,0 +1,4 @@
+@use '../base/colors';
+h1 {
+  color: colors.$color-primary;
+}
