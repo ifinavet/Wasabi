@@ -9,10 +9,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AspNetCore.SassCompiler" Version="1.83.4" />
-        <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
-        <PackageReference Include="Umbraco.Cms" Version="13.5.3" />
-        <PackageReference Include="uSync" Version="13.2.6" />
+        <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0"/>
+        <PackageReference Include="Umbraco.Cms" Version="13.5.3"/>
+        <PackageReference Include="uSync" Version="13.2.6"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -25,9 +24,8 @@
 
     <ItemGroup>
         <Folder Include="Models\Generated\"/>
-        <Folder Include="wwwroot\assets\Font\" />
-        <Folder Include="wwwroot\assets\Images\" />
-        <Folder Include="wwwroot\assets\Styles\" />
+        <Folder Include="wwwroot\assets\images\"/>
+        <Folder Include="wwwroot\assets\css\"/>
         <Folder Include="wwwroot\umbraco\assets\"/>
     </ItemGroup>
 
@@ -1158,6 +1156,44 @@
         <_ContentIncludedByDefault Remove="uSync\migrate\v8_migration_2024_11_03_013746\_site\views\Semester.cshtml"/>
         <_ContentIncludedByDefault Remove="uSync\migrate\v8_migration_2024_11_03_013746\_site\views\StartPage.cshtml"/>
         <_ContentIncludedByDefault Remove="uSync\migrate\v8_migration_2024_11_03_013746\_site\views\Validate.cshtml"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina01-Bold.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina01-BoldItalic.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina01-Light.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina01-LightItalic.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina01-Regular.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina01-RegularItalic.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina01-SemiBold.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina01-SemiboldItalic.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina02-Bold.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina02-BoldItalic.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina02-Light.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina02-LightItalic.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina02-Regular.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina02-RegularItalic.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina02-SemiBold.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina02-SemiboldItalic.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina03-Bold.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina03-BoldItalic.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina03-Light.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina03-LightItalic.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina03-Regular.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina03-RegularItalic.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina03-SemiBold.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina03-SemiboldItalic.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina04-Bold.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina04-BoldItalic.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina04-Light.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina04-LightItalic.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina04-Regular.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina04-RegularItalic.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina04-SemiBold.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\Font\Eina04-SemiboldItalic.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\assets\css\css\Components\header.css"/>
+        <_ContentIncludedByDefault Remove="wwwroot\assets\css\css\Components\header.css.map"/>
+        <_ContentIncludedByDefault Remove="wwwroot\assets\css\css\main.css"/>
+        <_ContentIncludedByDefault Remove="wwwroot\assets\css\css\main.css.map"/>
+        <_ContentIncludedByDefault Remove="wwwroot\assets\css\css\Pages\startPage.css"/>
+        <_ContentIncludedByDefault Remove="wwwroot\assets\css\css\Pages\startPage.css.map"/>
     </ItemGroup>
 
     <PropertyGroup>

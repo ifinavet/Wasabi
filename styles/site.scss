@@ -1,0 +1,11 @@
+@use 'utilities/_utilities';
+@use 'pages/_pages';
+@use 'layouts/_layouts';
+@use 'components/_components';
+@use 'base/_base';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
