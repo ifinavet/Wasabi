@@ -1,14 +1,14 @@
-@use '../base/colors';
+@use '../base' as *;
 
 .image-container-circle {
-  width: 60%;
+  width: 80%;
 
   .image {
     aspect-ratio: 1 / 1;
     border-radius: 50%;
     display: grid;
     place-content: center;
-    background-color: colors.$color-primary-background;
+    background-color: $color-primary-background;
     overflow: hidden;
 
     &--company {

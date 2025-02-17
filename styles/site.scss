@@ -1,9 +1,9 @@
-@use 'utilities/_utilities';
-@use 'pages/_pages';
-@use 'layouts/_layouts';
-@use 'components/_components';
-@use 'base/_base';
-@use 'vendor/_vendor';
+@use 'utilities';
+@use 'pages';
+@use 'layouts';
+@use 'components';
+@use 'base';
+@use 'vendor';
 
 * {
   margin: 0;

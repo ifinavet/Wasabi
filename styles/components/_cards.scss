@@ -1,11 +1,11 @@
-@use '../base/colors';
+@use '../base' as *;
 
 .card {
   border-radius: 15px;
-  background-color: colors.$color-contrast-background;
+  background-color: $color-contrast-background;
   padding: 2rem;
 
   &--main {
-    background-color: colors.$color-primary;
+    background-color: $color-primary;
   }
 }

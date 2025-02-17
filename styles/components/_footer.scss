@@ -1,9 +1,8 @@
-@use '../base/colors';
-@use '../base/typography';
+@use '../base' as *;
 
 footer {
-  background: colors.$color-primary;
-  color: colors.$color-white;
+  background: $color-primary;
+  color: $color-white;
   padding-bottom: 3rem;
   padding-top: 1rem;
   min-height: 100px;
@@ -26,12 +25,9 @@ footer {
 
   .footer-information {
     h1, h2, h3 {
-      font-size: typography.$h3-size;
+      font-size: $h3-size;
     }
 
-    p {
-      font-size: typography.$secondary-text-size;
-    }
   }
 
   .footer-link {
@@ -42,5 +38,6 @@ footer {
     color: white;
     display: block;
     margin-bottom: 1em;
+    font-size: $text-size;
   }
 }
