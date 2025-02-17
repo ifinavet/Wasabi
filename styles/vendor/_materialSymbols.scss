@@ -1,0 +1,9 @@
+@use '../base/typography';
+
+.material-symbols-rounded {
+  font-variation-settings: 'FILL' 1,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48;
+  font-size: typography.$h3-size !important;
+}
