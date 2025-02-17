@@ -114,3 +114,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Webpack generated files
+Wasabi/wwwroot/assets/css/*
+Wasabi/wwwroot/assets/css/*.css
