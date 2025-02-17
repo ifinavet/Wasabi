@@ -11,12 +11,20 @@
 
     // Event metadata
     string dayOfWeek = Model.EventDate.ToString("dddd");
-    dayOfWeek = char.ToUpper(dayOfWeek[0]) + dayOfWeek.Substring(1);
+    dayOfWeek = char.ToUpper(dayOfWeek[0]) + dayOfWeek[1..];
     int remainingAvailableSpots = Model.ParticipantLimit - Model.AmountOfAttendees;
+
+    string companyLogoUrl = "https://wwww.ifinavet.no" + ImageService.GetCompanyImageUrl((Company?)Model.HostingCompany);
 }
 
 @section Head {
     <meta name="description" content="@description"/>
+
+    @* meta tags for showing images on facebook *@
+    <meta property="og:image" content="@companyLogoUrl"/>
+    <meta property="og:image:secure_url" content="@companyLogoUrl"/>
+    <meta property="og:image:type" content="image/jpeg"/>
+    <meta property="og:title" content="@Model.EventTeaser"/>
 }
 
 <div class="page--layout">
@@ -144,7 +152,7 @@
                     </div>
                 }
 
-                <div class="admin-btn">
+                <div class="btn--admin">
                     <a href="@Model.Url()?altTemplate=EventAttendeeRegistration">Administer</a>
                 </div>
             </aside>
