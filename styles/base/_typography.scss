@@ -42,6 +42,11 @@ p, a, .main-text {
   font-family: Eina01-Regular, sans-serif;
 }
 
+.main-text-semibold {
+  font-size: $text-size;
+  font-family: Eina01-SemiBold, sans-serif;
+}
+
 .secondary-text {
   font-size: $secondary-text-size;
   font-family: Eina01-Regular, sans-serif;
