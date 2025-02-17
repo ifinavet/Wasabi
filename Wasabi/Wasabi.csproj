@@ -11,7 +11,7 @@
     <ItemGroup>
         <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0"/>
         <PackageReference Include="Umbraco.Cms" Version="13.5.3"/>
-        <PackageReference Include="uSync" Version="13.2.6"/>
+        <PackageReference Include="uSync" Version="14.2.3"/>
     </ItemGroup>
 
     <ItemGroup>
