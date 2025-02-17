@@ -1,18 +1,163 @@
-@using Wasabi.ViewModels.Events
 @using Umbraco.Cms.Core.Security
+@using Wasabi.Services
+@using Wasabi.ViewModels.Events
 @inherits UmbracoViewPage<Wasabi.ViewModels.Events.EventViewModel>
 @inject IMemberManager MemberManager;
+@inject IImageService ImageService;
 
 @{
     Layout = "master.cshtml";
     string description = Model.EventTeaser ?? Model.Root().Value<string>("metaDescription")!;
+
+    // Event metadata
+    string dayOfWeek = Model.EventDate.ToString("dddd");
+    dayOfWeek = char.ToUpper(dayOfWeek[0]) + dayOfWeek.Substring(1);
+    int remainingAvailableSpots = Model.ParticipantLimit - Model.AmountOfAttendees;
 }
 
 @section Head {
     <meta name="description" content="@description"/>
 }
 
-<h1>@Model.Name</h1>
+<div class="page--layout">
+    <div class="page--container">
+        <div class="page--title">
+            <h1>@Model.Name</h1>
+        </div>
+        <div class="page--content">
+            <main class="page--main">
+                <div class="card meta-data card--main">
+                    <div class="metadata">
+                        <div class="metadata-item">
+                            <div class="icon">
+                                <span class="material-symbols-rounded">
+                                    event 
+                                </span>
+                            </div>
+                            <div class="metadata-data">
+                                <span class="main-text semi-bold">
+                                    @dayOfWeek @Model.EventDate.ToString("dd.MM") <br/> @Model.EventDate.ToString("kl. HH:mm")
+                                </span>
+                            </div>
+                        </div>
+                        <div class="metadata-item">
+                            <div class="icon">
+                                <span class="material-symbols-rounded">
+                                    map
+                                </span>
+                            </div>
+                            <div class="metadata-data">
+                                <span class="main-text semi-bold"> @Model.Location </span>
+                            </div>
+                        </div>
+                        <div class="metadata-item">
+                            <div class="icon">
+                                <span class="material-symbols-rounded">
+                                    fork_spoon
+                                </span>
+                            </div>
+                            <div class="metadata-data">
+                                <span class="main-text semi-bold">
+                                    @Model.Food
+                                </span>
+                            </div>
+                        </div>
+                        <div class="metadata-item">
+                            <div class="icon">
+                                <span class="material-symbols-rounded">
+                                    group
+                                </span>
+                            </div>
+                            <div class="metadata-data">
+                                <span class="main-text semi-bold">
+                                    @remainingAvailableSpots plasser igjen
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="signup btn--main"></div>
+                </div>
+                <div class="card information">
+                    <div class="teaser">
+                        <h3>@Model.EventTeaser</h3>
+                    </div>
+                    <div class="description">
+                        @Model.EventDescription
+                    </div>
+                </div>
+            </main>
+            <aside class="page--aside">
+                <div class="card card--company">
+                    <div class="cut-effect">
+                        <div class="image-container-circle border-gray">
+                            <div class="image image--company">
+                                <img src="@ImageService.GetCompanyImageUrl((Company?)Model.HostingCompany)"
+                                     alt="@Model.HostingCompany?.Name">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="company-description">
+                        @Model.HostingCompany?.GetProperty("CompanyDescription")?.GetValue()
+                    </div>
+                </div>
+
+                @if (Model.Organizers.FirstOrDefault() != null)
+                {
+                    StudentMember mainOrganizer = Model.Organizers.FirstOrDefault()!;
+
+                    <div class="card card--main-organizer">
+                        <div class="image-container-circle ">
+                            <div class="image image--person">
+                                <img src="@ImageService.GetProfileImageUrl(mainOrganizer)" alt="@mainOrganizer.Name">
+                            </div>
+                        </div>
+                        <div class="organizer-information">
+                            <div class="name">
+                                <h3>Ansvarlig</h3>
+                                <p> @mainOrganizer.Name </p>
+                            </div>
+                            <div class="btn-contact">
+                                <a href="mailto:@mainOrganizer.GetProperty("Email")?.GetValue()">Kontakt</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @foreach (StudentMember? assistantOrganizer in Model.Organizers.Skip(1))
+                {
+                    <div class="card card--assistant-organiser">
+                        <div class="image-container-circle">
+                            <div class="image image--person">
+                                <img src="@ImageService.GetProfileImageUrl(assistantOrganizer!)"
+                                     alt="@assistantOrganizer!.Name">
+                            </div>
+                        </div>
+                        <div class="assistant-organizer-information">
+                            <div class="name">
+                                <h3>Medhjelper</h3>
+                                <p>@assistantOrganizer.Name</p>
+                            </div>
+                            <div class="btn-contact">
+                                <a href="mailto:@assistantOrganizer.GetProperty("Email")?.GetValue()">Kontakt</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div class="admin-btn">
+                    <a href="@Model.Url()?altTemplate=EventAttendeeRegistration">Administer</a>
+                </div>
+            </aside>
+        </div>
+
+        <div class="container">
+            <h2 class="primary">@Umbraco.GetDictionaryValue("jobRelatedHeader") @Model.HostingCompany?.Name</h2>
+            <div class="spacer"></div>
+            @await Html.PartialAsync("JobListings/JobListingsSearchResult", Model.JobListings)
+        </div>
+    </div>
+</div>
+
 
 @if (!Model.IsRegistrationOpen)
 {
@@ -36,10 +181,5 @@ else
     <h3>Arrangementet er fult</h3>
 }
 
-<a href="@Model.Url()?altTemplate=EventAttendeeRegistration">Administer</a>
 
-<div class="container">
-    <h2 class="primary">@Umbraco.GetDictionaryValue("jobRelatedHeader") @Model.HostingCompany?.Name</h2>
-    <div class="spacer"></div>
-    @await Html.PartialAsync("JobListings/JobListingsSearchResult", Model.JobListings)
-</div>
+

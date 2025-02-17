@@ -1,0 +1,30 @@
+@use '../base/colors';
+
+.image-container-circle {
+  width: 60%;
+
+  .image {
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    display: grid;
+    place-content: center;
+    background-color: colors.$color-primary-background;
+    overflow: hidden;
+
+    &--company {
+      padding: 1rem;
+    }
+
+    &--person {
+      padding: 0;
+    }
+
+    img {
+      width: 100%;
+      height: inherit;
+
+    }
+  }
+
+
+}
