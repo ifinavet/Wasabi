@@ -7,9 +7,9 @@
   }
 }
 
-@include font('Eina01-Regular', '/assets/Font/Eina01-Regular', regular, normal);
-@include font('Eina01-SemiBold', '/assets/Font/Eina01-SemiBold', semibold, normal);
-@include font('Eina01-Bold', '/assets/Font/Eina01-Bold', bold, normal);
+@include font('Eina01-Regular', '/assets/fonts/Eina01-Regular', regular, normal);
+@include font('Eina01-SemiBold', '/assets/fonts/Eina01-SemiBold', semibold, normal);
+@include font('Eina01-Bold', '/assets/fonts/Eina01-Bold', bold, normal);
 
 $h1-font: 2.986rem;
 $h2-font: 2.488rem;

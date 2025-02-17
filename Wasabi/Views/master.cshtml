@@ -1,11 +1,8 @@
-@using System.Reflection
-@using Umbraco.Cms.Core.Models
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @inherits UmbracoViewPage;
 
 @{
     Layout = null;
-
-    MediaWithCrops navetLogo = Model.Root().Value<MediaWithCrops>("Logo")!;
 }
 
 <!DOCTYPE html>
@@ -23,14 +20,15 @@
 
     @* Main style *@
     <link rel="stylesheet" type="text/css"
-          href="@Url.Content("~/assets/Styles/css/main.css")?version=@(Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId)"/>
+          href="@Url.Content("~/assets/css/site.css")"
+          asp-append-version="true"/>
 
     @* Page specific meta data *@
     @await RenderSectionAsync("Head", false)
 </head>
 <body>
 @* Header *@
-@await Html.PartialAsync("Header", navetLogo)
+@await Html.PartialAsync("Header")
 
 @* Body *@
 <main id="app">
