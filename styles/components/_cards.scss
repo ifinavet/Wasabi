@@ -1,0 +1,11 @@
+@use '../base' as *;
+
+.card {
+  border-radius: 15px;
+  background-color: $color-contrast-background;
+  padding: 2rem;
+
+  &--main {
+    background-color: $color-primary;
+  }
+}

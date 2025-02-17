@@ -1,0 +1,49 @@
+@use '../base' as *;
+
+@media screen and (min-width: $breakpoint-sm) {
+
+}
+
+@media screen and (min-width: $breakpoint-md) {
+
+}
+
+@media screen and (min-width: $breakpoint-lg) {
+
+}
+
+@media screen and (min-width: $breakpoint-xl) {
+  .metadata {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    .metadata-item {
+      display: flex;
+      align-items: center;
+      color: $color-white;
+    }
+  }
+
+  .card--company {
+    $offset-margin: 4rem;
+
+    margin: $offset-margin 0 0;
+
+    .cut-effect {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: $offset-margin * -1;
+
+      &:first-child {
+        position: relative;
+        bottom: 20%;
+      }
+    }
+
+    .border-gray .image {
+      border: $color-light-gray solid 2px;
+    }
+  }
+}
+                                    

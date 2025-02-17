@@ -1,0 +1,98 @@
+@use "../base" as *;
+
+@media (min-width: $breakpoint-sm) {
+}
+
+@media (min-width: $breakpoint-md) {
+}
+
+@media (min-width: $breakpoint-lg) {
+  .header {
+    padding: 0;
+    margin: 0;
+    background-color: $color-primary;
+    position: relative;
+    z-index: 2;
+
+    .nav-bar {
+      width: 100%;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-direction: column;
+
+      .logo {
+        display: flex;
+        flex-direction: row;
+        height: 3rem;
+        margin: 1.5rem 0;
+
+        .divider {
+          border: solid 1px $color-white;
+          margin: 0 2rem;
+        }
+
+        img {
+          height: 100%;
+          width: initial;
+        }
+      }
+    }
+
+    .navigation {
+      ul {
+        margin: 0;
+        padding: 1rem 0;
+        list-style-type: none;
+        display: flex;
+        box-sizing: border-box;
+
+        li a {
+          margin: 0 1rem;
+          color: $color-contrast-background;
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      .dropdown {
+        position: relative;
+        display: block;
+        box-sizing: border-box;
+
+        &:hover .dropdown-menu {
+          display: block;
+        }
+
+        a {
+          padding: 2rem 0;
+        }
+
+        .dropdown-menu {
+          display: none;
+          z-index: 1;
+          position: absolute;
+          list-style: none;
+          padding: 5px 10px 10px 0;
+          margin: 1rem -1rem;
+          background-color: $color-primary;
+          width: max-content;
+
+          li {
+            margin: 0;
+          }
+
+          a {
+            display: block;
+            padding: 10px 15px;
+          }
+        }
+      }
+    }
+  }
+}

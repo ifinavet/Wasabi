@@ -1,11 +1,9 @@
-@using System.Reflection
-@using Umbraco.Cms.Core.Models
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Wasabi.ViewModels
 @inherits UmbracoViewPage;
 
 @{
     Layout = null;
-
-    MediaWithCrops navetLogo = Model.Root().Value<MediaWithCrops>("Logo")!;
 }
 
 <!DOCTYPE html>
@@ -23,7 +21,13 @@
 
     @* Main style *@
     <link rel="stylesheet" type="text/css"
-          href="@Url.Content("~/assets/Styles/css/main.css")?version=@(Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId)"/>
+          href="@Url.Content("~/assets/css/site.css")"
+          asp-append-version="true"/>
+
+    @* Google material symbols *@
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=event,fork_spoon,group,map"/>
+
 
     @* Google symbols *@
     <link rel="stylesheet"
@@ -34,7 +38,7 @@
 </head>
 <body>
 @* Header *@
-@await Html.PartialAsync("Header", navetLogo)
+@await Html.PartialAsync("Header", new HeaderViewModel { PageUrl = Model.Url() })
 
 @* Body *@
 <main id="app">
@@ -43,8 +47,8 @@
 
 @* Footer *@
 <footer>
-    <div class="footer-information container footer-split">
-        <div>
+    <div class="footer-container footer-split">
+        <div class="footer-information">
             @Model.Root().Value("FooterInformation")
         </div>
         <div class="footer-link">

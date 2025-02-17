@@ -485,3 +485,7 @@ appsettings-schema.*.json
 dev_secrets.json
 
 /uSync
+
+# Webpack generated files
+wwwroot/assets/css/*
+wwwroot/assets/css/*.css
