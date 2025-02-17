@@ -1,0 +1,46 @@
+@use '../base/colors';
+@use '../base/typography';
+
+footer {
+  background: colors.$color-primary;
+  color: colors.$color-white;
+  padding-bottom: 3rem;
+  padding-top: 1rem;
+  min-height: 100px;
+  flex-shrink: 0;
+  position: relative;
+  margin-top: 2rem;
+
+  .footer-container {
+    max-width: 64rem;
+    width: 100%;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+
+  .footer-split {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .footer-information {
+    h1, h2, h3 {
+      font-size: typography.$h3-size;
+    }
+
+    p {
+      font-size: typography.$secondary-text-size;
+    }
+  }
+
+  .footer-link {
+    align-self: flex-end;
+  }
+
+  .footer-link a {
+    color: white;
+    display: block;
+    margin-bottom: 1em;
+  }
+}
