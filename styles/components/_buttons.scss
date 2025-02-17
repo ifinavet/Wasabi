@@ -1,0 +1,19 @@
+@use '../base' as *;
+
+.btn {
+  display: inline-block;
+  border-radius: 15px;
+  padding: 2rem 3rem;
+  text-align: center;
+}
+
+.btn--admin {
+  @extend .btn;
+  background-color: $color-primary;
+
+  a {
+    @extend .main-text-semibold;
+    color: $color-white;
+    text-decoration: none;
+  }
+}
