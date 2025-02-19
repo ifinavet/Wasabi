@@ -6,7 +6,7 @@
     Dictionary<string, bool> visibleColumns = Model.Columns;
     Dictionary<string, string> englishToNorwegian = new()
     {
-        { nameof(AdministrationAttendee.Username), "Brukernavn" },
+        { nameof(AdministrationAttendee.Username), "Username" },
         { nameof(AdministrationAttendee.FullName), "Navn" },
         { nameof(AdministrationAttendee.Email), "Epost" },
         { nameof(AdministrationAttendee.Allergies), "Allergier" },
@@ -17,7 +17,7 @@
 <form action="@Model.Url()" method="get" aria-label="Visible Columns">
     <div class="search-input-wrapper">
         <input type="hidden" name="altTemplate" value="EventAttendeeRegistration">
-        @foreach (string column in visibleColumns.Keys)
+        @foreach (string column in visibleColumns.Keys.Skip(2))
         {
             <input type="checkbox" name="columns" value="@column" @(visibleColumns[column] ? "checked" : "")>
             <label>@englishToNorwegian[column]</label>
@@ -26,24 +26,22 @@
     </div>
 </form>
 
+<button onclick="generateColumns(['fullName', 'username'], 'Deltaker liste kopiert!')">Kopier deltakerliste</button>
+
 <table>
     <tr>
+        <th onclick="generateColumns(['fullNames'], 'Kolonne kopiert')">Navn</th>
+        <th onclick="generateColumns(['username'], 'Kolonne kopiert')">Brukernavn</th>
         @foreach (KeyValuePair<string, bool> column in visibleColumns.Where(column => column.Value))
         {
-            <th>@englishToNorwegian[column.Key]</th>
+            <th onclick="generateColumns(['@(column.Key[0].ToString().ToLower() + column.Key[1..])'], 'Kolonne kopiert')">@englishToNorwegian[column.Key]</th>
         }
     </tr>
     @foreach (AdministrationAttendee attendee in Model.Attendees)
     {
         <tr>
-            @if (visibleColumns[nameof(attendee.FullName)])
-            {
-                <td>@attendee.FullName</td>
-            }
-            @if (visibleColumns[nameof(attendee.Username)])
-            {
-                <td>@attendee.Username</td>
-            }
+            <td>@attendee.FullName</td>
+            <td>@attendee.Username</td>
             @if (visibleColumns[nameof(attendee.Email)])
             {
                 <td>@attendee.Email</td>
@@ -61,5 +59,56 @@
 </table>
 
 @section Scripts {
+    <script>
+        const attendees = @Json.Serialize(Model.Attendees);
 
+        const copyToClipboard = (text, success_message) => {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard
+                    .writeText(text)
+                    .then(() => alert(success_message))
+                    .catch((err) => {
+                        console.error("Failed to copy text: ", err);
+                    });
+            } else {
+                // Fallback for older browsers
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+
+                // Make the textarea out of viewport
+                textArea.style.position = "fixed";
+                textArea.style.left = "-999999px";
+                textArea.style.top = "-999999px";
+                document.body.appendChild(textArea);
+
+                textArea.focus();
+                textArea.select();
+
+                try {
+                    const successful = document.execCommand("copy");
+                    alert(success_message);
+                } catch (err) {
+                    console.error("Fallback: Oops, unable to copy", err);
+                }
+
+                document.body.removeChild(textArea);
+            }
+        }
+
+        const generateColumns = (column_names, success_message) => {
+            console.log(column_names)
+            let copy_text = "";
+
+            attendees.forEach(attendee => {
+                column_names.forEach(column_name => copy_text += attendee[column_name] + '\t')
+                copy_text += '\n';
+                console.log(copy_text)
+            })
+
+            console.log(copy_text)
+
+            copyToClipboard(copy_text, success_message);
+        }
+
+    </script>
 }
