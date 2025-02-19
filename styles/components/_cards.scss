@@ -7,5 +7,31 @@
 
   &--main {
     background-color: $color-primary;
+    padding: 4rem;
+  }
+
+  &--metadata {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: $default-card-gap + 2rem;
+  }
+
+  &--company {
+    $offset-margin: 4rem;
+
+    margin: $offset-margin 0 0;
+
+    .cut-effect {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: $offset-margin * -1;
+
+      &:first-child {
+        position: relative;
+        bottom: 20%;
+      }
+    }
   }
 }

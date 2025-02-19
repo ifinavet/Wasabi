@@ -1,10 +1,12 @@
 @use '../base' as *;
 
 .btn {
+  all: unset;
   display: inline-block;
   border-radius: 15px;
   padding: 2rem 3rem;
   text-align: center;
+  font-family: Eina01-Regular, sans-serif;
 }
 
 .btn--admin {
@@ -16,4 +18,10 @@
     color: $color-white;
     text-decoration: none;
   }
+}
+
+.btn--second {
+  @extend .btn;
+
+  background-color: $color-contrast-background;
 }
