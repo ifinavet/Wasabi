@@ -17,9 +17,9 @@ namespace Wasabi.Controllers.Events;
 
 public class EventRegistrationController : SurfaceController
 {
+    private readonly IContentService _contentService;
     private readonly IMemberManager _memberManger;
     private readonly IMemberService _memberService;
-    private readonly IContentService _contentService;
 
     public EventRegistrationController(
         IUmbracoContextAccessor umbracoContextAccessor,
@@ -63,15 +63,29 @@ public class EventRegistrationController : SurfaceController
             return RedirectToCurrentUmbracoPage();
         }
 
-        if (CurrentPage is not Event currentPage)
+        if (CurrentPage is not Event || CurrentPage == null)
         {
             TempData["status"] = "Det har oppstått en feil, prøv igjen senere.";
             TempData["error"] = true;
             return RedirectToCurrentUmbracoPage();
         }
 
-        IContent newAttendee = _contentService.Create(currentMember.Name!, currentPage.Id, Attendee.ModelTypeAlias);
+        Event currentPage = (Event)CurrentPage;
 
+        if (currentPage.Children<Attendee>()!.Any(a => a.MemberId == currentMember.Key.ToString()))
+        {
+            TempData["status"] = "Du er allerede registert";
+            return RedirectToCurrentUmbracoPage();
+        }
+
+        if (currentPage.ParticipantLimit <= currentPage.Children<Attendee>()!.Count())
+        {
+            TempData["status"] = "Arrangementet er fullt";
+            TempData["error"] = true;
+            return RedirectToCurrentUmbracoPage();
+        }
+
+        IContent newAttendee = _contentService.Create(currentMember.Name!, currentPage.Id, Attendee.ModelTypeAlias);
         newAttendee.SetValue("attendingMember", new GuidUdi("member", currentMember.Key));
         newAttendee.SetValue("shownUp", false);
         newAttendee.SetValue("allergies", model.Allergie);
