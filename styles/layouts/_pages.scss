@@ -20,8 +20,8 @@
     align-items: center;
 
     .page--container {
-      min-width: $breakpoint-xl * 0.75;
-      max-width: $breakpoint-xl * 0.85;
+      min-width: $breakpoint-xl * 0.80;
+      max-width: $breakpoint-xl * 0.90;
 
       .page--title {
         width: 100%;
@@ -39,7 +39,7 @@
         width: inherit;
         display: grid;
         gap: $default-card-gap;
-        grid-template-columns: 7fr 4fr;
+        grid-template-columns: 8fr 5fr;
 
         .page--main {
           width: 100%;

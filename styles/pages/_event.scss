@@ -24,7 +24,11 @@
       display: flex;
       width: 100%;
       align-items: center;
-      color: $color-white;
+      color: $color-text-white;
+
+      * {
+        color: $color-text-white;
+      }
 
       .icon {
         margin-right: 1rem;

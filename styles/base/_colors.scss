@@ -1,11 +1,27 @@
-$color-blue: #30486C;
+$color-blue-primary: #30486C;
+$color-blue-secondary: #707C9A;
+$color-blue-pale: #F1F3F7;
 $color-red: #D54D4d;
 $color-green: #008066;
 $color-light-gray: #F4F4F4;
+$color-gray: #EDEDED;
+$color-dark-gray: #ABABAB;
+$color-very-dark-gray: #333333;
+$color-almost-white: #F9F9F9;
 $color-white: #FFFFFF;
 
-$color-primary: $color-blue;
+$color-primary: $color-blue-primary;
+
 $color-contrast-background: $color-light-gray;
 $color-primary-background: $color-white;
+$color-blue-background: $color-blue-secondary;
+$color-pale-blue-background: $color-blue-pale;
+
+$color-text-primary: $color-very-dark-gray;
+$color-text-blue: $color-blue-primary;
+$color-text-blue-secondary: $color-blue-secondary;
+$color-text-white: $color-almost-white;
+
 $color-error: $color-red;
 $color-success: $color-green;
+$color-information: $color-blue-secondary;

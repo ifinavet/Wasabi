@@ -15,7 +15,7 @@
 
   a {
     @extend .main-text-semibold;
-    color: $color-white;
+    color: $color-text-white;
     text-decoration: none;
   }
 }
@@ -23,5 +23,6 @@
 .btn--second {
   @extend .btn;
 
-  background-color: $color-contrast-background;
+  background-color: $color-blue-background;
+  color: $color-text-white
 }
