@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Cache;
@@ -129,8 +128,14 @@ public class EventRegistrationController : SurfaceController
         }
 
         MemberIdentityUser? currentMemberIdentity = _memberManger.GetCurrentMemberAsync().Result;
+        if (currentMemberIdentity == null)
+        {
+            TempData["status"] = "Det har oppstått en feil, prøv igjen senere.";
+            return RedirectToCurrentUmbracoPage();
+        }
+
         int attendeeId = currentPage.Children<Attendee>()!
-            .FirstOrDefault(a => a.MemberId == currentMemberIdentity!.Key.ToString())!.Id;
+            .FirstOrDefault(a => a.MemberId == currentMemberIdentity.Key.ToString())!.Id;
 
         IContent content = _contentService.GetById(attendeeId)!;
         OperationResult result = _contentService.Delete(content);
@@ -147,25 +152,7 @@ public class EventRegistrationController : SurfaceController
         if (timeRemaining < 24 && currentMemberIdentity != null)
         {
             IMember currentMember = _memberService.GetByKey(currentMemberIdentity.Key)!;
-
-            DateTime violationDateTime = DateTime.Now;
-            const string violationCause = "Du meldte deg av for sent";
-            const int violationSeverity = 1;
-            string violation = JsonSerializer.Serialize(new PointEntry
-            {
-                Date = violationDateTime,
-                Severity = violationSeverity,
-                Cause = violationCause
-            });
-
-
-            if (currentMember.GetValue<string>("points") == null)
-                currentMember.SetValue("points", violation);
-            else
-                currentMember.SetValue("points",
-                    currentMember.GetValue<string>("points") + Environment.NewLine + violation);
-
-            _memberService.Save(currentMember);
+            _pointsService.GivePoints(currentMember, "Du meldte deg av for sent", 1);
 
             _logger.LogWarning("Member given point for late unregistration");
         }

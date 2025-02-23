@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Cms.Core.Cache;
 using Umbraco.Cms.Core.Logging;
@@ -96,17 +95,14 @@ public class MemberLoginController : SurfaceController
         }
 
         // Checks if there are points that are more than 6 months. if there is we remove them.
-        List<PointEntry>? pointEntries = _pointsService.ParsedPointEntries(currentMember.GetValue<string>("points"));
-        if (pointEntries == null) return Redirect(redirectUrl);
-
-        IEnumerable<PointEntry> expiredPoints = pointEntries.ToList()
-            .Where(entry => (entry.Date.AddMonths(6) - DateTime.Now).Days <= 0);
-        foreach (PointEntry expiredPoint in expiredPoints) pointEntries.Remove(expiredPoint);
-
-        string updatedPoints = string.Join(Environment.NewLine,
-            pointEntries.Select(p => JsonSerializer.Serialize(p)));
-        currentMember.SetValue("points", updatedPoints);
-        _memberService.Save(currentMember);
+        try
+        {
+            _pointsService.RemoveExpiredPoints(currentMember, 6);
+        }
+        catch (Exception)
+        {
+            return Redirect(redirectUrl);
+        }
 
         return Redirect(redirectUrl);
     }
