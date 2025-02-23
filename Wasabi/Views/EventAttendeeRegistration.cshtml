@@ -61,6 +61,7 @@
 @section Scripts {
     <script>
         const attendees = @Json.Serialize(Model.Attendees);
+        console.log(attendees)
 
         const copyToClipboard = (text, success_message) => {
             if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -100,9 +101,13 @@
             let copy_text = "";
 
             attendees.forEach(attendee => {
-                column_names.forEach(column_name => copy_text += attendee[column_name] + '\t')
+                column_names.forEach(column_name => {
+                        if (attendee[column_name] !== "") {
+                            copy_text += attendee[column_name] + '\t'
+                        }
+                    }
+                )
                 copy_text += '\n';
-                console.log(copy_text)
             })
 
             console.log(copy_text)

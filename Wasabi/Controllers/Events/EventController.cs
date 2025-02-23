@@ -114,9 +114,9 @@ public class EventController : RenderController
         // TODO! OK for now, future figure out how to improve the speed.
         // Checks if the current member is registered to the event
         MemberIdentityUser? currentMember = await _memberManager.GetCurrentMemberAsync();
-        bool isCurrentMemberAttending = false;
+        bool? isCurrentMemberAttending = false;
         if (currentMember != null && isRegistrationOpen)
-            isCurrentMemberAttending = model.Children<Attendee>()!
+            isCurrentMemberAttending = model.Children<Attendee>()?
                 .Any(a => a.MemberId == currentMember.Key.ToString());
 
         // Related job to the event
@@ -132,7 +132,7 @@ public class EventController : RenderController
             },
             IsRegistrationOpen = isRegistrationOpen,
             AmountOfAttendees = model.Children.Count(),
-            IsCurrentMemberAttending = isCurrentMemberAttending,
+            IsCurrentMemberAttending = isCurrentMemberAttending ?? false,
             Organizers = model.Organizer?.Select(static x => x as StudentMember).ToArray()!
         };
 
