@@ -17,28 +17,18 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-    
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-            node-version: '22.x'
-      - run: npm ci
-      - run: npm run build
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
-          
-      - name: Clean with dotnet
-        run: dotnet clean
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp --self-contained true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:PublishSingleFile=true
-        
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
@@ -64,9 +54,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_3150869B5E6E428186AD501C7F6ABF0B }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_6C6D93363CC84E1DAC38C82A9CF50E17 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A40E7D0ED3A34BF691B5C56E237B4E00 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_05BE8098D30E4692BD724AC47DBEAA2E }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_6A5A2ACD4A6F4F60982D676AD5A8597F }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_B36F23C5FF014A3DBA5937B6FD4A70F7 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
