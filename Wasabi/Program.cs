@@ -29,6 +29,11 @@ await app.BootUmbracoAsync();
 
 app.UseHttpsRedirection();
 
+if (builder.Environment.IsDevelopment())
+    app.UseDeveloperExceptionPage();
+else
+    app.UseHsts();
+
 app.UseUmbraco()
     .WithMiddleware(u =>
     {
