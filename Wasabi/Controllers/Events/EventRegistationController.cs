@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Cache;
 using Umbraco.Cms.Core.Logging;
@@ -104,7 +105,7 @@ public class EventRegistrationController : SurfaceController
 
         IContent newAttendee = _contentService.Create(currentMember.Name!, currentPage.Id, Attendee.ModelTypeAlias);
         newAttendee.SetValue("attendingMember", new GuidUdi("member", currentMember.Key));
-        newAttendee.SetValue("shownUp", false);
+        newAttendee.SetValue("shownUp", "");
         newAttendee.SetValue("allergies", model.Allergie);
         newAttendee.SetValue("memberId", currentMember.Key.ToString());
 
@@ -147,9 +148,9 @@ public class EventRegistrationController : SurfaceController
 
         Event? currentEvent = (Event)CurrentPage;
         int timeRemaining = (DateTime.Now - currentEvent.EventDate).Hours;
-        _logger.LogDebug("Current member ${currentMember}", currentMemberIdentity?.Id);
+        _logger.LogDebug("Current member ${currentMember}", currentMemberIdentity.Id);
 
-        if (timeRemaining < 24 && currentMemberIdentity != null)
+        if (timeRemaining < 24)
         {
             IMember currentMember = _memberService.GetByKey(currentMemberIdentity.Key)!;
             _pointsService.GivePoints(currentMember, "Du meldte deg av for sent", 1);
@@ -158,5 +159,66 @@ public class EventRegistrationController : SurfaceController
         }
 
         return CurrentUmbracoPage();
+    }
+
+    public IActionResult RegisterAttendee(EventRegisterAttendeeFormViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            TempData["status"] = "Det har oppstått en feil, prøv igjen senere.";
+            return RedirectToCurrentUmbracoPage(new QueryString("?altTemplate=EventAttendeeRegistration"));
+        }
+
+        if (CurrentPage is not Event currentPage)
+        {
+            TempData["status"] = "Det har oppstått en feil, prøv igjen senere.";
+            return RedirectToCurrentUmbracoPage(new QueryString("?altTemplate=EventAttendeeRegistration"));
+        }
+
+        if (currentPage.Children<Attendee>().IsNullOrEmpty())
+        {
+            TempData["status"] = "Det har oppstått en feil, prøv igjen senere.";
+            return RedirectToCurrentUmbracoPage(new QueryString("?altTemplate=EventAttendeeRegistration"));
+        }
+
+        Attendee? attendee = currentPage.Children<Attendee>()!.FirstOrDefault(a => a.Id == int.Parse(model.AttendeeId));
+        if (attendee == null)
+        {
+            TempData["status"] = "Det har oppstått en feil, prøv igjen senere.";
+            return RedirectToCurrentUmbracoPage(new QueryString("?altTemplate=EventAttendeeRegistration"));
+        }
+
+        if (attendee.ShownUp?.ToLower() == "yes" || attendee.ShownUp?.ToLower() == "late")
+        {
+            TempData["status"] = "Den oppmeldte er allerede registrert";
+            return RedirectToCurrentUmbracoPage(new QueryString("?altTemplate=EventAttendeeRegistration"));
+        }
+
+        IContent attendeeContent = _contentService.GetById(int.Parse(model.AttendeeId))!;
+        attendeeContent.SetValue("shownUp", model.ShownUp);
+        PublishResult result = _contentService.SaveAndPublish(attendeeContent);
+        if (!result.Success)
+        {
+            TempData["status"] = "Det har oppstått en feil, prøv igjen senere.";
+            return RedirectToCurrentUmbracoPage(new QueryString("?altTemplate=EventAttendeeRegistration"));
+        }
+
+        TempData["status"] = "Registrering vellykket";
+
+        if (model.ShownUp.Equals("late", StringComparison.CurrentCultureIgnoreCase))
+        {
+            IMember member = _memberService.GetByKey(Guid.Parse(model.AttendeeMemberId))!;
+            TempData["status"] = "Registrering vellykket. Prikk registrert";
+            _pointsService.GivePoints(member, "Du møtte for sent til et arrangement", 1);
+        }
+
+        if (model.ShownUp.Equals("no", StringComparison.CurrentCultureIgnoreCase))
+        {
+            IMember member = _memberService.GetByKey(Guid.Parse(model.AttendeeMemberId))!;
+            TempData["status"] = "Registrering vellykket. Prikk registrert";
+            _pointsService.GivePoints(member, "Du møtte ikke til et arrangement arrangement", 2);
+        }
+
+        return RedirectToCurrentUmbracoPage(new QueryString("?altTemplate=EventAttendeeRegistration"));
     }
 }

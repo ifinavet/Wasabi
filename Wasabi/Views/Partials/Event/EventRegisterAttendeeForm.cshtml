@@ -1,0 +1,34 @@
+@inherits UmbracoViewPage<Wasabi.ViewModels.Events.EventRegisterAttendeeFormViewModel>
+@using Wasabi.Controllers.Events
+@model Wasabi.ViewModels.Events.EventRegisterAttendeeFormViewModel
+
+@using (Html.BeginUmbracoForm<EventRegistrationController>(nameof(EventRegistrationController.RegisterAttendee), FormMethod.Post, new { id = "register-attendee-form" }))
+{
+    <div>
+        @Html.HiddenFor(m => m.AttendeeMemberId, new { id = "AttendeeMemberId" })
+        @Html.HiddenFor(m => m.AttendeeId, new { id = "AttendeeId" })
+        @Html.HiddenFor(m => m.ShownUp, new { id = "ShownUp" })
+    </div>
+
+    <div class="qr-scanner-container">
+        <div id="reader" width="600px"></div>
+    </div>
+
+    <div class="scanned-attendee">
+        <p id="scannedAttendee" class="scanned-attendee-information"></p>
+    </div>
+
+    <button id="register-submit" type="submit" class="btn btn--rounded btn--shadow h2"
+            onclick="submitForm('yes')">
+        Ja
+    </button>
+    <button id="register-submit" type="submit" class="btn btn--rounded btn--shadow h2"
+            onclick="submitForm('late')">
+        Møtt sent
+    </button>
+    <button id="register-submit" type="submit" class="btn btn--rounded btn--shadow h2"
+            onclick="submitForm('no')">
+        Ikke møtt
+    </button>
+    <p>@TempData["status"]</p>
+}

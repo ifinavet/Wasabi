@@ -14,6 +14,8 @@
     };
 }
 
+@await Html.PartialAsync("Event/EventRegisterAttendeeForm", new EventRegisterAttendeeFormViewModel())
+
 <form action="@Model.Url()" method="get" aria-label="Visible Columns">
     <div class="search-input-wrapper">
         <input type="hidden" name="altTemplate" value="EventAttendeeRegistration">
@@ -30,11 +32,28 @@
 
 <table>
     <tr>
-        <th onclick="generateColumns(['fullNames'], 'Kolonne kopiert')">Navn</th>
-        <th onclick="generateColumns(['username'], 'Kolonne kopiert')">Brukernavn</th>
+        <th onclick="generateColumns(['fullNames'], 'Kolonne kopiert')">
+            Navn
+            <span class="material-symbols-rounded">
+                content_copy
+            </span>
+        </th>
+        <th onclick="generateColumns(['username'], 'Kolonne kopiert')">
+            Brukernavn
+            <span
+                class="material-symbols-rounded">
+                content_copy
+            </span>
+        </th>
         @foreach (KeyValuePair<string, bool> column in visibleColumns.Where(column => column.Value))
         {
-            <th onclick="generateColumns(['@(column.Key[0].ToString().ToLower() + column.Key[1..])'], 'Kolonne kopiert')">@englishToNorwegian[column.Key]</th>
+            <th onclick="generateColumns(['@(column.Key[0].ToString().ToLower() + column.Key[1..])'], 'Kolonne kopiert')">
+                @englishToNorwegian[column.Key]
+                <span
+                    class="material-symbols-rounded">
+                    content_copy
+                </span>
+            </th>
         }
     </tr>
     @foreach (AdministrationAttendee attendee in Model.Attendees)
@@ -54,6 +73,7 @@
             {
                 <td>@attendee.PreferredLanguage</td>
             }
+            <td onclick="setAttendeeInForm('@attendee.AttendeeMemberId', '@attendee.AttendeeId')">Registrer</td>
         </tr>
     }
 </table>
@@ -85,7 +105,26 @@
 @section Scripts {
     <script>
         const attendees = @Json.Serialize(Model.Attendees);
+        const eventId = @Model.Id;
+        console.log(eventId)
         console.log(attendees)
+
+        const attendeeMemberIdFromInput = document.getElementById("AttendeeMemberId");
+        const attendeeIdFromInput = document.getElementById("AttendeeId");
+        const shownUp = document.getElementById("ShownUp")
+
+        const setAttendeeInForm = (attendeeMemberId, attendeeId) => {
+            attendeeMemberIdFromInput.value = attendeeMemberId;
+            attendeeIdFromInput.value = attendeeId;
+            console.log(attendeeId, attendeeMemberId)
+        }
+
+        const submitForm = (status) => {
+            shownUp.value = status;
+
+            this.disabled = true;
+            this.from.submit();
+        }
 
         const copyToClipboard = (text, success_message) => {
             if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -121,23 +160,49 @@
         }
 
         const generateColumns = (column_names, success_message) => {
-            console.log(column_names)
             let copy_text = "";
 
             attendees.forEach(attendee => {
+                let row_text = "";
                 column_names.forEach(column_name => {
-                        if (attendee[column_name] !== "") {
-                            copy_text += attendee[column_name] + '\t'
-                        }
+                    if (attendee[column_name] !== "" && attendee[column_name].length !== 0) {
+                        row_text += attendee[column_name] + '\t';
                     }
-                )
-                copy_text += '\n';
-            })
-
-            console.log(copy_text)
+                });
+                if (row_text.trim().length > 0) {
+                    copy_text += row_text + '\n';
+                }
+            });
 
             copyToClipboard(copy_text, success_message);
         }
+        const attendeeInfo = document.getElementById("scannedAttendee");
 
+    </script>
+    <script defer>
+        const onScanSuccess = (decodedText, decodedResult) => {
+            // handle the scanned code as you like, for example:
+            console.log(`Code matched = ${decodedText}`, decodedResult);
+            let parsedData = JSON.parse(decodedText);
+            if (parseInt(parsedData["eventId"]) === eventId) {
+                attendeeMemberIdFromInput.value = parsedData["attendeeMemberId"];
+                attendeeIdFromInput.value = parsedData["attendeeId"];
+
+                attendeeInfo.innerHTML = attendees.find(item => item.attendeeId === parsedData["attendeeId"])["fullName"];
+            }
+
+
+        };
+
+        const onScanFailure = error => {
+
+
+        };
+
+        let html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader",
+            {fps: 10, qrbox: {width: 250, height: 250}},
+            /* verbose= */ false);
+        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
     </script>
 }

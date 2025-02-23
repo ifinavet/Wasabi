@@ -121,6 +121,14 @@
                     </div>
                 }
 
+                @if (!Model.CurrentAttendeeQrCode.IsNullOrWhiteSpace())
+                {
+                    <div class="card card--info">
+                        <img class="qr-code" src="@Model.CurrentAttendeeQrCode" alt="Din QR kode">
+                    </div>
+                }
+
+
                 <div class="card information">
                     <div class="teaser">
                         <h3>@Model.EventTeaser</h3>
@@ -201,15 +209,3 @@
         </div>
     </div>
 </div>
-
-
-@if (!Model.IsRegistrationOpen)
-{
-}
-else
-{
-    <h3>Arrangementet er fult</h3>
-}
-
-
-

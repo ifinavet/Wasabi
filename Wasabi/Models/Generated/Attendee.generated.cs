@@ -74,10 +74,11 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string MemberId => this.Value<string>(_publishedValueFallback, "memberId");
 
 		///<summary>
-		/// Shown up: The user has showed up to the event
+		/// Shown up: The user has showed up to the event; late, on time or not at all
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "13.5.3+2161edb")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("shownUp")]
-		public virtual bool ShownUp => this.Value<bool>(_publishedValueFallback, "shownUp");
+		public virtual string ShownUp => this.Value<string>(_publishedValueFallback, "shownUp");
 	}
 }
