@@ -62,7 +62,9 @@ public class EventController : RenderController
         EventAttendeeRegistrationViewModel viewModel = new(CurrentPage!, _publishedValueFallback)
         {
             EventId = model.Id,
-            Attendees = attendees
+            Attendees = attendees,
+            StudyProgramAndSemester =
+                StudyProgramAndSemester((model.Children<Attendee>() ?? Array.Empty<Attendee>()).ToList())
         };
 
         foreach (KeyValuePair<string, bool> column in viewModel.Columns)
@@ -70,6 +72,29 @@ public class EventController : RenderController
 
 
         return CurrentTemplate(viewModel);
+    }
+
+    private static Dictionary<string, SortedDictionary<int, int>> StudyProgramAndSemester(List<Attendee> attendees)
+    {
+        Dictionary<string, SortedDictionary<int, int>> studyProgramAndSemester = new();
+
+        foreach (Attendee attendee in attendees)
+        {
+            if (attendee.AttendingMember is not StudentMember member) continue;
+
+            string studyProgram = member.Studieprogram is not ("" or null) ? member.Studieprogram : "NA";
+            int semester = member.Semester;
+
+            if (!studyProgramAndSemester.ContainsKey(studyProgram))
+                studyProgramAndSemester[studyProgram] = new SortedDictionary<int, int>();
+
+            if (!studyProgramAndSemester[studyProgram].ContainsKey(semester))
+                studyProgramAndSemester[studyProgram].Add(semester, 0);
+
+            studyProgramAndSemester[studyProgram][semester] += 1;
+        }
+
+        return studyProgramAndSemester;
     }
 
     /// <summary>

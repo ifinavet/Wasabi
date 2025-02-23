@@ -21,6 +21,8 @@ public class EventAttendeeRegistrationViewModel : Event
         { "Allergies", false },
         { "PreferredLanguage", false }
     };
+
+    public required Dictionary<string, SortedDictionary<int, int>> StudyProgramAndSemester { get; set; }
 }
 
 public class AdministrationAttendee
