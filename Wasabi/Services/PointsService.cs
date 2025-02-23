@@ -33,7 +33,7 @@ public interface IPointsService
     /// </summary>
     /// <param name="pointEntriesString">The string containing point entries to parse. Each line should be a valid JSON object.</param>
     /// <returns>An array of parsed PointEntry objects, or null if parsing fails or input is invalid.</returns>
-    public PointEntry[]? ParsedPointEntries(string? pointEntriesString);
+    public List<PointEntry>? ParsedPointEntries(string? pointEntriesString);
 }
 
 /// <summary>
@@ -42,21 +42,18 @@ public interface IPointsService
 public class PointsService : IPointsService
 {
     /// <inheritdoc />
-    public PointEntry[]? ParsedPointEntries(string? pointEntriesString)
+    public List<PointEntry>? ParsedPointEntries(string? pointEntriesString)
     {
-        Console.WriteLine("Hei!");
         if (string.IsNullOrWhiteSpace(pointEntriesString))
             return null;
 
-        Console.WriteLine("Hei! Igjen!");
         try
         {
             string[] lines = pointEntriesString.Split([Environment.NewLine], StringSplitOptions.RemoveEmptyEntries);
             List<PointEntry> entries = new(lines.Length);
             entries.AddRange(lines.Select(line => JsonSerializer.Deserialize<PointEntry>(line)).OfType<PointEntry>());
-            Console.WriteLine(entries[0].Severity);
 
-            return entries.Count > 0 ? entries.ToArray() : null;
+            return entries.Count > 0 ? entries.ToList() : null;
         }
         catch (Exception e)
         {

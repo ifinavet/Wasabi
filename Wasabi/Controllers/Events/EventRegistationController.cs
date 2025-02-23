@@ -71,11 +71,8 @@ public class EventRegistrationController : SurfaceController
             return RedirectToCurrentUmbracoPage();
         }
 
-        _logger.LogDebug("Member points: " + currentStudent.GetValue<string>("points"));
-        PointEntry[]? pointEntries = _pointsService.ParsedPointEntries(currentStudent.GetValue<string>("points"));
-        _logger.LogWarning("Points: " + pointEntries);
+        List<PointEntry>? pointEntries = _pointsService.ParsedPointEntries(currentStudent.GetValue<string>("points"));
         int? numOfPoints = pointEntries?.Select(entry => entry.Severity).Sum();
-        _logger.LogWarning("Number of points: " + numOfPoints);
         if (numOfPoints >= 3)
         {
             _logger.LogWarning("Member have to many points");
@@ -161,8 +158,6 @@ public class EventRegistrationController : SurfaceController
                 Cause = violationCause
             });
 
-            _logger.LogDebug(violation);
-            _logger.LogWarning(currentMember.GetValue<string>("points"));
 
             if (currentMember.GetValue<string>("points") == null)
                 currentMember.SetValue("points", violation);

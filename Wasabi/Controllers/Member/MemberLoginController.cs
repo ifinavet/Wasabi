@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Cms.Core.Cache;
 using Umbraco.Cms.Core.Logging;
@@ -16,9 +17,10 @@ namespace Wasabi.Controllers.Member;
 
 public class MemberLoginController : SurfaceController
 {
+    private readonly IGoogleReCaptchaService _googleReCaptchaService;
     private readonly IMemberService _memberService;
     private readonly IMemberSignInManager _memberSignInManager;
-    private readonly IGoogleReCaptchaService _googleReCaptchaService;
+    private readonly IPointsService _pointsService;
 
     public MemberLoginController(
         IUmbracoContextAccessor umbracoContextAccessor,
@@ -29,12 +31,14 @@ public class MemberLoginController : SurfaceController
         IPublishedUrlProvider publishedUrlProvider,
         IMemberService memberService,
         IMemberSignInManager memberSignInManager,
-        IGoogleReCaptchaService googleReCaptchaService)
+        IGoogleReCaptchaService googleReCaptchaService,
+        IPointsService pointsService)
         : base(umbracoContextAccessor, databaseFactory, services, appCaches, profilingLogger, publishedUrlProvider)
     {
         _memberSignInManager = memberSignInManager;
         _memberService = memberService;
         _googleReCaptchaService = googleReCaptchaService;
+        _pointsService = pointsService;
     }
 
     /// <summary>
@@ -90,6 +94,19 @@ public class MemberLoginController : SurfaceController
                 "Du vil ha fått en e-post fra IFI-Navet sitt styre for hvorfor dette har skjedd.";
             return CurrentUmbracoPage();
         }
+
+        // Checks if there are points that are more than 6 months. if there is we remove them.
+        List<PointEntry>? pointEntries = _pointsService.ParsedPointEntries(currentMember.GetValue<string>("points"));
+        if (pointEntries == null) return Redirect(redirectUrl);
+
+        IEnumerable<PointEntry> expiredPoints = pointEntries.ToList()
+            .Where(entry => (entry.Date.AddMonths(6) - DateTime.Now).Days <= 0);
+        foreach (PointEntry expiredPoint in expiredPoints) pointEntries.Remove(expiredPoint);
+
+        string updatedPoints = string.Join(Environment.NewLine,
+            pointEntries.Select(p => JsonSerializer.Serialize(p)));
+        currentMember.SetValue("points", updatedPoints);
+        _memberService.Save(currentMember);
 
         return Redirect(redirectUrl);
     }
