@@ -16,8 +16,6 @@
             onclick="this.disabled = true; this.form.submit();">
         @Umbraco.GetDictionaryValue("eventButtonSignUp")
     </button>
-
-    <p>@TempData["status"]</p>
 }
 @if (success is false && (string)TempData["Result"]! != "")
 {

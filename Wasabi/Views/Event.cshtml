@@ -83,14 +83,23 @@
                             </div>
                         </div>
                     </div>
-                    @if (Model.IsRegistrationOpen)
+                    @if (!Model.IsRegistrationOpen)
+                    {
+                        <div class="btn container">
+                            <div class="floating">
+                                <p>Påmeldingen åpner @Model.RegistrationDate.ToString("dd.MM kl. HH:mm")</p>
+                            </div>
+                        </div>
+                    }
+                    else
                     {
                         <div class="signup">
                             <div class="floating">
                                 <div class="container">
                                     @if (!MemberManager.IsLoggedIn())
                                     {
-                                        <a href="/login/?redirectURL=@Model.Url()">Logg inn for å melde deg på</a>
+                                        <a class="btn" href="/login/?redirectURL=@Model.Url()">Logg inn for å melde deg
+                                            på</a>
                                     }
                                     else if (Model.IsCurrentMemberAttending)
                                     {
@@ -99,6 +108,10 @@
                                     else if (Model.AmountOfAttendees < Model.ParticipantLimit)
                                     {
                                         @await Html.PartialAsync("Event/EventRegistrationForm", new EventRegistrationFormViewModel())
+                                    }
+                                    else
+                                    {
+                                        <p>Det er fult akkurat nå, men kanskje en plass åpner seg!</p>
                                     }
                                 </div>
                             </div>
@@ -113,13 +126,6 @@
                     </div>
                 }
 
-                @if (!Model.IsRegistrationOpen)
-                {
-                    <div class="card card--info">
-                        <h3>Arrangmentet åpner for
-                            påmelding @Model.RegistrationDate.ToString("dddd dd.MM kl. HH:mm")</h3>
-                    </div>
-                }
 
                 @if (!Model.CurrentAttendeeQrCode.IsNullOrWhiteSpace())
                 {
