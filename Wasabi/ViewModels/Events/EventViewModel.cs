@@ -16,4 +16,6 @@ public class EventViewModel : Event
     public int AmountOfAttendees { get; set; }
     public bool IsCurrentMemberAttending { get; set; }
     public required StudentMember?[] Organizers { get; set; }
+
+    public string? CurrentAttendeeQrCode { get; set; }
 }

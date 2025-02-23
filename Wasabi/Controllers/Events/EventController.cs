@@ -1,5 +1,8 @@
+using System.Drawing;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
+using QRCoder;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Security;
@@ -38,13 +41,19 @@ public class EventController : RenderController
         _contentService = contentService;
     }
 
+    /// <summary>
+    ///     Handles the event attendee registration process,
+    ///     and the information about the students registered and attending the event
+    /// </summary>
+    /// <param name="columns">A set of columns to be included in the registration view.</param>
+    /// <returns>An IActionResult containing the event attendee registration view.</returns>
     [HttpGet]
     [UmbracoMemberAuthorize("StudentMember", "NavetEventAdmins", "")]
     public IActionResult EventAttendeeRegistration([FromQuery(Name = "columns")] HashSet<string> columns)
     {
         Event model = new(CurrentPage, _publishedValueFallback);
 
-        List<AdministrationAttendee> attendees = [];
+        List<AdministrationAttendee> attendees = new();
         foreach (Attendee attendee in model.Children<Attendee>()!)
         {
             StudentMember? member = (StudentMember?)attendee.AttendingMember;
@@ -55,21 +64,55 @@ public class EventController : RenderController
                     Username = attendee.AttendingMember!.GetProperty("Username")!.GetValue()!.ToString()!,
                     Allergies = attendee.Allergies,
                     Email = attendee.AttendingMember!.GetProperty("Email")!.GetValue()!.ToString()!,
-                    PreferredLanguage = member.PreferredLanguage
+                    PreferredLanguage = member.PreferredLanguage,
+                    AttendeeMemberId = member.Key.ToString(),
+                    AttendeeId = attendee.Id.ToString()
                 });
         }
 
         EventAttendeeRegistrationViewModel viewModel = new(CurrentPage!, _publishedValueFallback)
         {
             EventId = model.Id,
-            Attendees = attendees
+            Attendees = attendees,
+            StudyProgramAndSemester =
+                StudyProgramAndSemester((model.Children<Attendee>() ?? Array.Empty<Attendee>()).ToList())
         };
 
         foreach (KeyValuePair<string, bool> column in viewModel.Columns)
             viewModel.Columns[column.Key] = columns.Contains(column.Key);
 
-
         return CurrentTemplate(viewModel);
+    }
+
+    /// <summary>
+    ///     Processes a list of attendees to group them by their study program and semester.
+    /// </summary>
+    /// <param name="attendees">A list of attendees to process.</param>
+    /// <returns>
+    ///     A dictionary where the key is the study program and the value is a sorted dictionary
+    ///     where the key is the semester and the value is the count of attendees in that semester.
+    /// </returns>
+    private static Dictionary<string, SortedDictionary<int, int>> StudyProgramAndSemester(List<Attendee> attendees)
+    {
+        Dictionary<string, SortedDictionary<int, int>> studyProgramAndSemester = new();
+
+        foreach (Attendee attendee in attendees)
+        {
+            if (attendee.AttendingMember is not StudentMember member) continue;
+
+            string studyProgram = member.Studieprogram is not ("" or null) ? member.Studieprogram : "NA";
+            int semester = member.Semester;
+
+            if (!studyProgramAndSemester.ContainsKey(studyProgram))
+                studyProgramAndSemester[studyProgram] = new SortedDictionary<int, int>();
+
+            if (!studyProgramAndSemester[studyProgram].ContainsKey(semester))
+                studyProgramAndSemester[studyProgram].Add(semester, 0);
+
+            studyProgramAndSemester[studyProgram][semester] += 1;
+        }
+
+        return studyProgramAndSemester;
     }
 
     /// <summary>
@@ -114,15 +157,24 @@ public class EventController : RenderController
         // TODO! OK for now, future figure out how to improve the speed.
         // Checks if the current member is registered to the event
         MemberIdentityUser? currentMember = await _memberManager.GetCurrentMemberAsync();
-        bool isCurrentMemberAttending = false;
+        bool? isCurrentMemberAttending = false;
+        Attendee? currentMemberAttendee = null;
         if (currentMember != null && isRegistrationOpen)
-            isCurrentMemberAttending = model.Children<Attendee>()!
-                .Any(a => a.MemberId == currentMember.Key.ToString());
+        {
+            currentMemberAttendee = model.Children<Attendee>()?
+                .FirstOrDefault(a => a.MemberId == currentMember.Key.ToString());
+            isCurrentMemberAttending = currentMemberAttendee != null;
+        }
 
         // Related job to the event
         string companyUdi = _contentService.GetById(model.HostingCompany!.Id)!.GetUdi().ToString();
         IEnumerable<IPublishedContent> relatedJobListing =
             _jobListingSearchService.GetJobListingsByCompanyUdi(companyUdi);
+
+        // CurrentMembers qrCode
+        string? qrCode = null;
+        if (currentMemberAttendee != null && (dateTimeCet - model.RegistrationDate).Hours < 12)
+            qrCode = CurrentMemberIdentityQrCode(currentMemberAttendee, model.Id);
 
         EventViewModel viewModel = new(CurrentPage!, _publishedValueFallback)
         {
@@ -132,10 +184,31 @@ public class EventController : RenderController
             },
             IsRegistrationOpen = isRegistrationOpen,
             AmountOfAttendees = model.Children.Count(),
-            IsCurrentMemberAttending = isCurrentMemberAttending,
-            Organizers = model.Organizer?.Select(static x => x as StudentMember).ToArray()!
+            IsCurrentMemberAttending = isCurrentMemberAttending ?? false,
+            Organizers = model.Organizer?.Select(static x => x as StudentMember).ToArray()!,
+            CurrentAttendeeQrCode = qrCode
         };
 
         return CurrentTemplate(viewModel);
+    }
+
+    private static string CurrentMemberIdentityQrCode(Attendee currentAttendee, int eventId)
+    {
+        Dictionary<string, string> qrCodeInformation = new()
+        {
+            { "eventId", eventId.ToString() },
+            { "attendeeId", currentAttendee.Id.ToString() },
+            { "attendeeMemberId", currentAttendee.MemberId ?? currentAttendee.AttendingMember!.Key.ToString() }
+        };
+
+        QRCodeGenerator qrCodeGenerator = new();
+        QRCodeData qrCodeData =
+            qrCodeGenerator.CreateQrCode(JsonSerializer.Serialize(qrCodeInformation), QRCodeGenerator.ECCLevel.Q);
+        Base64QRCode qrCode = new(qrCodeData);
+        string qrCodeImageAsBase64 = qrCode.GetGraphic(15, Color.FromArgb(42, 72, 108), Color.White);
+
+        string htmlImgSrc = $"data:image/jpeg;base64,{qrCodeImageAsBase64}";
+
+        return htmlImgSrc;
     }
 }

@@ -1,3 +1,5 @@
+@use 'colors' as *;
+
 @mixin font($font-family, $font-file, $font-weight, $font-style) {
   @font-face {
     font-family: $font-family;
@@ -14,6 +16,9 @@
 $h1-size: 2.986rem;
 $h2-size: 2.488rem;
 $h3-size: 2.074rem;
+$h4-size: 1.728rem;
+$text-size-xlarge: 1.44rem;
+$text-size-large: 1.2rem;
 $text-size: 1rem;
 $secondary-text-size: 0.833rem;
 
@@ -25,31 +30,45 @@ html {
 h1, .main-header {
   font-size: $h1-size;
   font-family: Eina01-Bold, sans-serif;
+  color: $color-text-primary;
 }
 
 h2, .secondary-header {
   font-size: $h2-size;
   font-family: Eina01-SemiBold, sans-serif;
+  color: $color-text-primary;
 }
 
 h3, .tertiary-header {
   font-size: $h3-size;
   font-family: Eina01-SemiBold, sans-serif;
+  color: $color-text-primary;
 }
 
 p, a, .main-text {
   font-size: $text-size;
   font-family: Eina01-Regular, sans-serif;
+  margin: 1em 0;
+  line-height: 1.5;
+  color: $color-text-primary;
+}
+
+.main-text-large {
+  font-size: $text-size-large;
+  font-family: Eina01-Regular, sans-serif;
+  color: $color-text-primary;
 }
 
 .main-text-semibold {
   font-size: $text-size;
   font-family: Eina01-SemiBold, sans-serif;
+  color: $color-text-primary;
 }
 
 .secondary-text {
   font-size: $secondary-text-size;
   font-family: Eina01-Regular, sans-serif;
+  color: $color-text-primary;
 }
 
 .icon-large {

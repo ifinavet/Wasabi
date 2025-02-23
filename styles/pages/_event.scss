@@ -14,36 +14,52 @@
 
 @media screen and (min-width: $breakpoint-xl) {
   .metadata {
+    width: 100%;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    gap: $default-card-gap;
+    align-items: center;
 
     .metadata-item {
       display: flex;
+      width: 100%;
       align-items: center;
-      color: $color-white;
-    }
-  }
+      color: $color-text-white;
 
-  .card--company {
-    $offset-margin: 4rem;
+      * {
+        color: $color-text-white;
+      }
 
-    margin: $offset-margin 0 0;
-
-    .cut-effect {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: $offset-margin * -1;
-
-      &:first-child {
-        position: relative;
-        bottom: 20%;
+      .icon {
+        margin-right: 1rem;
       }
     }
+  }
 
-    .border-gray .image {
-      border: $color-light-gray solid 2px;
+  .signup {
+    width: 100%;
+
+    .floating {
+      margin: 2rem 0 -10rem 0;
+
+      .container:first-child {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+      }
+
+      .unregister {
+        padding: 1.2rem 7rem;
+      }
     }
   }
+
+
+  .border-gray .image {
+    border: $color-light-gray solid 2px;
+  }
 }
+
+
                                     

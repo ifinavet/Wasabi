@@ -34,7 +34,7 @@
         </div>
         <div class="page--content">
             <main class="page--main">
-                <div class="card meta-data card--main">
+                <div class="card card--metadata card--main">
                     <div class="metadata">
                         <div class="metadata-item">
                             <div class="icon">
@@ -43,7 +43,7 @@
                                 </span>
                             </div>
                             <div class="metadata-data">
-                                <span class="main-text semi-bold">
+                                <span class="main-text-large semi-bold">
                                     @dayOfWeek @Model.EventDate.ToString("dd.MM") <br/> @Model.EventDate.ToString("kl. HH:mm")
                                 </span>
                             </div>
@@ -55,7 +55,7 @@
                                 </span>
                             </div>
                             <div class="metadata-data">
-                                <span class="main-text semi-bold"> @Model.Location </span>
+                                <span class="main-text-large semi-bold"> @Model.Location </span>
                             </div>
                         </div>
                         <div class="metadata-item">
@@ -65,7 +65,7 @@
                                 </span>
                             </div>
                             <div class="metadata-data">
-                                <span class="main-text semi-bold">
+                                <span class="main-text-large semi-bold">
                                     @Model.Food
                                 </span>
                             </div>
@@ -77,14 +77,58 @@
                                 </span>
                             </div>
                             <div class="metadata-data">
-                                <span class="main-text semi-bold">
+                                <span class="main-text-large semi-bold">
                                     @remainingAvailableSpots plasser igjen
                                 </span>
                             </div>
                         </div>
                     </div>
-                    <div class="signup btn--main"></div>
+                    @if (Model.IsRegistrationOpen)
+                    {
+                        <div class="signup">
+                            <div class="floating">
+                                <div class="container">
+                                    @if (!MemberManager.IsLoggedIn())
+                                    {
+                                        <a href="/login/?redirectURL=@Model.Url()">Logg inn for å melde deg på</a>
+                                    }
+                                    else if (Model.IsCurrentMemberAttending)
+                                    {
+                                        @await Html.PartialAsync("Event/EventUnregistrationForm")
+                                    }
+                                    else if (Model.AmountOfAttendees < Model.ParticipantLimit)
+                                    {
+                                        @await Html.PartialAsync("Event/EventRegistrationForm", new EventRegistrationFormViewModel())
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
+
+                @if (TempData["status"] != null)
+                {
+                    <div class="card card--error">
+                        <p>@TempData["status"]</p>
+                    </div>
+                }
+
+                @if (!Model.IsRegistrationOpen)
+                {
+                    <div class="card card--info">
+                        <h3>Arrangmentet åpner for
+                            påmelding @Model.RegistrationDate.ToString("dddd dd.MM kl. HH:mm")</h3>
+                    </div>
+                }
+
+                @if (!Model.CurrentAttendeeQrCode.IsNullOrWhiteSpace())
+                {
+                    <div class="card card--info">
+                        <img class="qr-code" src="@Model.CurrentAttendeeQrCode" alt="Din QR kode">
+                    </div>
+                }
+
+
                 <div class="card information">
                     <div class="teaser">
                         <h3>@Model.EventTeaser</h3>
@@ -114,7 +158,7 @@
                     StudentMember mainOrganizer = Model.Organizers.FirstOrDefault()!;
 
                     <div class="card card--main-organizer">
-                        <div class="image-container-circle ">
+                        <div class="image-container-circle floating">
                             <div class="image image--person">
                                 <img src="@ImageService.GetProfileImageUrl(mainOrganizer)" alt="@mainOrganizer.Name">
                             </div>
@@ -165,29 +209,3 @@
         </div>
     </div>
 </div>
-
-
-@if (!Model.IsRegistrationOpen)
-{
-    <h3>Arrangmentet åpner for påmelding @Model.RegistrationDate.ToString("dddd dd.MM kl. HH:mm")</h3>
-}
-else if (!MemberManager.IsLoggedIn())
-{
-    <a href="/login/?redirectURL=@Model.Url()">Logg inn for å melde deg på</a>
-}
-else if (Model.IsCurrentMemberAttending)
-{
-    <p>Du er påmeldt</p>
-    @await Html.PartialAsync("Event/EventUnregistrationForm")
-}
-else if (Model.AmountOfAttendees < Model.ParticipantLimit)
-{
-    @await Html.PartialAsync("Event/EventRegistrationForm", new EventRegistrationFormViewModel())
-}
-else
-{
-    <h3>Arrangementet er fult</h3>
-}
-
-
-

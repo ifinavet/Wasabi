@@ -1,5 +1,18 @@
 @use '../base' as *;
 
+$offset-margin: 4rem;
+.cut-effect {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: ($offset-margin) * -1;
+
+  &:first-child {
+    position: relative;
+    bottom: 20%;
+  }
+}
+
 .card {
   border-radius: 15px;
   background-color: $color-contrast-background;
@@ -7,5 +20,71 @@
 
   &--main {
     background-color: $color-primary;
+    padding: 4rem;
   }
+
+  &--metadata {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: $default-card-gap + 2rem;
+  }
+
+  &--company {
+    margin: $offset-margin 0 0;
+
+    .company-description * {
+      color: $color-text-blue-secondary;
+    }
+  }
+
+  &--main-organizer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 4rem;
+
+    .floating {
+      width: 65%;
+      margin-bottom: -6rem;
+      border: $color-primary-background solid 1rem;
+      border-radius: 50%;
+
+      &:first-child {
+        position: relative;
+        bottom: 50%;
+      }
+    }
+
+    .organizer-information * {
+      color: $color-primary;
+    }
+  }
+
+  &--assistant-organiser {
+    display: flex;
+    flex-direction: row;
+    gap: $default-card-gap;
+
+    .image-container-circle {
+      .image {
+        height: 100%;
+      }
+    }
+
+
+    .assistant-organizer-information {
+      .name {
+        h3 {
+          font-size: $text-size-large;
+        }
+      }
+
+      * {
+        color: $color-primary;
+
+      }
+    }
+  }
+
 }

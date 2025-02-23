@@ -1,11 +1,8 @@
 @using Wasabi.Controllers.Events
-
 @using (Html.BeginUmbracoForm<EventRegistrationController>(nameof(EventRegistrationController.Unregister), FormMethod.Post))
 {
-    <button id="register-submit" type="submit" class="btn btn--rounded btn--shadow h2"
+    <button id="register-submit" type="submit" class="btn btn--second unregister"
             onclick="this.disabled = true; this.form.submit();">
         Meld meg av
     </button>
-
-    <p>@TempData["status"]</p>
 }
