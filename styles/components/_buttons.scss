@@ -7,6 +7,12 @@
   padding: 2rem 3rem;
   text-align: center;
   font-family: Eina01-Regular, sans-serif;
+  background-color: $color-dark-gray;
+  color: $color-text-white;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .btn--admin {
@@ -22,7 +28,8 @@
 
 .btn--second {
   @extend .btn;
+  @extend .main-text-semibold;
 
   background-color: $color-blue-background;
-  color: $color-text-white
+  color: $color-text-white;
 }

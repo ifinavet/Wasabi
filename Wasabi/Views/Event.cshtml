@@ -98,7 +98,8 @@
                                 <div class="container">
                                     @if (!MemberManager.IsLoggedIn())
                                     {
-                                        <a class="btn" href="/login/?redirectURL=@Model.Url()">Logg inn for å melde deg
+                                        <a class="btn--second" href="/login/?redirectURL=@Model.Url()">Logg inn for å
+                                            melde deg
                                             på</a>
                                     }
                                     else if (Model.IsCurrentMemberAttending)
