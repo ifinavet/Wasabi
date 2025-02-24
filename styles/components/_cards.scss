@@ -120,7 +120,7 @@ $offset-margin: 4rem;
     }
 
     .event-content {
-      height: 15rem;
+      height: 14rem;
       flex-grow: 1;
       display: grid;
       grid-template-columns: 3fr 7fr;
@@ -149,6 +149,9 @@ $offset-margin: 4rem;
       .event-information {
         padding: 2rem;
         width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
 
         * {
           color: $color-text-white;
@@ -160,7 +163,8 @@ $offset-margin: 4rem;
 
         .metadata {
           display: flex;
-          height: 90%;
+          flex-direction: row;
+          justify-content: space-evenly;
         }
       }
     }
