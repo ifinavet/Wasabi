@@ -1,0 +1,28 @@
+@{
+    Layout = "master.cshtml";
+}
+
+@section Head
+{
+    @await RenderSectionAsync("Head", false)
+}
+
+<div class="page--layout">
+    <div class="page--container">
+        @await RenderSectionAsync("Title", false)
+        @if (!IsSectionDefined("Title"))
+        {
+            <div class="page--title">
+                <h1>@Model.Name</h1>
+            </div>
+        }
+        <div class="page--content">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    @await RenderSectionAsync("Scripts", false)
+}

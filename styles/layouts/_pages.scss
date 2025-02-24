@@ -31,6 +31,7 @@
         border-bottom: $color-primary solid 2px;
 
         * {
+          color: $color-primary;
           text-align: center;
         }
       }
@@ -42,6 +43,12 @@
         grid-template-columns: 8fr 5fr;
 
         .page--main {
+          width: 100%;
+          display: block;
+        }
+
+        .page--main--full {
+          grid-column: 1/-1;
           width: 100%;
           display: block;
         }

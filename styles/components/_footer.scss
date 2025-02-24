@@ -26,8 +26,12 @@ footer {
   .footer-information {
     h1, h2, h3 {
       font-size: $h3-size;
+      color: $color-text-white;
     }
 
+    * {
+      color: $color-text-white;
+    }
   }
 
   .footer-link {

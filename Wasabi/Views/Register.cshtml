@@ -1,9 +1,9 @@
-@using Wasabi.ViewModels.Member
 @using Umbraco.Cms.Core.Security
+@using Wasabi.ViewModels.Member
 @inject IMemberManager MemberManager;
 
 @{
-    Layout = "master.cshtml";
+    Layout = "pages.cshtml";
 }
 
 @if (MemberManager.IsLoggedIn())

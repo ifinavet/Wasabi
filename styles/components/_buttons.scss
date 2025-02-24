@@ -30,6 +30,11 @@
   @extend .btn;
   @extend .main-text-semibold;
 
-  background-color: $color-blue-background;
+  background-color: $color-background-blue;
   color: $color-text-white;
+}
+
+.btn--select {
+  padding: 1rem 3rem
+ 
 }

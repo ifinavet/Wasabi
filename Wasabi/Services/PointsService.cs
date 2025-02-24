@@ -1,29 +1,9 @@
 using System.Text.Json;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Services;
+using Wasabi.Models;
 
 namespace Wasabi.Services;
-
-/// <summary>
-///     Represents a single point entry with date, severity, and cause information.
-/// </summary>
-public class PointEntry
-{
-    /// <summary>
-    ///     Gets the date and time when the point entry was created.
-    /// </summary>
-    public DateTime Date { get; init; }
-
-    /// <summary>
-    ///     Gets the severity level of the point entry.
-    /// </summary>
-    public int Severity { get; init; }
-
-    /// <summary>
-    ///     Gets the cause or reason for the point entry.
-    /// </summary>
-    public required string Cause { get; init; }
-}
 
 /// <summary>
 ///     Defines the contract for services that handle point entry operations.
@@ -31,11 +11,11 @@ public class PointEntry
 public interface IPointsService
 {
     /// <summary>
-    ///     Parses a string containing point entries into an array of PointEntry objects.
+    ///     Parses a string containing point entries into an array of Point objects.
     /// </summary>
     /// <param name="pointEntriesString">The string containing point entries to parse. Each line should be a valid JSON object.</param>
-    /// <returns>An array of parsed PointEntry objects, or null if parsing fails or input is invalid.</returns>
-    public List<PointEntry>? ParsedPointEntries(string? pointEntriesString);
+    /// <returns>An array of parsed Point objects, or null if parsing fails or input is invalid.</returns>
+    public List<Point>? ParsedPointEntries(string? pointEntriesString);
 
     /// <summary>
     ///     Assigns points to a member based on the given cause and severity.
@@ -66,7 +46,7 @@ public class PointsService : IPointsService
     }
 
     /// <inheritdoc />
-    public List<PointEntry>? ParsedPointEntries(string? pointEntriesString)
+    public List<Point>? ParsedPointEntries(string? pointEntriesString)
     {
         if (string.IsNullOrWhiteSpace(pointEntriesString))
             return null;
@@ -74,8 +54,8 @@ public class PointsService : IPointsService
         try
         {
             string[] lines = pointEntriesString.Split([Environment.NewLine], StringSplitOptions.RemoveEmptyEntries);
-            List<PointEntry> entries = new(lines.Length);
-            entries.AddRange(lines.Select(line => JsonSerializer.Deserialize<PointEntry>(line)).OfType<PointEntry>());
+            List<Point> entries = new(lines.Length);
+            entries.AddRange(lines.Select(line => JsonSerializer.Deserialize<Point>(line)).OfType<Point>());
 
             return entries.Count > 0 ? entries.ToList() : null;
         }
@@ -90,7 +70,7 @@ public class PointsService : IPointsService
     public void GivePoints(IMember member, string cause, int severity = 1)
     {
         DateTime violationDateTime = DateTime.Now;
-        string violation = JsonSerializer.Serialize(new PointEntry
+        string violation = JsonSerializer.Serialize(new Point
         {
             Date = violationDateTime,
             Severity = severity,
@@ -107,14 +87,15 @@ public class PointsService : IPointsService
         _memberService.Save(member);
     }
 
+    /// <inheritdoc />
     public void RemoveExpiredPoints(IMember member, int expiratoryLimitInMonths)
     {
-        List<PointEntry> pointEntries =
+        List<Point> pointEntries =
             ParsedPointEntries(member.GetValue<string>("points")) ?? throw new NullReferenceException();
 
-        IEnumerable<PointEntry> expiredPoints = pointEntries.ToList()
+        IEnumerable<Point> expiredPoints = pointEntries.ToList()
             .Where(entry => entry.Date.AddMonths(expiratoryLimitInMonths) < DateTime.Now);
-        foreach (PointEntry expiredPoint in expiredPoints) pointEntries.Remove(expiredPoint);
+        foreach (Point expiredPoint in expiredPoints) pointEntries.Remove(expiredPoint);
 
         string updatedPoints = string.Join(Environment.NewLine,
             pointEntries.Select(p => JsonSerializer.Serialize(p)));

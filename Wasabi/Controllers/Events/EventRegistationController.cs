@@ -12,6 +12,7 @@ using Umbraco.Cms.Infrastructure.Persistence;
 using Umbraco.Cms.Web.Common.PublishedModels;
 using Umbraco.Cms.Web.Website.Controllers;
 using Wasabi.Helpers;
+using Wasabi.Models;
 using Wasabi.Services;
 using Wasabi.ViewModels.Events;
 
@@ -71,7 +72,7 @@ public class EventRegistrationController : SurfaceController
             return RedirectToCurrentUmbracoPage();
         }
 
-        List<PointEntry>? pointEntries = _pointsService.ParsedPointEntries(currentStudent.GetValue<string>("points"));
+        List<Point>? pointEntries = _pointsService.ParsedPointEntries(currentStudent.GetValue<string>("points"));
         int? numOfPoints = pointEntries?.Select(entry => entry.Severity).Sum();
         if (numOfPoints >= 3)
         {

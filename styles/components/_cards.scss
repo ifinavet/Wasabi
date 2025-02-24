@@ -15,7 +15,7 @@ $offset-margin: 4rem;
 
 .card {
   border-radius: 15px;
-  background-color: $color-contrast-background;
+  background-color: $color-background-contrast;
   padding: 2rem;
 
   &--main {
@@ -47,7 +47,7 @@ $offset-margin: 4rem;
     .floating {
       width: 65%;
       margin-bottom: -6rem;
-      border: $color-primary-background solid 1rem;
+      border: $color-background-primary solid 1rem;
       border-radius: 50%;
 
       &:first-child {
@@ -86,5 +86,83 @@ $offset-margin: 4rem;
       }
     }
   }
+}
 
+.card--event {
+  width: 100%;
+
+  a {
+    all: unset;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .event-wrapper {
+    display: flex;
+    flex-direction: column;
+
+    * {
+      background-color: $color-background-contrast-medium;
+    }
+
+    .event-popup {
+      align-self: flex-end;
+      padding: 0 3rem;
+      margin-bottom: -2rem;
+      z-index: 10;
+      border-radius: 15px 15px 0 0;
+
+      * {
+        color: $color-text-white;
+      }
+    }
+
+    .event-content {
+      height: 15rem;
+      flex-grow: 1;
+      display: grid;
+      grid-template-columns: 3fr 7fr;
+      border-radius: 15px;
+      border: $color-background-contrast-medium solid 1px;
+      overflow: hidden;
+
+      .company-image {
+        background-color: $color-white !important;
+        height: 100%;
+        width: 100%;
+        display: grid;
+        place-content: center;
+        padding: 1rem 0;
+
+        img {
+          background-color: inherit !important;
+          box-sizing: border-box;
+          margin: auto;
+          height: initial;
+          max-height: 7rem;
+          width: 90%;
+        }
+      }
+
+      .event-information {
+        padding: 2rem;
+        width: 100%;
+
+        * {
+          color: $color-text-white;
+        }
+
+        h1 {
+          font-size: $text-size-xlarge;
+        }
+
+        .metadata {
+          display: flex;
+          height: 90%;
+        }
+      }
+    }
+  }
 }

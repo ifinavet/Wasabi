@@ -6,15 +6,17 @@ using Umbraco.Cms.Core.Security;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.Common.Controllers;
+using Wasabi.Services;
 using Wasabi.ViewModels.Member;
 
 namespace Wasabi.Controllers.Member;
 
 public class MemberEditProfileRenderController : RenderController
 {
+    private readonly ILogger<RenderController> _logger;
     private readonly IMemberManager _memberManager;
     private readonly IMemberService _memberService;
-    private readonly ILogger<RenderController> _logger;
+    private readonly IPointsService _pointsService;
     private readonly IPublishedValueFallback _publishedValueFallback;
 
     public MemberEditProfileRenderController(
@@ -22,20 +24,23 @@ public class MemberEditProfileRenderController : RenderController
         ICompositeViewEngine compositeViewEngine,
         IUmbracoContextAccessor umbracoContextAccessor,
         IMemberManager memberManager,
-        IMemberService memberService, IPublishedValueFallback publishedValueFallback)
+        IMemberService memberService,
+        IPublishedValueFallback publishedValueFallback,
+        IPointsService pointsService)
         : base(logger, compositeViewEngine, umbracoContextAccessor)
     {
         _memberManager = memberManager;
         _memberService = memberService;
         _publishedValueFallback = publishedValueFallback;
         _logger = logger;
+        _pointsService = pointsService;
     }
-    
+
     /// <summary>
-    /// Renders the profile edit page for the current member.
+    ///     Renders the profile edit page for the current member.
     /// </summary>
     /// <returns>
-    /// An <see cref="IActionResult"/> that renders the profile edit page view.
+    ///     An <see cref="IActionResult" /> that renders the profile edit page view.
     /// </returns>
     [Route("/profil/endre-profil/")]
     public override IActionResult Index()
@@ -47,7 +52,7 @@ public class MemberEditProfileRenderController : RenderController
         MemberEditProfileViewModel model = new(CurrentPage!, _publishedValueFallback);
 
         if (currentMember == null) return CurrentTemplate(model);
-        
+
         IMember currentStudent = _memberService.GetByKey(currentMember.Key)!;
         formViewModel.FirstName = currentStudent.GetValue<string>("firstName") ?? string.Empty;
         formViewModel.LastName = currentStudent.GetValue<string>("lastName") ?? string.Empty;
@@ -56,7 +61,8 @@ public class MemberEditProfileRenderController : RenderController
         formViewModel.StudyProgram = currentStudent.GetValue<string>("studieprogram") ?? "ingen";
 
         model.FormViewModel = formViewModel;
-        
+        model.MemberPoints = _pointsService.ParsedPointEntries(currentStudent.GetValue<string>("points"));
+
         return CurrentTemplate(model);
     }
 }
