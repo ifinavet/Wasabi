@@ -1,30 +1,132 @@
+@using Wasabi.Services
 @inherits UmbracoViewPage<Wasabi.ViewModels.SemesterViewModel>
+@inject IImageService ImageService
 @{
-    Layout = "master.cshtml";
+    Layout = "pages.cshtml";
 
-    string initalMonth = DateTime.Now.ToString("MM");
     IGrouping<string, Event>[] months = Model.MonthGroups;
-    if (months != null && months.All(m => m.Key != initalMonth))
+
+    Dictionary<string, string> monthNames = new()
     {
-        initalMonth = months.First().Key;
-    }
+        { "01", "Januar" },
+        { "02", "Februar" },
+        { "03", "Mars" },
+        { "04", "April" },
+        { "05", "Mai" },
+        { "06", "Juni" },
+        { "07", "Juli" },
+        { "08", "August" },
+        { "09", "September" },
+        { "10", "Oktober" },
+        { "11", "November" },
+        { "12", "Desember" }
+    };
 }
 
-@if (months == null)
+@section Title
 {
-    <p>Det er foreløpig ingen arrangementer</p>
+    <div class="event-title">
+        <h1>
+            @Model.Parent?.Parent?.Name
+        </h1>
+        <h3>
+            @Model.Name @Model.Parent?.Name
+        </h3>
+    </div>
 }
-else
-{
-    @foreach (IGrouping<string, Event> month in months)
+
+<div class="page--main--full">
+    @if (months == null)
     {
-        string style = initalMonth == month.Key ? "red" : "inital"; // Testing
-        <h1 style="color: @style">@month.Key</h1>
-        @foreach (Event element in month)
-        {
-            <p>@element.Name</p>
-            <p>@element.EventDate</p>
-            <a href=@element.Url()>Til arrangement</a>
-        }
+        <p>Det er foreløpig ingen arrangementer</p>
     }
-}
+    else
+    {
+        <div class="month-selectors">
+            @foreach (IGrouping<string, Event> month in months)
+            {
+                <a href="?month=@month.Key"
+                   class="month-selector @(month.Key == Model.ActiveMonth ? "active-month" : "")">@monthNames[month.Key]</a>
+            }
+        </div>
+        <div class="events">
+            @foreach (Event el in months.Where(x => x.Key == Model.ActiveMonth).SelectMany(x => x))
+            {
+                bool openButNotBeen = el.RegistrationDate < DateTime.Now && el.EventDate > DateTime.Now;
+                string green = openButNotBeen ? "active" : "";
+                <div class="card--event">
+                    <a href=@el.Url()>
+                        <div class="event-wrapper @green">
+                            @if (el.RegistrationDate == DateTime.Today)
+                            {
+                                <div class="event-popup">
+                                    <p>Påmeldingen er åpen!</p>
+                                </div>
+                            }
+                            else if (openButNotBeen)
+                            {
+                                <div class="event-popup">
+                                    <p>@(el.ParticipantLimit - el.Children.Count()) plasser igjen</p>
+                                </div>
+                            }
+                            else if (el.EventDate > DateTime.Now)
+                            {
+                                <div class="event-popup">
+                                    <p>Påmeldingen åpner @el.RegistrationDate.ToString("MM.dd kl. hh:mm")</p>
+                                </div>
+                            }
+                            <div class="event-content">
+                                <div class="company-image">
+                                    <img src="@ImageService.GetCompanyImageUrl((Company)el.HostingCompany!)" alt="">
+                                </div>
+                                <div class="event-information">
+                                    <h1>@el.Name</h1>
+                                    <p>@el.EventTeaser</p>
+                                    <div class="metadata">
+                                        <div class="metadata-item">
+                                            <div class="icon">
+                                                <span class="material-symbols-rounded">
+                                                    event
+                                                </span>
+                                            </div>
+                                            <div class="metadata-data">
+                                                <span class="main-text-large semi-bold">
+                                                    @el.EventDate.ToString("dddd dd.mm")
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="metadata-item">
+                                            <div class="icon">
+                                                <span class="material-symbols-rounded">
+                                                    <span class="material-symbols-rounded">
+                                                        schedule
+                                                    </span>
+                                                </span>
+                                            </div>
+                                            <div class="metadata-data">
+                                                <span
+                                                    class="main-text-large semi-bold"> @el.EventDate.ToString("hh:mm") </span>
+                                            </div>
+                                        </div>
+                                        <div class="metadata-item">
+                                            <div class="icon">
+                                                <span class="material-symbols-rounded">
+                                                    group
+                                                </span>
+                                            </div>
+                                            <div class="metadata-data">
+                                                <span class="main-text-large semi-bold">
+                                                    @el.ParticipantLimit
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    }
+</div>

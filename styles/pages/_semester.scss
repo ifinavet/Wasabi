@@ -1,0 +1,63 @@
+@use "../base" as *;
+
+.event-title {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0;
+  margin: 2rem 0;
+
+  h1 {
+    color: $color-primary;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    @extend .main-text-large;
+    font-size: $h4-size;
+  }
+
+}
+
+.events {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.month-selectors {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  border-bottom: $color-primary solid 3px;
+  margin-bottom: 2rem;
+
+  .month-selector {
+    @extend .main-text-semibold;
+    font-size: $h4-size;
+    text-decoration: none;
+    color: $color-medium-gray;
+    padding: 0 2rem;
+    margin: 2rem 0 .5rem;
+  }
+
+  .active-month {
+    color: $color-primary
+  }
+}
+
+.active {
+
+  & > * {
+    border: $color-green solid 1px !important;
+
+  }
+
+  * {
+    background-color: $color-green !important;
+
+  }
+}

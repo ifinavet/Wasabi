@@ -29,8 +29,9 @@ public class SemesterController : RenderController
     /// <summary>
     ///     Gets the events for the semester, sorts them and groups them by month
     /// </summary>
-    /// <returns>Viewmodel with all the events for the semeste</returns>
-    public override IActionResult Index()
+    /// <returns>Viewmodel with all the events for the semester</returns>
+    [HttpGet]
+    public IActionResult Index([FromQuery(Name = "month")] string month)
     {
         IGrouping<string, Event>[]? monthGroups = _umbracoHelper
             .Content(CurrentPage!.Id)?.Children.OfType<Event>()
@@ -41,7 +42,8 @@ public class SemesterController : RenderController
 
         SemesterViewModel semesterViewModel = new(CurrentPage!, _publishedValueFallback)
         {
-            MonthGroups = monthGroups
+            MonthGroups = monthGroups,
+            ActiveMonth = month.IsNullOrWhiteSpace() ? DateTime.Today.ToString("MM") : month
         };
 
         return CurrentTemplate(semesterViewModel);
