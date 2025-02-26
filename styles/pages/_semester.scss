@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  flex-wrap: wrap;
   align-items: center;
   padding: 1rem 0;
   margin: 2rem 0;
@@ -12,6 +13,11 @@
   h1 {
     color: $color-primary;
     margin-bottom: 1rem;
+
+    @media (max-width: 375px) {
+      font-size: $h3-size;
+      word-break: break-all;
+    }
   }
 
   h3 {
