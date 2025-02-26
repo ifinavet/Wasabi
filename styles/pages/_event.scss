@@ -13,28 +13,6 @@
 }
 
 @media screen and (min-width: $breakpoint-xl) {
-  .metadata {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: $default-card-gap;
-    align-items: center;
-
-    .metadata-item {
-      display: flex;
-      width: 100%;
-      align-items: center;
-      color: $color-text-white;
-
-      * {
-        color: $color-text-white;
-      }
-
-      .icon {
-        margin-right: 1rem;
-      }
-    }
-  }
 
   .signup {
     width: 100%;
