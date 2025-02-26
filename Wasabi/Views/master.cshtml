@@ -32,6 +32,7 @@
 
     @* Page specific meta data *@
     @await RenderSectionAsync("Head", false)
+
 </head>
 <body>
 @* Header *@
@@ -56,5 +57,22 @@
 </footer>
 
 @await RenderSectionAsync("Scripts", false)
+<script defer>
+    // Toggle mobile navigation
+    document.getElementById('hamburger-menu').addEventListener('click', function () {
+        document.getElementById('mobile-nav').classList.toggle('active');
+    });
+
+    // Toggle mobile dropdown menus
+    document.getElementById('info-dropdown-toggle').addEventListener('click', function () {
+        this.classList.toggle('active');
+        document.getElementById('info-dropdown').classList.toggle('active');
+    });
+
+    document.getElementById('profile-dropdown-toggle').addEventListener('click', function () {
+        this.classList.toggle('active');
+        document.getElementById('profile-dropdown').classList.toggle('active');
+    });
+</script>
 </body>
 </html>

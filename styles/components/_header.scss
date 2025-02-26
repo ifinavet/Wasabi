@@ -1,98 +1,288 @@
 @use "../base" as *;
 
-@media (min-width: $breakpoint-sm) {
+// ========================================
+// MAIN NAVBAR CONTAINER
+// ========================================
+// The main navigation container that holds all elements
+.navbar {
+  background-color: $color-blue-primary; // Deep blue background
+  color: $color-text-white; // Light text color
+  padding: 0.75rem 1.5rem; // Inner spacing
+  display: flex; // Flexbox for layout
+  justify-content: space-between; // Spread items to each end
+  align-items: center; // Vertically center items
+  position: relative; // For absolute positioning of dropdown
+
+  // Increase padding on small devices and above
+  @media (min-width: $breakpoint-sm) {
+    padding: 1rem 2rem;
+    height: 70px; // Fixed height for consistency
+  }
+
+  @media (min-width: $breakpoint-md) {
+    flex-direction: row;
+  }
+
+  // Additional styling for medium devices and above
+  @media (min-width: $breakpoint-lg) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+  }
 }
 
-@media (min-width: $breakpoint-md) {
+// ========================================
+// LOGO SECTION
+// ========================================
+// Container for the logo and subtitle
+.logo-container {
+  display: flex; // Flexbox for logo and subtitle alignment
+  align-items: center; // Vertically center content
+  height: 100%; // Take full height of navbar
 }
 
+// Logo link and image
+.logo {
+  display: flex;
+  align-items: center;
+  height: 100%;
+
+  .logo-image {
+    height: 2rem; // Fixed height for logo
+    width: auto; // Maintain aspect ratio
+    max-width: 100%; // Prevent overflow
+    object-fit: contain; // Ensure image fits without distortion
+  }
+}
+
+// Subtitle with "BEDRIFTSKONTAKTEN VED INSTITUTT FOR INFORMATIKK"
+.nav-subtitle {
+  display: none; // Hidden on mobile by default
+
+  // Show on medium devices and above
+  @media (min-width: $breakpoint-md) {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    border-left: 1px solid rgba(255, 255, 255, 0.3); // Vertical separator
+    padding-left: 1rem;
+    margin-left: 1rem;
+
+    .subtitle-image {
+      height: 2rem; // Smaller height for subtitle image
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+    }
+  }
+}
+
+// ========================================
+// MOBILE LOGOS
+// ========================================
 @media (min-width: $breakpoint-lg) {
-  .header {
-    padding: 0;
-    margin: 0;
-    background-color: $color-primary;
+  .logo-container {
+    display: flex;
+  }
+}
+
+
+// ========================================
+// DESKTOP NAVIGATION
+// ========================================
+// Primary navigation menu for desktop/laptop devices
+.desktop-nav {
+  display: none; // Hidden on smaller screens
+
+  // Only show on large devices (desktops/laptops)
+  @media (min-width: $breakpoint-lg) {
+    display: block;
+  }
+
+  // Main navigation list
+  ul {
+    display: flex; // Horizontal layout
+    list-style: none; // Remove bullets
+    gap: 1.5rem; // Space between items
+  }
+
+  // Navigation items
+  li {
+    position: relative; // For dropdown positioning
+  }
+
+  // Navigation links
+  a {
+    color: $color-text-white;
+    text-decoration: none;
+    font-size: $text-size;
+    padding: 0.5rem 0;
+    display: inline-block;
+
+    &:hover {
+      opacity: 0.8; // Slightly transparent on hover
+    }
+  }
+
+  // ========================================
+  // DROPDOWN MENUS (DESKTOP)
+  // ========================================
+  // Container for dropdown items (Info and Profil)
+  .dropdown {
     position: relative;
-    z-index: 2;
 
-    .nav-bar {
-      width: 100%;
-      margin: 0 auto;
-      padding: 1rem 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-direction: column;
-
-      .logo {
-        display: flex;
-        flex-direction: row;
-        height: 3rem;
-        margin: 1.5rem 0;
-
-        .divider {
-          border: solid 1px $color-text-white;
-          margin: 0 2rem;
-        }
-
-        img {
-          height: 100%;
-          width: initial;
-        }
+    // Show dropdown on hover
+    &:hover {
+      .dropdown-content {
+        display: block;
       }
     }
+  }
 
-    .navigation {
-      ul {
-        margin: 0;
-        padding: 1rem 0;
-        list-style-type: none;
-        display: flex;
-        box-sizing: border-box;
+  // Dropdown content (hidden by default)
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: $color-white;
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); // Shadow for depth
+    z-index: 100; // Ensure it appears above other content
+    border-radius: 4px; // Rounded corners
+    top: 100%; // Position below parent
+    left: 0;
+    margin-top: 0.5rem;
 
-        li a {
-          margin: 0 1rem;
-          color: $color-background-contrast;
-          text-decoration: none;
+    // Links within dropdown
+    a {
+      color: $color-text-blue; // Blue text in dropdown
+      padding: 0.75rem 1rem;
+      text-decoration: none;
+      display: block; // Full width clickable
+      font-size: 0.9rem;
 
-          &:hover {
-            text-decoration: underline;
-          }
-        }
-      }
-
-      .dropdown {
-        position: relative;
-        display: block;
-        box-sizing: border-box;
-
-        &:hover .dropdown-menu {
-          display: block;
-        }
-
-        a {
-          padding: 2rem 0;
-        }
-
-        .dropdown-menu {
-          display: none;
-          z-index: 1;
-          position: absolute;
-          list-style: none;
-          padding: 5px 10px 10px 0;
-          margin: 1rem -1rem;
-          background-color: $color-primary;
-          width: max-content;
-
-          li {
-            margin: 0;
-          }
-
-          a {
-            display: block;
-            padding: 10px 15px;
-          }
-        }
+      &:hover {
+        background-color: $color-light-gray; // Gray background on hover
+        opacity: 1; // Full opacity on hover
       }
     }
   }
 }
+
+
+// ========================================
+// HAMBURGER MENU (MOBILE)
+// ========================================
+// Hamburger button for mobile navigation
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 21px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+
+  // Hide on desktop
+  @media (min-width: $breakpoint-lg) {
+    display: none;
+  }
+
+  // The three lines of the hamburger
+  span {
+    width: 100%;
+    height: 3px;
+    background-color: $color-white;
+    transition: all 0.3s ease; // Smooth animation
+  }
+}
+
+// ========================================
+// MOBILE NAVIGATION
+// ========================================
+// Mobile navigation dropdown (hidden by default)
+.mobile-nav {
+  display: none; // Hidden until activated
+  position: absolute; // Position below navbar
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: $color-blue-primary;
+  z-index: 99;
+  padding: 1rem 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); // Shadow for depth
+
+  // When active class is added via JavaScript
+  &.active {
+    display: block;
+  }
+
+  // Always hide on desktop regardless of active state
+  @media (min-width: $breakpoint-lg) {
+    display: none !important;
+  }
+
+  // Navigation list
+  ul {
+    list-style: none;
+  }
+
+  // List items
+  li {
+    padding: 0.5rem 1.5rem;
+  }
+
+  // Navigation links
+  a {
+    color: $color-text-white;
+    text-decoration: none;
+    font-size: $text-size;
+    display: block;
+    padding: 0.5rem 0;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  // ========================================
+  // MOBILE DROPDOWNS
+  // ========================================
+  // Title bar for dropdown toggles (contains link and arrow)
+  .mobile-nav-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+
+    // Dropdown arrow
+    span {
+      transition: transform 0.3s ease; // Smooth rotation animation
+    }
+
+    // Rotate arrow when active
+    &.active span {
+      transform: rotate(180deg);
+    }
+  }
+
+  // Dropdown content (hidden by default)
+  .mobile-dropdown {
+    margin-top: 0.5rem;
+    padding-left: 1rem; // Indent dropdown items
+    display: none;
+
+    // Show when active class is added via JavaScript
+    &.active {
+      display: block;
+    }
+
+    // Links within dropdown
+    a {
+      padding: 0.5rem 0;
+      font-size: 0.9rem;
+    }
+  }
+}
+
