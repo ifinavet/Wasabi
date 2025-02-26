@@ -25,7 +25,7 @@
 
     @* Google material symbols *@
     <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=content_copy,event,fork_spoon,group,map,schedule"/>
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=chevron_left,chevron_right,content_copy,event,fork_spoon,group,map,schedule"/>
 
     @* Qr code scanner *@
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
@@ -33,10 +33,18 @@
     @* Page specific meta data *@
     @await RenderSectionAsync("Head", false)
 
+    @await Html.PartialAsync("Header", new HeaderViewModel { PageUrl = Model.Url() })
 </head>
 <body>
 @* Header *@
-@await Html.PartialAsync("Header", new HeaderViewModel { PageUrl = Model.Url() })
+
+<svg width="0" height="0">
+    <defs>
+        <clipPath id="curveClip" clipPathUnits="objectBoundingBox">
+            <path d="M0,0 L0.8,0 Q1.1,0.5 0.8,1 L0,1 Z"/>
+        </clipPath>
+    </defs>
+</svg>
 
 @* Body *@
 <main id="app">
@@ -60,18 +68,7 @@
 <script defer>
     // Toggle mobile navigation
     document.getElementById('hamburger-menu').addEventListener('click', function () {
-        document.getElementById('mobile-nav').classList.toggle('active');
-    });
-
-    // Toggle mobile dropdown menus
-    document.getElementById('info-dropdown-toggle').addEventListener('click', function () {
-        this.classList.toggle('active');
-        document.getElementById('info-dropdown').classList.toggle('active');
-    });
-
-    document.getElementById('profile-dropdown-toggle').addEventListener('click', function () {
-        this.classList.toggle('active');
-        document.getElementById('profile-dropdown').classList.toggle('active');
+        document.getElementById('mobile-nav').classList.toggle('dropdown-active');
     });
 </script>
 </body>

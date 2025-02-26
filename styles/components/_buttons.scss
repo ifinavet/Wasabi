@@ -36,5 +36,19 @@
 
 .btn--select {
   padding: 1rem 3rem
- 
+}
+
+.btn--carousel-navigation {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-content: center;
+  aspect-ratio: 1 / 1;
+  background-color: $color-primary;
+  padding: 1rem;
+  border-radius: 50%;
+
+  * {
+    color: $color-text-white;
+  }
 }

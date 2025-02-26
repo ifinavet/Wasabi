@@ -49,6 +49,8 @@ public class StartPageController : RenderController
             .Take(3)
             .ToArray();
 
+        Console.WriteLine(events.Length);
+
         StartPageViewModel startPageViewModel = new(CurrentPage!, _publishedValueFallback)
         {
             JobListings = hits,
