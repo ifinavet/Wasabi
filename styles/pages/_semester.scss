@@ -32,6 +32,8 @@
 .month-selectors {
   display: flex;
   flex-direction: row;
+  gap: 1rem;
+  flex-wrap: wrap;
   width: 100%;
   justify-content: space-evenly;
   border-bottom: $color-primary solid 3px;
@@ -42,7 +44,6 @@
     font-size: $h4-size;
     text-decoration: none;
     color: $color-medium-gray;
-    padding: 0 2rem;
     margin: 2rem 0 .5rem;
   }
 

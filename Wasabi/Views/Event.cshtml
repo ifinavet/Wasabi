@@ -28,12 +28,18 @@
 }
 
 <main class="page--main">
+    @if (TempData["status"] != null)
+    {
+        <div class="card--error">
+            <p>@TempData["status"]</p>
+        </div>
+    }
     <div class="card card--metadata card--main">
         <div class="metadata">
             <div class="metadata-item">
                 <div class="icon">
                     <span class="material-symbols-rounded">
-                        event 
+                        event
                     </span>
                 </div>
                 <div class="metadata-data">
@@ -71,9 +77,9 @@
                     </span>
                 </div>
                 <div class="metadata-data">
-                <span class="main-text-large semi-bold">
-                    @remainingAvailableSpots plasser igjen
-                </span>
+                    <span class="main-text-large semi-bold">
+                        @remainingAvailableSpots plasser igjen
+                    </span>
                 </div>
             </div>
         </div>
@@ -114,12 +120,7 @@
         }
     </div>
 
-    @if (TempData["status"] != null)
-    {
-        <div class="card card--error">
-            <p>@TempData["status"]</p>
-        </div>
-    }
+
 
 
     @if (!Model.CurrentAttendeeQrCode.IsNullOrWhiteSpace())

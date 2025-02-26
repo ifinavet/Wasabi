@@ -1,64 +1,113 @@
 @use '../base' as *;
 
+// Mobile-first approach
+.page--layout {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .page--container {
+    width: 95%;
+
+    .page--title {
+      width: 100%;
+      padding: 0.75rem 0;
+      margin: 1rem 0;
+      color: $color-primary;
+      border-bottom: $color-primary solid 2px;
+
+      * {
+        color: $color-primary;
+        text-align: center;
+      }
+    }
+
+    .page--content {
+      width: 100%;
+      display: grid;
+      gap: $default-card-gap;
+      grid-template-columns: 1fr;
+
+      .page--main {
+        width: 100%;
+        display: block;
+      }
+
+      .page--main--full {
+        grid-column: 1/-1;
+        width: 100%;
+        display: block;
+      }
+
+      .page--aside {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: $default-card-gap;
+      }
+    }
+  }
+}
+
+// Small devices (576px and up)
 @media screen and (min-width: $breakpoint-sm) {
+  .page--layout {
+    .page--container {
+      width: 90%;
 
+      .page--title {
+        padding: 0.8rem 0;
+        margin: 1.25rem 0;
+      }
+    }
+  }
 }
 
+// Medium devices (768px and up)
 @media screen and (min-width: $breakpoint-md) {
+  .page--layout {
+    .page--container {
+      width: 85%;
 
+      .page--title {
+        padding: 0.9rem 0;
+        margin: 1.5rem 0;
+      }
+
+      // After medium breakpoint, switch to two columns
+      .page--content {
+        grid-template-columns: 8fr 5fr;
+      }
+    }
+  }
 }
 
+// Large devices (1025px and up)
 @media screen and (min-width: $breakpoint-lg) {
+  .page--layout {
+    .page--container {
+      min-width: $breakpoint-lg * 0.75;
+      max-width: $breakpoint-lg * 0.85;
 
+      .page--title {
+        padding: 1rem 0;
+        margin: 1.75rem 0;
+      }
+    }
+  }
 }
 
+// Extra large devices (1200px and up)
 @media screen and (min-width: $breakpoint-xl) {
   .page--layout {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
     .page--container {
       min-width: $breakpoint-xl * 0.80;
       max-width: $breakpoint-xl * 0.90;
 
       .page--title {
-        width: 100%;
         padding: 1rem 0;
         margin: 2rem 0;
-        color: $color-primary;
-        border-bottom: $color-primary solid 2px;
-
-        * {
-          color: $color-primary;
-          text-align: center;
-        }
-      }
-
-      .page--content {
-        width: inherit;
-        display: grid;
-        gap: $default-card-gap;
-        grid-template-columns: 8fr 5fr;
-
-        .page--main {
-          width: 100%;
-          display: block;
-        }
-
-        .page--main--full {
-          grid-column: 1/-1;
-          width: 100%;
-          display: block;
-        }
-
-        .page--aside {
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          gap: $default-card-gap;
-        }
       }
     }
   }
