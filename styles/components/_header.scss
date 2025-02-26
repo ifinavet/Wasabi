@@ -144,26 +144,26 @@
   .dropdown-content {
     display: none;
     position: absolute;
-    background-color: $color-white;
+    background-color: $color-primary;
     min-width: 200px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); // Shadow for depth
     z-index: 100; // Ensure it appears above other content
     border-radius: 4px; // Rounded corners
     top: 100%; // Position below parent
     left: 0;
-    margin-top: 0.5rem;
+    margin: -1rem;
 
     // Links within dropdown
     a {
-      color: $color-text-blue; // Blue text in dropdown
-      padding: 0.75rem 1rem;
+      color: $color-text-white; // Blue text in dropdown
+      padding: 1rem 1rem;
+      margin: 0;
       text-decoration: none;
       display: block; // Full width clickable
-      font-size: 0.9rem;
 
       &:hover {
-        background-color: $color-light-gray; // Gray background on hover
         opacity: 1; // Full opacity on hover
+        text-decoration: underline;
       }
     }
   }
@@ -214,7 +214,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); // Shadow for depth
 
   // When active class is added via JavaScript
-  &.active {
+  &.dropdown-active {
     display: block;
   }
 
@@ -243,45 +243,6 @@
 
     &:hover {
       opacity: 0.8;
-    }
-  }
-
-  // ========================================
-  // MOBILE DROPDOWNS
-  // ========================================
-  // Title bar for dropdown toggles (contains link and arrow)
-  .mobile-nav-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-
-    // Dropdown arrow
-    span {
-      transition: transform 0.3s ease; // Smooth rotation animation
-    }
-
-    // Rotate arrow when active
-    &.active span {
-      transform: rotate(180deg);
-    }
-  }
-
-  // Dropdown content (hidden by default)
-  .mobile-dropdown {
-    margin-top: 0.5rem;
-    padding-left: 1rem; // Indent dropdown items
-    display: none;
-
-    // Show when active class is added via JavaScript
-    &.active {
-      display: block;
-    }
-
-    // Links within dropdown
-    a {
-      padding: 0.5rem 0;
-      font-size: 0.9rem;
     }
   }
 }
