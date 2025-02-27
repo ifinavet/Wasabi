@@ -14,7 +14,7 @@ $offset-margin: 4rem;
 }
 
 .card {
-  border-radius: 15px;
+  border-radius: $border-radius-default;
   background-color: $color-background-contrast;
   padding: 2rem;
 
@@ -51,7 +51,7 @@ $offset-margin: 4rem;
       width: 65%;
       margin-bottom: -6rem;
       border: $color-background-almost-white solid 1rem;
-      border-radius: 50%;
+      border-radius: $border-radius-round;
 
       &:first-child {
         position: relative;
@@ -90,7 +90,7 @@ $offset-margin: 4rem;
           padding: .5rem 5rem;
           background-color: $color-primary;
           color: $color-text-white;
-          border-radius: 10px;
+          border-radius: $border-radius-small;
         }
       }
     }
@@ -162,7 +162,7 @@ $offset-margin: 4rem;
       padding: 0 3rem;
       margin-bottom: -2rem;
       z-index: 10;
-      border-radius: 15px 15px 0 0;
+      border-radius: $border-radius-default $border-radius-default 0 0;
 
       * {
         color: $color-text-white;
@@ -184,12 +184,12 @@ $offset-margin: 4rem;
       flex-grow: 1;
       display: grid;
       grid-template-columns: 3fr 7fr;
-      border-radius: 15px;
+      border-radius: $border-radius-default;
       border: $color-background-contrast-medium solid 1px;
       overflow: hidden;
 
       @media (max-width: $breakpoint-lg) {
-        border-radius: 15px 0 15px 15px;
+        border-radius: $border-radius-default 0 $border-radius-default $border-radius-default;
       }
 
       @media (max-width: $breakpoint-md) {
@@ -263,8 +263,8 @@ $offset-margin: 4rem;
         .metadata {
           display: flex;
           flex-direction: row;
-          justify-content: space-evenly;
-
+          gap: 5rem;
+         
           @media (max-width: $breakpoint-sm) {
             flex-wrap: wrap;
             gap: 1rem;

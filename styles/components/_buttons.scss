@@ -3,7 +3,7 @@
 .btn {
   all: unset;
   display: inline-block;
-  border-radius: 15px;
+  border-radius: $border-radius-default;
   padding: 2rem 3rem;
   text-align: center;
   font-family: Eina01-Regular, sans-serif;
@@ -46,7 +46,7 @@
   aspect-ratio: 1 / 1;
   background-color: $color-primary;
   padding: 1rem;
-  border-radius: 50%;
+  border-radius: $border-radius-round;
 
   * {
     color: $color-text-white;

@@ -71,7 +71,7 @@
       display: grid;
       place-content: center;
       padding: 2rem;
-      border-radius: 50%;
+      border-radius: $border-radius-round;
 
       img {
         width: 100%;
@@ -129,7 +129,7 @@
           flex-direction: column;
           justify-content: space-between;
           background-color: $color-background-primary;
-          border-radius: 15px;
+          border-radius: $border-radius-default;
           overflow: hidden;
 
           .image {
