@@ -2,18 +2,26 @@
 @inherits UmbracoViewPage<Wasabi.ViewModels.Member.MemberEditProfileViewModel>
 
 @{
-    Layout = "pages.cshtml";
+    Layout = "_pages.cshtml";
 }
 
-@await Html.PartialAsync("Member/MemberEditProfileForm", Model.FormViewModel)
+@section Title {
+    <div class="page--title">
+        <h1>@Model.Name</h1>
+    </div>
+}
 
-<div class="points">
-    @foreach (Point point in Model.MemberPoints)
-    {
-        <div class="point">
-            <p class="main-text-semibold">Dato for prikk: @point.Date.ToString("D")</p>
-            <p>Årsak: @point.Cause</p>
-            <p>Antall prikker: @point.Severity</p>
-        </div>
-    }
+<div class="page--content">
+    @await Html.PartialAsync("Member/MemberEditProfileForm", Model.FormViewModel)
+
+    <div class="points">
+        @foreach (Point point in Model.MemberPoints)
+        {
+            <div class="point">
+                <p class="main-text-semibold">Dato for prikk: @point.Date.ToString("D")</p>
+                <p>Årsak: @point.Cause</p>
+                <p>Antall prikker: @point.Severity</p>
+            </div>
+        }
+    </div>
 </div>

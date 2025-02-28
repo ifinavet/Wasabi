@@ -1,7 +1,7 @@
 @using Wasabi.ViewModels.JobListings
 @inherits UmbracoViewPage<Wasabi.ViewModels.JobListings.JobListingsViewModel>
 @{
-    Layout = "master.cshtml";
+    Layout = "_master.cshtml";
 }
 
 <div class="container">
@@ -26,9 +26,11 @@
 
     <div class="row margin-bottom--default">
         <div class="col-xs-12">
-            <form action="@Model.Url()" method="get" aria-label="@Umbraco.GetDictionaryValue("searchbarLabel")" class="center">
+            <form action="@Model.Url()" method="get" aria-label="@Umbraco.GetDictionaryValue("searchbarLabel")"
+                  class="center">
                 <div class="search-input-wrapper">
-                    <input type="text" placeholder="@Umbraco.GetDictionaryValue("searchbarPlaceholder")" id="query" name="query" class="search-input" value="@Model.QueryString"/>
+                    <input type="text" placeholder="@Umbraco.GetDictionaryValue("searchbarPlaceholder")" id="query"
+                           name="query" class="search-input" value="@Model.QueryString"/>
                     <button type="submit" class="search-button">@Umbraco.GetDictionaryValue("Search")</button>
                 </div>
             </form>

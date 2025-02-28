@@ -20,23 +20,25 @@
 
     @* Main style *@
     <link rel="stylesheet" type="text/css"
-          href="@Url.Content("~/assets/css/site.css")"
+          href="@Url.Content("~/assets/generated/css/site.css")"
           asp-append-version="true"/>
 
     @* Google material symbols *@
     <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=chevron_left,chevron_right,content_copy,event,fork_spoon,group,map,schedule"/>
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=cancel,check_circle,chevron_left,chevron_right,content_copy,directions_run,event,fork_spoon,group,map,schedule"/>
 
     @* Qr code scanner *@
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="https://unpkg.com/html5-qrcode" asp-append-version="true" type="text/javascript"></script>
+
+    <script src="@Url.Content("~/assets/generated/js/main.js")" asp-append-version="true" type="text/javascript"
+            defer></script>
 
     @* Page specific meta data *@
     @await RenderSectionAsync("Head", false)
-
-    @await Html.PartialAsync("Header", new HeaderViewModel { PageUrl = Model.Url() })
 </head>
 <body>
 @* Header *@
+@await Html.PartialAsync("Header", new HeaderViewModel { PageUrl = Model.Url() })
 
 <svg width="0" height="0">
     <defs>
@@ -65,11 +67,5 @@
 </footer>
 
 @await RenderSectionAsync("Scripts", false)
-<script defer>
-    // Toggle mobile navigation
-    document.getElementById('hamburger-menu').addEventListener('click', function () {
-        document.getElementById('mobile-nav').classList.toggle('dropdown-active');
-    });
-</script>
 </body>
 </html>

@@ -195,32 +195,66 @@
     height: 3px;
     background-color: $color-white;
     transition: all 0.3s ease; // Smooth animation
+    transform-origin: center; // Ensure rotation happens from center
+  }
+
+  // Hamburger to X animation when active
+  &.active {
+    span {
+      &:nth-child(1) {
+        transform: translateY(9px) rotate(45deg); // Rotate top line
+      }
+
+      &:nth-child(2) {
+        opacity: 0; // Hide middle line
+      }
+
+      &:nth-child(3) {
+        transform: translateY(-9px) rotate(-45deg); // Rotate bottom line
+      }
+    }
   }
 }
 
 // ========================================
 // MOBILE NAVIGATION
 // ========================================
-// Mobile navigation dropdown (hidden by default)
+// Mobile navigation dropdown
 .mobile-nav {
-  display: none; // Hidden until activated
-  position: absolute; // Position below navbar
-  top: 100%;
+  position: fixed; // Change to fixed to cover entire screen
+  top: 70px; // Height of the navbar on small devices and above
   left: 0;
   right: 0;
+  bottom: 0; // Extend to bottom of viewport
   background-color: $color-blue-primary;
   z-index: 99;
-  padding: 1rem 0;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); // Shadow for depth
+  padding: 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  // Animation properties
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: height 0.4s ease,
+  opacity 0.3s ease,
+  transform 0.3s ease,
+  padding 0.3s ease;
 
   // When active class is added via JavaScript
-  &.dropdown-active {
-    display: block;
+  &.active {
+    height: calc(100vh - 70px); // Full viewport height minus navbar
+    overflow-y: auto; // Allow scrolling within the menu if needed
+    opacity: 1;
+    transform: translateY(0);
+    padding: 1rem 0;
   }
 
   // Always hide on desktop regardless of active state
   @media (min-width: $breakpoint-lg) {
-    display: none !important;
+    height: 0 !important;
+    opacity: 0 !important;
+    padding: 0 !important;
   }
 
   // Navigation list
@@ -246,4 +280,3 @@
     }
   }
 }
-

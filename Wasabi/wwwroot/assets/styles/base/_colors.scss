@@ -3,6 +3,7 @@ $color-blue-secondary: #707C9A;
 $color-blue-pale: #F1F3F7;
 $color-red: #D54D4d;
 $color-green: #008066;
+$color-yellow: #D9A455;
 $color-light-gray: #F4F4F4;
 $color-gray: #EDEDED;
 $color-medium-gray: #C4C4C4;
@@ -26,6 +27,9 @@ $color-text-blue: $color-blue-primary;
 $color-text-blue-secondary: $color-blue-secondary;
 $color-text-white: $color-almost-white;
 
+$color-border-primary: $color-dark-gray;
+
 $color-error: $color-red;
 $color-success: $color-green;
+$color-warning: $color-yellow;
 $color-information: $color-blue-secondary;

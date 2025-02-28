@@ -1,22 +1,21 @@
 @inherits UmbracoViewPage<Wasabi.ViewModels.Member.MemberRegisterViewModel>
+@using Microsoft.Extensions.Options
 @using Wasabi.Controllers.Member
 @using Wasabi.Helpers
+@using Wasabi.Options
 @model Wasabi.ViewModels.Member.MemberRegisterViewModel
-@inject IConfiguration Configuration
-@using Microsoft.Extensions.Configuration
+@inject IOptions<ReCaptchaModel> RecaptchaOptions
 
 @{
     const string formId = "member-register-form";
-    string reCaptchaSiteKey = Configuration["reCaptcha:reCaptchaSiteKey"]!;
+    string reCaptchaSiteKey = RecaptchaOptions.Value.reCaptchaSiteKey;
 }
 
 @if (TempData["Success"] == null)
 {
-    using (Html.BeginUmbracoForm<MemberRegisterController>(nameof(MemberRegisterController.Submit), null, new {id = formId}))
+    using (Html.BeginUmbracoForm<MemberRegisterController>(nameof(MemberRegisterController.Submit), null, new { id = formId }))
     {
         @Html.ValidationSummary(true)
-
-        <h1 class="h2">@Umbraco.GetDictionaryValue("memberSignUp")</h1>
 
         <div class="form-input">
             @Html.LabelFor(
@@ -49,7 +48,7 @@
             <p class="form-label" id="PreferredLanguageLabel">@Umbraco.GetDictionaryValue("memberPreferredLanguage")</p>
             @Html.RadioButtonFor(m => m.PreferredLanguage, "english", new { id = "PreferredLanguageEnglish" })
             @Html.Label("PreferredLanguageEnglish", Umbraco.GetDictionaryValue("languageEnglish"), new { @class = "form-label" })
-            @Html.RadioButtonFor(m => m.PreferredLanguage, "norwegian", new { @id = "PreferredLanguageNorwegian" })
+            @Html.RadioButtonFor(m => m.PreferredLanguage, "norwegian", new { id = "PreferredLanguageNorwegian" })
             @Html.Label("PreferredLanguageNorwegian", Umbraco.GetDictionaryValue("languageNorwegian"), new { @class = "form-label" })
             @Html.ValidationMessageFor(m => m.PreferredLanguage)
         </div>
@@ -88,8 +87,10 @@
             @Html.ValidationMessageFor(m => m.ConfirmPassword)
         </div>
 
-        <p>Når du registrerer en bruker på ifinavet.no så godtar du IFI-Navets <a href="/personvernerklaering" target="_blank">personvernerklæring</a></p>
-        
+        <p>Når du registrerer en bruker på ifinavet.no så godtar du IFI-Navets <a href="/personvernerklaering"
+                                                                                  target="_blank">personvernerklæring</a>
+        </p>
+
         @Html.HiddenFor(m => m.CaptchaToken)
         @ReCaptchaHelper.ReCaptchaScript(reCaptchaSiteKey, formId, nameof(Model.CaptchaToken))
 

@@ -66,7 +66,8 @@ public class EventController : RenderController
                     Email = attendee.AttendingMember!.GetProperty("Email")!.GetValue()!.ToString()!,
                     PreferredLanguage = member.PreferredLanguage,
                     AttendeeMemberId = member.Key.ToString(),
-                    AttendeeId = attendee.Id.ToString()
+                    AttendeeId = attendee.Id.ToString(),
+                    AttendeeStatus = attendee.ShownUp ?? "Ikke registrert"
                 });
         }
 

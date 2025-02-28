@@ -1,6 +1,13 @@
 @using Wasabi.ViewModels.Member
 @{
-    Layout = "pages.cshtml";
+    Layout = "_pages.cshtml";
 }
 
-@await Html.PartialAsync("Member/MemberLoginForm", new MemberLoginViewModel())
+@section titleText
+{
+    Logg inn
+}
+
+<div class="page--content--full center">
+    @await Html.PartialAsync("Member/MemberLoginForm", new MemberLoginViewModel())
+</div>

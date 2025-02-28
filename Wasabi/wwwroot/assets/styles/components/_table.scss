@@ -1,0 +1,211 @@
+@use "../base" as *;
+
+// Table styles
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  font-size: 0.9rem;
+
+  th, td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid $color-border-primary;
+    vertical-align: middle;
+  }
+
+  th {
+    background-color: $color-background-contrast-light;
+    font-weight: 600;
+    color: $color-text-primary;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: $color-background-contrast-light;
+    }
+
+    .material-symbols-rounded {
+      font-size: 1rem;
+      vertical-align: middle;
+      margin-left: 0.25rem;
+      opacity: 0.6;
+    }
+  }
+
+  tr {
+    &:nth-child(even) {
+      background-color: rgba($color-background-contrast-light, 0.3);
+    }
+
+    &:hover {
+      background-color: rgba($color-background-contrast-light, 0.5);
+    }
+  }
+
+  // Status color indicators
+  .attendance-dropdown {
+    &__toggle {
+      &--yes {
+        color: $color-success;
+
+        .attendance-dropdown__icon {
+          color: $color-success;
+        }
+      }
+
+      &--late {
+        color: $color-warning;
+
+        .attendance-dropdown__icon {
+          color: $color-warning;
+        }
+      }
+
+      &--no {
+        color: $color-error;
+
+        .attendance-dropdown__icon {
+          color: $color-error;
+        }
+      }
+
+      &--0 {
+        color: $color-text-white;
+      }
+    }
+  }
+
+  // Responsive styles
+  @media screen and (max-width: 768px) {
+    display: block;
+
+    thead, tbody, th, td, tr {
+      display: block;
+    }
+
+    thead tr {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+
+    tr {
+      margin-bottom: 1rem;
+      border: 1px solid $color-border-primary;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    td {
+      border: none;
+      border-bottom: 1px solid $color-border-primary;
+      position: relative;
+      padding-left: 50%;
+
+      &:before {
+        position: absolute;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: 600;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    // For the attendance column, we want full width
+    td:last-child {
+      padding-left: 1rem;
+    }
+
+    // Custom dropdown position for mobile view
+    .attendance-dropdown {
+      &__menu {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        max-height: 40vh;
+        overflow-y: auto;
+        border-radius: 8px 8px 0 0;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
+      }
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    td {
+      padding-left: 1rem;
+      padding-right: 1rem;
+
+      // Stack the content in mobile view
+      display: flex;
+      flex-direction: column;
+
+      &:before {
+        position: relative;
+        left: 0;
+        margin-bottom: 0.25rem;
+      }
+    }
+  }
+}
+
+// Search inputs and form elements within table context
+.search-input-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  input[type="checkbox"] {
+    margin-right: 0.25rem;
+  }
+
+  input[type="submit"] {
+    padding: 0.5rem 1rem;
+    background-color: $color-primary;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: $color-primary;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+// Button styles for actions like "Kopier deltakerliste"
+button {
+  padding: 0.5rem 1rem;
+  background-color: $color-primary;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: $color-primary;
+  }
+}

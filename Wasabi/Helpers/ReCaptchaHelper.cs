@@ -4,7 +4,7 @@ namespace Wasabi.Helpers;
 
 public static class ReCaptchaHelper
 {
-    public static IHtmlContent ReCaptchaScript(string siteKey, string formId,
+    public static IHtmlContent ReCaptchaScript(string? siteKey, string formId,
         string inputFieldName)
     {
         string apiScript = $"<script src=\"https://www.google.com/recaptcha/api.js?render={siteKey}\"></script>";

@@ -12,6 +12,10 @@ body {
   background-color: $color-background-almost-white;
 }
 
+body .nav-open {
+  overflow: hidden;
+}
+
 #app {
   flex: 1 0 auto;
 }

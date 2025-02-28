@@ -4,7 +4,7 @@
 @model Wasabi.ViewModels.Member.MemberEditProfileFormViewModel
 
 @{
-    List<SelectListItem> studieprogramDropdown = [new() { Text = "-- Velg studieprogram --", Selected = true, Disabled = true}];
+    List<SelectListItem> studieprogramDropdown = [new() { Text = "-- Velg studieprogram --", Selected = true, Disabled = true }];
 
     studieprogramDropdown.AddRange(Studieprogram.StudieprogramList.Select(program => new SelectListItem
     {
@@ -20,9 +20,7 @@
     using (Html.BeginUmbracoForm<MemberEditProfileController>(nameof(MemberEditProfileController.UpdateMember), FormMethod.Post))
     {
         @Html.ValidationSummary(true)
-
-        <h1 class="h2">@Umbraco.GetDictionaryValue("memberEditProfile")</h1>
-
+       
         <div class="form-input">
             @Html.LabelFor(
                 m => m.FirstName,
@@ -45,14 +43,14 @@
             <p class="form-label" id="PreferredLanguageLabel">@Umbraco.GetDictionaryValue("memberPreferredLanguage")</p>
             @Html.RadioButtonFor(m => m.PreferredLanguage, "english", new { id = "PreferredLanguageEnglish" })
             @Html.Label("PreferredLanguageEnglish", Umbraco.GetDictionaryValue("languageEnglish"), new { @class = "form-label" })
-            @Html.RadioButtonFor(m => m.PreferredLanguage, "norwegian", new { @id = "PreferredLanguageNorwegian" })
+            @Html.RadioButtonFor(m => m.PreferredLanguage, "norwegian", new { id = "PreferredLanguageNorwegian" })
             @Html.Label("PreferredLanguageNorwegian", Umbraco.GetDictionaryValue("languageNorwegian"), new { @class = "form-label" })
             @Html.ValidationMessageFor(m => m.PreferredLanguage)
         </div>
 
         <div class="form-input">
             @Html.LabelFor(m => m.Semester, Umbraco.GetDictionaryValue("memberSemester"), new { name = "Semester", @class = "form-label" })
-            @Html.TextBoxFor(m => m.Semester, new { @type = "number", @min = "1", @max = "10", @step = "1" })
+            @Html.TextBoxFor(m => m.Semester, new { type = "number", min = "1", max = "10", step = "1" })
             @Html.ValidationMessageFor(m => m.Semester)
         </div>
 

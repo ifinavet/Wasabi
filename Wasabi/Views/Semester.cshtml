@@ -2,7 +2,7 @@
 @inherits UmbracoViewPage<Wasabi.ViewModels.SemesterViewModel>
 @inject IImageService ImageService
 @{
-    Layout = "pages.cshtml";
+    Layout = "_pages.cshtml";
 
     IGrouping<string, Event>[] months = Model.MonthGroups;
 
@@ -35,7 +35,7 @@
     </div>
 }
 
-<div class="page--main--full">
+<div class="page--content--full">
     @if (months == null)
     {
         <p>Det er foreløpig ingen arrangementer</p>
@@ -53,7 +53,7 @@
             @foreach (Event el in months.Where(x => x.Key == Model.ActiveMonth).SelectMany(x => x))
             {
                 bool openButNotBeen = el.RegistrationDate < DateTime.Now && el.EventDate > DateTime.Now;
-                string green = openButNotBeen ? "active" : "";
+                string green = openButNotBeen ? "open" : "";
                 <div class="card--event">
                     <a href=@el.Url()>
                         <div class="event-wrapper @green">
@@ -72,7 +72,7 @@
                             else if (el.EventDate > DateTime.Now)
                             {
                                 <div class="event-popup">
-                                    <p>Påmeldingen åpner @el.RegistrationDate.ToString("MM.dd kl. hh:mm")</p>
+                                    <p>Påmeldingen åpner @el.RegistrationDate.ToString("MM.dd kl. HH:mm")</p>
                                 </div>
                             }
                             <div class="event-content">
@@ -107,7 +107,7 @@
                                             </div>
                                             <div class="metadata-data">
                                                 <span
-                                                    class="main-text-large semi-bold"> @el.EventDate.ToString("hh:mm") </span>
+                                                    class="main-text-large semi-bold"> @el.EventDate.ToString("HH:mm") </span>
                                             </div>
                                         </div>
                                         <div class="metadata-item">

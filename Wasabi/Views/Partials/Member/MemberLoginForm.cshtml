@@ -1,13 +1,14 @@
 @inherits UmbracoViewPage<Wasabi.ViewModels.Member.MemberLoginViewModel>
+@using Microsoft.Extensions.Options
 @using Wasabi.Controllers.Member
-@model Wasabi.ViewModels.Member.MemberLoginViewModel
 @using Wasabi.Helpers
-@inject IConfiguration Configuration
-@using Microsoft.Extensions.Configuration
+@using Wasabi.Options
+@model Wasabi.ViewModels.Member.MemberLoginViewModel
+@inject IOptions<ReCaptchaModel> RecaptchaOptions
 
 @{
     const string formId = "member-login-form";
-    string reCaptchaSiteKey = Configuration["reCaptcha:reCaptchaSiteKey"]!;
+    string reCaptchaSiteKey = RecaptchaOptions.Value.reCaptchaSiteKey;
 }
 
 @using (Html.BeginUmbracoForm<MemberLoginController>(nameof(MemberLoginController.Submit), null, new { id = formId }))
@@ -31,7 +32,7 @@
 
     @Html.HiddenFor(m => m.CaptchaToken)
     @ReCaptchaHelper.ReCaptchaScript(reCaptchaSiteKey, formId, nameof(Model.CaptchaToken))
-    
+
     <div class="form-input">
         <button id="login-submit" type="submit" class="btn">
             @Umbraco.GetDictionaryValue("login")

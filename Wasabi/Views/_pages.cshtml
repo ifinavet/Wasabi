@@ -1,5 +1,5 @@
 @{
-    Layout = "master.cshtml";
+    Layout = "_master.cshtml";
 }
 
 @section Head
@@ -13,12 +13,10 @@
         @if (!IsSectionDefined("Title"))
         {
             <div class="page--title">
-                <h1>@Model.Name</h1>
+                <h1>@(await RenderSectionAsync("titleText", false))</h1>
             </div>
         }
-        <div class="page--content">
-            @RenderBody()
-        </div>
+        @RenderBody()
     </div>
 </div>
 

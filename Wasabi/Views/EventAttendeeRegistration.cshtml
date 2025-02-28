@@ -2,7 +2,7 @@
 @inherits UmbracoViewPage<Wasabi.ViewModels.Events.EventAttendeeRegistrationViewModel>
 
 @{
-    Layout = "pages.cshtml";
+    Layout = "_pages.cshtml";
     Dictionary<string, bool> visibleColumns = Model.Columns;
     Dictionary<string, string> englishToNorwegian = new()
     {
@@ -12,194 +12,171 @@
         { nameof(AdministrationAttendee.Allergies), "Allergier" },
         { nameof(AdministrationAttendee.PreferredLanguage), "Språk" }
     };
+
+    Dictionary<string, string> statusEnglishToNorwegian = new()
+    {
+        { "yes", "Møtt" },
+        { "late", "Sen" },
+        { "no", "Ikke møtt" },
+        { "0", "---" }
+    };
+
+    Dictionary<string, string> statusMaterialSymbols = new()
+    {
+        { "yes", "check_circle" },
+        { "late", "directions_run" },
+        { "no", "cancel" },
+        { "0", "" }
+    };
 }
 
-@await Html.PartialAsync("Event/EventRegisterAttendeeForm", new EventRegisterAttendeeFormViewModel())
+@section titleText
+{
+    @Model.Name
+}
 
-<form action="@Model.Url()" method="get" aria-label="Visible Columns">
-    <div class="search-input-wrapper">
-        <input type="hidden" name="altTemplate" value="EventAttendeeRegistration">
-        @foreach (string column in visibleColumns.Keys.Skip(2))
-        {
-            <input type="checkbox" name="columns" value="@column" @(visibleColumns[column] ? "checked" : "")>
-            <label>@englishToNorwegian[column]</label>
-        }
-        <input type="submit"/>
-    </div>
-</form>
+<div class="page--content--full">
+    @await Html.PartialAsync("Event/EventRegisterAttendeeForm", new EventRegisterAttendeeFormViewModel())
 
-<button onclick="generateColumns(['fullName', 'username'], 'Deltaker liste kopiert!')">Kopier deltakerliste</button>
+    <form action="@Model.Url()" method="get" aria-label="Visible Columns">
+        <div class="search-input-wrapper">
+            <input type="hidden" name="altTemplate" value="EventAttendeeRegistration">
+            @foreach (string column in visibleColumns.Keys.Skip(2))
+            {
+                <input type="checkbox" name="columns" value="@column" @(visibleColumns[column] ? "checked" : "")>
+                <label>@englishToNorwegian[column]</label>
+            }
+            <input type="submit"/>
+        </div>
+    </form>
 
-<table>
-    <tr>
-        <th onclick="generateColumns(['fullNames'], 'Kolonne kopiert')">
-            Navn
-            <span class="material-symbols-rounded">
+    <button onclick="generateColumns(['fullName', 'username'], 'Deltaker liste kopiert!')">Kopier deltakerliste</button>
+    <p>@TempData["status"]</p>
+    <table>
+        <tr>
+            <th onclick="generateColumns(['fullName'], 'Kolonne kopiert')">
+                Navn
+                <span class="material-symbols-rounded">
                 content_copy
             </span>
-        </th>
-        <th onclick="generateColumns(['username'], 'Kolonne kopiert')">
-            Brukernavn
-            <span
-                class="material-symbols-rounded">
-                content_copy
-            </span>
-        </th>
-        @foreach (KeyValuePair<string, bool> column in visibleColumns.Where(column => column.Value))
-        {
-            <th onclick="generateColumns(['@(column.Key[0].ToString().ToLower() + column.Key[1..])'], 'Kolonne kopiert')">
-                @englishToNorwegian[column.Key]
+            </th>
+            <th onclick="generateColumns(['username'], 'Kolonne kopiert')">
+                Brukernavn
                 <span
                     class="material-symbols-rounded">
+                content_copy
+            </span>
+            </th>
+            @foreach (KeyValuePair<string, bool> column in visibleColumns.Where(column => column.Value))
+            {
+                <th onclick="generateColumns(['@(column.Key[0].ToString().ToLower() + column.Key[1..])'], 'Kolonne kopiert')">
+                    @englishToNorwegian[column.Key]
+                    <span
+                        class="material-symbols-rounded">
                     content_copy
                 </span>
+                </th>
+            }
+            <th>
+                Oppmøte
             </th>
-        }
-    </tr>
-    @foreach (AdministrationAttendee attendee in Model.Attendees)
-    {
-        <tr>
-            <td>@attendee.FullName</td>
-            <td>@attendee.Username</td>
-            @if (visibleColumns[nameof(attendee.Email)])
-            {
-                <td>@attendee.Email</td>
-            }
-            @if (visibleColumns[nameof(attendee.Allergies)])
-            {
-                <td>@attendee.Allergies</td>
-            }
-            @if (visibleColumns[nameof(attendee.PreferredLanguage)])
-            {
-                <td>@attendee.PreferredLanguage</td>
-            }
-            <td onclick="setAttendeeInForm('@attendee.AttendeeMemberId', '@attendee.AttendeeId')">Registrer</td>
         </tr>
-    }
-</table>
-
-<table>
-    <tr>
-        <th>Studieprogram</th>
-        <th>Semester</th>
-        <th>Antall</th>
-    </tr>
-    @foreach (KeyValuePair<string, SortedDictionary<int, int>> el in Model.StudyProgramAndSemester)
-    {
-        <tr>
-            <td>@el.Key</td>
-            <td>@el.Value.FirstOrDefault().Key</td>
-            <td>@el.Value.FirstOrDefault().Value</td>
-        </tr>
-        foreach (KeyValuePair<int, int> nestedEl in el.Value.Skip(1))
+        @foreach (AdministrationAttendee attendee in Model.Attendees)
         {
             <tr>
-                <td></td>
-                <td>@nestedEl.Key</td>
-                <td>@nestedEl.Value</td>
+                <td>@attendee.FullName</td>
+                <td>@attendee.Username</td>
+                @if (visibleColumns[nameof(attendee.Email)])
+                {
+                    <td>@attendee.Email</td>
+                }
+                @if (visibleColumns[nameof(attendee.Allergies)])
+                {
+                    <td>@attendee.Allergies</td>
+                }
+                @if (visibleColumns[nameof(attendee.PreferredLanguage)])
+                {
+                    <td>@attendee.PreferredLanguage</td>
+                }
+                <td>
+                    <div class="attendance-dropdown">
+                        <button
+                            class="attendance-dropdown__toggle attendance-dropdown__toggle--@attendee.AttendeeStatus">
+                        <span
+                            class="attendance-dropdown__selected">
+                            <span class="material-symbols-rounded attendance-dropdown__icon"></span>
+                            <span
+                                class="attendance-dropdown__text">@statusEnglishToNorwegian[attendee.AttendeeStatus]</span>
+                        </span>
+                            <span
+                                class="material-symbols-rounded attendance-dropdown__icon">@statusMaterialSymbols[attendee.AttendeeStatus]</span>
+                        </button>
+                        <div class="attendance-dropdown__menu">
+                            <div class="attendance-dropdown__option attendance-dropdown__option--success"
+                                 data-value="mott"
+                                 onClick="registerAttendeeFromDropdown('@attendee.AttendeeId', '@attendee.AttendeeMemberId', 'yes')">
+                                <span
+                                    class="material-symbols-rounded attendance-dropdown__icon">@statusMaterialSymbols["yes"]</span>
+                                <span class="attendance-dropdown__text">Møtt</span>
+                            </div>
+                            <div class="attendance-dropdown__option attendance-dropdown__option--warning"
+                                 data-value="sen"
+                                 onClick="registerAttendeeFromDropdown('@attendee.AttendeeId', '@attendee.AttendeeMemberId', 'late')">
+                                <span
+                                    class="material-symbols-rounded attendance-dropdown__icon">@statusMaterialSymbols["late"]</span>
+                                <span class="attendance-dropdown__text">Sen</span>
+                            </div>
+                            <div class="attendance-dropdown__option attendance-dropdown__option--error"
+                                 data-value="ikke-mott"
+                                 onClick="registerAttendeeFromDropdown('@attendee.AttendeeId', '@attendee.AttendeeMemberId', 'no')">
+                                <span
+                                    class="material-symbols-rounded attendance-dropdown__icon">@statusMaterialSymbols["no"]</span>
+                                <span class="attendance-dropdown__text">Ikke Møtt</span>
+                            </div>
+                        </div>
+                    </div>
+                </td>
             </tr>
         }
-    }
-</table>
+    </table>
+
+    <table>
+        <tr>
+            <th>Studieprogram</th>
+            <th>Semester</th>
+            <th>Antall</th>
+        </tr>
+        @foreach (KeyValuePair<string, SortedDictionary<int, int>> el in Model.StudyProgramAndSemester)
+        {
+            <tr>
+                <td>@el.Key</td>
+                <td>@el.Value.FirstOrDefault().Key</td>
+                <td>@el.Value.FirstOrDefault().Value</td>
+            </tr>
+            foreach (KeyValuePair<int, int> nestedEl in el.Value.Skip(1))
+            {
+                <tr>
+                    <td></td>
+                    <td>@nestedEl.Key</td>
+                    <td>@nestedEl.Value</td>
+                </tr>
+            }
+        }
+    </table>
+</div>
 
 @section Scripts {
+    <script src="@Url.Content("~/assets/generated/js/adminRegistration.js")"
+            asp-append-version="true"
+            type="text/javascript" defer></script>
     <script>
-        const attendees = @Json.Serialize(Model.Attendees);
-        const eventId = @Model.Id;
-        console.log(eventId)
-        console.log(attendees)
-
-        const attendeeMemberIdFromInput = document.getElementById("AttendeeMemberId");
-        const attendeeIdFromInput = document.getElementById("AttendeeId");
-        const shownUp = document.getElementById("ShownUp")
-
-        const setAttendeeInForm = (attendeeMemberId, attendeeId) => {
-            attendeeMemberIdFromInput.value = attendeeMemberId;
-            attendeeIdFromInput.value = attendeeId;
-            console.log(attendeeId, attendeeMemberId)
+        window.backendData = {
+            attendees: @Json.Serialize(Model.Attendees),
+            eventId: @Model.Id
         }
-
-        const submitForm = (status) => {
-            shownUp.value = status;
-
-            this.disabled = true;
-            this.from.submit();
-        }
-
-        const copyToClipboard = (text, success_message) => {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard
-                    .writeText(text)
-                    .then(() => alert(success_message))
-                    .catch((err) => {
-                        console.error("Failed to copy text: ", err);
-                    });
-            } else {
-                // Fallback for older browsers
-                const textArea = document.createElement("textarea");
-                textArea.value = text;
-
-                // Make the textarea out of viewport
-                textArea.style.position = "fixed";
-                textArea.style.left = "-999999px";
-                textArea.style.top = "-999999px";
-                document.body.appendChild(textArea);
-
-                textArea.focus();
-                textArea.select();
-
-                try {
-                    const successful = document.execCommand("copy");
-                    alert(success_message);
-                } catch (err) {
-                    console.error("Fallback: Oops, unable to copy", err);
-                }
-
-                document.body.removeChild(textArea);
-            }
-        }
-
-        const generateColumns = (column_names, success_message) => {
-            let copy_text = "";
-
-            attendees.forEach(attendee => {
-                let row_text = "";
-                column_names.forEach(column_name => {
-                    if (attendee[column_name] !== "" && attendee[column_name].length !== 0) {
-                        row_text += attendee[column_name] + '\t';
-                    }
-                });
-                if (row_text.trim().length > 0) {
-                    copy_text += row_text + '\n';
-                }
-            });
-
-            copyToClipboard(copy_text, success_message);
-        }
-        const attendeeInfo = document.getElementById("scannedAttendee");
-
     </script>
     <script defer>
-        const onScanSuccess = (decodedText, decodedResult) => {
-            // handle the scanned code as you like, for example:
-            console.log(`Code matched = ${decodedText}`, decodedResult);
-            let parsedData = JSON.parse(decodedText);
-            if (parseInt(parsedData["eventId"]) === eventId) {
-                attendeeMemberIdFromInput.value = parsedData["attendeeMemberId"];
-                attendeeIdFromInput.value = parsedData["attendeeId"];
-
-                attendeeInfo.innerHTML = attendees.find(item => item.attendeeId === parsedData["attendeeId"])["fullName"];
-            }
-
-
-        };
-
-        const onScanFailure = error => {
-
-
-        };
-
-        let html5QrcodeScanner = new Html5QrcodeScanner(
+        let html5QrcodeScanner = new html5QrcodeScanner(
             "reader",
             {fps: 10, qrbox: {width: 250, height: 250}},
             /* verbose= */ false);

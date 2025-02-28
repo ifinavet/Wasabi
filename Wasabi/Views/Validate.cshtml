@@ -1,14 +1,20 @@
 @{
-    Layout = "master.cshtml";
+    Layout = "_pages.cshtml";
 }
-<h1>Validering</h1>
 
-@if ((bool)TempData["success"]!)
+@section titleText
 {
-    <a href="/login/">Logg inn</a>
+    Validering
 }
-else
-{
-    <a href="/">Gå til forsiden</a>
-}
-<p>@TempData["status"]</p>
+
+<div class="main-content-full center">
+    @if ((bool)TempData["success"]!)
+    {
+        <a href="/login/">Logg inn</a>
+    }
+    else
+    {
+        <a href="/">Gå til forsiden</a>
+    }
+    <p>@TempData["status"]</p>
+</div>

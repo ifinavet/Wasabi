@@ -2,7 +2,7 @@
 @using Wasabi.Services
 @inherits UmbracoViewPage<Wasabi.ViewModels.StartPageViewModel>
 @{
-    Layout = "master.cshtml";
+    Layout = "_master.cshtml";
     Company? partner = Model.Partner as Company;
     JobListing[]? upcomingJobs = Model.JobListings;
     Event[]? upcomingEvents = Model.Events;

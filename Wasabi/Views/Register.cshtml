@@ -3,17 +3,24 @@
 @inject IMemberManager MemberManager;
 
 @{
-    Layout = "pages.cshtml";
+    Layout = "_pages.cshtml";
 }
 
-@if (MemberManager.IsLoggedIn())
+@section titleText
 {
-    <p>Du er allerede logget inn med en bruker</p>
-    <p>
-        <a href="/logout/">Log ut</a>
-    </p>
+    Opprett ny bruker
 }
-else
-{
-    @await Html.PartialAsync("Member/MemberRegisterForm", new MemberRegisterViewModel())
-}
+
+<div class="page--content--full center">
+    @if (MemberManager.IsLoggedIn())
+    {
+        <p>Du er allerede logget inn med en bruker</p>
+        <p>
+            <a href="/logout/">Log ut</a>
+        </p>
+    }
+    else
+    {
+        @await Html.PartialAsync("Member/MemberRegisterForm", new MemberRegisterViewModel())
+    }
+</div>

@@ -2,35 +2,42 @@
 @inherits UmbracoViewPage<Info>
 @inject IImageService ImageService
 @{
-    Layout = "pages.cshtml";
+    Layout = "_pages.cshtml";
 
     StudentMember contactPerson = (StudentMember)Model.ContactPerson!;
 }
 
-<div class="page--main">
-    <div class="card">
-        @Model.Main
+@section titleText
+{
+    @Model.Name
+}
+
+<div class="page--content">
+    <div class="page--main">
+        <div class="card">
+            @Model.Main
+        </div>
     </div>
-</div>
-<div class="page--aside">
-    <aside>
-        @if (Model.ContactPerson != null)
-        {
-            <div class="card card--contact">
-                <div class="image-container-circle floating">
-                    <div class="image image--person">
-                        <img src="@ImageService.GetProfileImageUrl(contactPerson)"
-                             alt="@contactPerson.Name @Umbraco.GetDictionaryValue("contactProfileImage")"/>
+    <div class="page--aside">
+        <aside>
+            @if (Model.ContactPerson != null)
+            {
+                <div class="card card--contact">
+                    <div class="image-container-circle floating">
+                        <div class="image image--person">
+                            <img src="@ImageService.GetProfileImageUrl(contactPerson)"
+                                 alt="@contactPerson.Name @Umbraco.GetDictionaryValue("contactProfileImage")"/>
+                        </div>
+                    </div>
+                    <div class="contact-personalia">
+                        <h2>@contactPerson.NavetVerv</h2>
+                        <p>@contactPerson.Name</p>
+                        <a href="mailto:@Model.ContactPerson.Value("email")">@Model.ContactPerson.Value("email")</a>
                     </div>
                 </div>
-                <div class="contact-personalia">
-                    <h2>@contactPerson.NavetVerv</h2>
-                    <p>@contactPerson.Name</p>
-                    <a href="mailto:@Model.ContactPerson.Value("email")">@Model.ContactPerson.Value("email")</a>
-                </div>
-            </div>
-        }
+            }
 
-        @await Html.GetBlockListHtmlAsync(Model.SidebarContent)
-    </aside>
+            @await Html.GetBlockListHtmlAsync(Model.SidebarContent)
+        </aside>
+    </div>
 </div>

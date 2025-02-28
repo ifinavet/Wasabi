@@ -26,8 +26,8 @@
     <ItemGroup>
         <Folder Include="Models\Generated\"/>
         <Folder Include="wwwroot\assets\fonts\"/>
+        <Folder Include="wwwroot\assets\generated\"/>
         <Folder Include="wwwroot\assets\images\"/>
-        <Folder Include="wwwroot\assets\css\"/>
         <Folder Include="wwwroot\umbraco\assets\"/>
     </ItemGroup>
 
@@ -1196,6 +1196,18 @@
         <_ContentIncludedByDefault Remove="wwwroot\assets\css\css\main.css.map"/>
         <_ContentIncludedByDefault Remove="wwwroot\assets\css\css\Pages\startPage.css"/>
         <_ContentIncludedByDefault Remove="wwwroot\assets\css\css\Pages\startPage.css.map"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <TypeScriptCompile Include="wwwroot\assets\typescript\adminRegistration\attendeeQrCodeScanner.ts"/>
+        <TypeScriptCompile Include="wwwroot\assets\typescript\adminRegistration\attendeeRegisterDropdown.ts"/>
+        <TypeScriptCompile Include="wwwroot\assets\typescript\adminRegistration\copyColumns.ts"/>
+        <TypeScriptCompile Include="wwwroot\assets\typescript\adminRegistration\index.ts"/>
+        <TypeScriptCompile Include="wwwroot\assets\typescript\adminRegistration\attendeeRegistration.ts"/>
+        <TypeScriptCompile Include="wwwroot\assets\typescript\global.d.ts"/>
+        <TypeScriptCompile Include="wwwroot\assets\typescript\index.ts"/>
+        <TypeScriptCompile Include="wwwroot\assets\typescript\index.ts"/>
+        <TypeScriptCompile Include="wwwroot\assets\typescript\navigation.ts"/>
     </ItemGroup>
 
     <PropertyGroup>

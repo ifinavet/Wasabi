@@ -1,7 +1,7 @@
 @using Umbraco.Cms.Core.Models.Blocks
 @inherits UmbracoViewPage<Wasabi.ViewModels.JobListings.JobListingViewModel>;
 @{
-    Layout = "master.cshtml";
+    Layout = "_master.cshtml";
 
     Company company = (Model.Employer as Company)!;
 }
