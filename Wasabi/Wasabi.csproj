@@ -1204,6 +1204,7 @@
         <TypeScriptCompile Include="wwwroot\assets\typescript\adminRegistration\copyColumns.ts"/>
         <TypeScriptCompile Include="wwwroot\assets\typescript\adminRegistration\index.ts"/>
         <TypeScriptCompile Include="wwwroot\assets\typescript\adminRegistration\attendeeRegistration.ts"/>
+        <TypeScriptCompile Include="wwwroot\assets\typescript\carousel.ts"/>
         <TypeScriptCompile Include="wwwroot\assets\typescript\global.d.ts"/>
         <TypeScriptCompile Include="wwwroot\assets\typescript\index.ts"/>
         <TypeScriptCompile Include="wwwroot\assets\typescript\index.ts"/>

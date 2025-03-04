@@ -62,32 +62,32 @@
                                             <h1 class="header">@upcomingEvent.Name</h1>
                                             <p class="teaser">@upcomingEvent.EventTeaser</p>
                                         </div>
-                                        <div class="metadata">
+                                        <div class="carousel-metadata">
                                             <div class="metadata-item">
                                                 <div class="icon">
-                                                <span class="material-symbols-rounded">
-                                                    event
-                                                </span>
+                                                    <span class="material-symbols-rounded">
+                                                        <span class="material-symbols-rounded">
+                                                            group
+                                                        </span>
+                                                    </span>
                                                 </div>
                                                 <div class="metadata-data">
-                                                <span class="main-text-large semi-bold">
-                                                    @upcomingEvent.EventDate.ToString("dddd dd.mm")
-                                                </span>
+                                                    <span
+                                                        class="main-text-large semi-bold">
+                                                        @upcomingEvent.ParticipantLimit
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div class="metadata-item">
                                                 <div class="icon">
-                                                <span class="material-symbols-rounded">
                                                     <span class="material-symbols-rounded">
-                                                        group
+                                                        event
                                                     </span>
-                                                </span>
                                                 </div>
                                                 <div class="metadata-data">
-                                                <span
-                                                    class="main-text-large semi-bold">
-                                                    @upcomingEvent.ParticipantLimit
-                                                </span>
+                                                    <span class="main-text-large semi-bold">
+                                                        @upcomingEvent.EventDate.ToString("dddd dd.mm")
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>

@@ -1,47 +1,73 @@
 @use "../base" as *;
 
+// ======================
+// LEADER SECTION (MOBILE FIRST)
+// ======================
 .leader {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-areas: "col1 col2";
+  display: flex;
+  flex-direction: column;
   width: 100%;
+  position: relative;
+  gap: 2rem;
 
-  .container-partner, .container-upcoming-events {
-    box-sizing: border-box;
+  // Order for mobile (events first)
+  .container-upcoming-events {
+    order: -1;
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    margin-top: 2rem;
+    padding: 1rem;
+    overflow: hidden;
   }
 
   .container-partner {
-    grid-area: col1;
-  }
-
-  .container-upcoming-events {
-    grid-area: col2;
+    z-index: 1;
+    width: 100%;
+    padding: 3rem 2rem 5rem;
+    background-color: $color-background-pale-blue;
+    border-radius: $border-radius-default;
   }
 }
 
+// Desktop layout (side by side)
+@media (min-width: $breakpoint-lg) {
+  .leader {
+    flex-direction: row;
+    gap: 0;
+
+    .container-partner,
+    .container-upcoming-events {
+      flex: 1 1 0;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+
+    .container-upcoming-events {
+      order: 0;
+      margin-top: 5rem;
+    }
+
+    .container-partner {
+      clip-path: url(#curveClip);
+      border-radius: 0;
+      padding: 5rem 10rem 10rem 2rem;
+    }
+  }
+}
+
+// ======================
+// PARTNER STYLES
+// ======================
 .leader-title {
   color: $color-primary;
-}
-
-@media (max-width: $breakpoint-md) {
-  .leader {
-    grid-template-columns: 1fr;
-    grid-template-areas: "col2 col1";
-  }
-}
-
-.container-partner {
-  background-color: $color-background-pale-blue;
-  padding: 5rem 10rem 10rem 2rem;
-  clip-path: url(#curveClip);
 }
 
 .partner {
   width: 100%;
   display: grid;
   grid-template-rows: 1fr 5fr;
-  grid-template-areas:  "header"
-                        "content";
+  grid-template-areas: "header" "content";
 
   .header {
     margin-right: $default-card-gap;
@@ -86,87 +112,242 @@
       }
 
       h2 {
-        color: $color-primary
+        color: $color-primary;
       }
-
     }
   }
 }
 
+// ======================
+// UPCOMING EVENTS CAROUSEL (MOBILE FIRST)
+// ======================
 .container-upcoming-events {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 5rem;
+  width: 100%;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
 
+  // Carousel container
   .container-carousel {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 1rem;
-    overflow: hidden;
-
+    width: 100%;
+    position: relative;
+    margin: 2rem 0;
+    box-sizing: border-box;
+    padding: 0 1.5rem;
   }
 
+  // Navigation buttons
+  .btn--carousel-navigation {
+    cursor: pointer;
+    z-index: 10;
+    background-color: $color-primary;
+    color: $color-text-white;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    transition: background-color 0.3s ease;
+    padding: 0;
+
+    .material-symbols-rounded {
+      font-size: 24px;
+    }
+  }
+
+  .btn-previous {
+    left: 0;
+  }
+
+  .btn--next {
+    right: 0;
+  }
+
+  // Carousel wrapper
   .carousel-wrapper {
-    height: 100%;
     width: 100%;
+    overflow: hidden;
+    padding: 0;
+    box-sizing: border-box;
+    position: relative;
 
     .carousel {
       display: flex;
-      flex-direction: row;
-      gap: 1rem;
+      transition: transform 0.5s ease;
       width: 100%;
 
       .container-card {
-        height: 35rem;
-        width: 30vw;
+        min-width: 100%;
+        flex-shrink: 0;
+        padding: 0;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
-        .carousel-card {
-          $outside-padding: 1rem;
-
+        a {
+          text-decoration: none;
+          width: 100%;
           display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          background-color: $color-background-primary;
-          border-radius: $border-radius-default;
-          overflow: hidden;
-
-          .image {
-            display: grid;
-            place-content: center;
-            aspect-ratio: 1 / 1;
-            padding: $outside-padding;
-            height: 75%;
-
-            img {
-              object-fit: contain;
-              height: 100%;
-              width: 100%;
-            }
-          }
-
-          .content {
-            flex-grow: 1;
-            padding: $outside-padding;
-            background-color: $color-primary;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-
-            .heading {
-              .header {
-                font-size: $h4-size;
-              }
-
-              * {
-                color: $color-text-white;
-              }
-            }
-          }
-
+          justify-content: center;
+          align-items: center;
         }
       }
     }
+  }
+}
+
+// Carousel card styles (Mobile first)
+.carousel-card {
+  display: flex;
+  flex-direction: column;
+  background-color: $color-background-primary;
+  border-radius: $border-radius-default;
+  overflow: hidden;
+  min-width: 50vw;
+  width: 18rem;
+  max-width: 90%;
+  margin: 0 auto;
+  height: 27rem; // Fixed height instead of min-height
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+
+
+  .image {
+    display: grid;
+    place-content: center;
+    padding: 0.5rem;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: $color-white;
+
+    img {
+      background-color: inherit;
+      box-sizing: border-box;
+      margin: auto;
+      height: initial;
+      max-height: 9rem;
+      width: 100%;
+    }
+  }
+
+  .content {
+    flex-grow: 1;
+    padding: 1rem 2rem 2rem;
+    background-color: $color-primary;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .heading {
+      .header {
+        font-size: $h4-size;
+      }
+
+      * {
+        color: $color-text-white;
+      }
+    }
+
+    .carousel-metadata {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: 2rem;
+
+      .metadata-item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+
+        * {
+          color: $color-text-white;
+        }
+      }
+    }
+  }
+}
+
+// ======================
+// RESPONSIVE BREAKPOINTS (MOBILE FIRST)
+// ======================
+
+// Small devices and up
+@media (min-width: $breakpoint-sm) {
+  .carousel-card {
+    width: min(26rem, 85vw);
+  }
+
+  .container-upcoming-events {
+    .btn-previous {
+      left: 20px;
+    }
+
+    .btn--next {
+      right: 20px;
+    }
+  }
+}
+
+// Medium devices and up
+@media (min-width: $breakpoint-md) {
+  .container-upcoming-events {
+    .container-carousel {
+      padding: 0 2rem;
+    }
+
+    .btn--carousel-navigation {
+      width: 40px;
+      height: 40px;
+    }
+
+    .btn-previous {
+      left: 25px;
+    }
+
+    .btn--next {
+      right: 25px;
+    }
+  }
+
+  .carousel-card {
+    width: min(28rem, 80vw);
+  }
+}
+
+// Large devices and up
+@media (min-width: $breakpoint-lg) {
+  .carousel-card {
+    width: min(28rem, 90%);
+  }
+
+  .container-upcoming-events {
+    .btn-previous {
+      left: 30px;
+    }
+
+    .btn--next {
+      right: 30px;
+    }
+  }
+}
+
+// Extra large devices and up
+@media (min-width: $breakpoint-xl) {
+  .carousel-card {
+    width: 25rem;
+    height: 30rem;
+    min-width: initial;
   }
 }
