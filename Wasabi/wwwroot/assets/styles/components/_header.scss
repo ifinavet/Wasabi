@@ -173,7 +173,6 @@
 // ========================================
 // HAMBURGER MENU (MOBILE)
 // ========================================
-// Hamburger button for mobile navigation
 .hamburger {
   display: flex;
   flex-direction: column;
@@ -183,6 +182,9 @@
   cursor: pointer;
   background: transparent;
   border: none;
+  padding: 0; // Ensure no padding affects the positioning
+  margin: 0; // Reset margins
+  z-index: 100; // Higher z-index to ensure clickability
 
   // Hide on desktop
   @media (min-width: $breakpoint-lg) {
@@ -191,41 +193,41 @@
 
   // The three lines of the hamburger
   span {
+    display: block;
     width: 100%;
     height: 3px;
     background-color: $color-white;
-    transition: all 0.3s ease; // Smooth animation
-    transform-origin: center; // Ensure rotation happens from center
+    border-radius: 1px; // Slightly rounded edges
+    transition: transform 0.3s ease, opacity 0.3s ease; // Separate transitions
+    transform-origin: center;
   }
 
   // Hamburger to X animation when active
   &.active {
     span {
       &:nth-child(1) {
-        transform: translateY(9px) rotate(45deg); // Rotate top line
+        transform: translateY(9px) rotate(45deg);
       }
 
       &:nth-child(2) {
-        opacity: 0; // Hide middle line
+        opacity: 0;
+        transform: scale(0); // Additional transform for better animation
       }
 
       &:nth-child(3) {
-        transform: translateY(-9px) rotate(-45deg); // Rotate bottom line
+        transform: translateY(-9px) rotate(-45deg);
       }
     }
   }
 }
 
-// ========================================
-// MOBILE NAVIGATION
-// ========================================
-// Mobile navigation dropdown
+// Make sure the mobile navigation has proper z-index and transition
 .mobile-nav {
-  position: fixed; // Change to fixed to cover entire screen
-  top: 70px; // Height of the navbar on small devices and above
+  position: fixed;
+  top: 70px;
   left: 0;
   right: 0;
-  bottom: 0; // Extend to bottom of viewport
+  bottom: 0;
   background-color: $color-blue-primary;
   z-index: 99;
   padding: 0;
@@ -236,18 +238,16 @@
   overflow: hidden;
   opacity: 0;
   transform: translateY(-10px);
-  transition: height 0.4s ease,
-  opacity 0.3s ease,
-  transform 0.3s ease,
-  padding 0.3s ease;
+  transition: height 0.4s ease, opacity 0.3s ease, transform 0.3s ease, padding 0.3s ease;
+  pointer-events: none; // Prevent interaction when hidden
 
-  // When active class is added via JavaScript
   &.active {
-    height: calc(100vh - 70px); // Full viewport height minus navbar
-    overflow-y: auto; // Allow scrolling within the menu if needed
+    height: calc(100vh - 70px);
+    overflow-y: auto;
     opacity: 1;
     transform: translateY(0);
     padding: 1rem 0;
+    pointer-events: auto; // Re-enable interactions when visible
   }
 
   // Always hide on desktop regardless of active state
