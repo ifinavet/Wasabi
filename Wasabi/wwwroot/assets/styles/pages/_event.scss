@@ -1,19 +1,90 @@
 @use '../base' as *;
 
-@media screen and (min-width: $breakpoint-sm) {
+.page--main {
+  display: flex;
+  flex-direction: column;
+  gap: $default-card-gap;
+}
 
+@media screen and (min-width: $breakpoint-sm) {
+  .signup {
+    width: 100%;
+
+    .floating {
+      margin: 2rem 0 -10rem 0;
+
+      .container:first-child {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+      }
+
+      .unregister {
+        padding: 1.2rem 5rem;
+      }
+    }
+  }
+
+
+  .border-gray .image {
+    border: $color-light-gray solid 2px;
+  }
 }
 
 @media screen and (min-width: $breakpoint-md) {
+  .signup {
+    width: 100%;
 
+    .floating {
+      margin: 2rem 0 -10rem 0;
+
+      .container:first-child {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+      }
+
+      .unregister {
+        padding: 1.2rem 5rem;
+      }
+    }
+  }
+
+
+  .border-gray .image {
+    border: $color-light-gray solid 2px;
+  }
 }
 
 @media screen and (min-width: $breakpoint-lg) {
+  .signup {
+    width: 100%;
 
+    .floating {
+      margin: 2rem 0 -15rem 0;
+
+      .container:first-child {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+      }
+
+      .unregister {
+        padding: 1.2rem 7rem;
+      }
+    }
+  }
+
+
+  .border-gray .image {
+    border: $color-light-gray solid 2px;
+  }
 }
 
 @media screen and (min-width: $breakpoint-xl) {
-
   .signup {
     width: 100%;
 

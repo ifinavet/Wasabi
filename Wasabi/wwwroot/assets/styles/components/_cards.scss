@@ -1,18 +1,5 @@
 @use '../base' as *;
 
-$offset-margin: 4rem;
-.cut-effect {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: ($offset-margin) * -1;
-
-  &:first-child {
-    position: relative;
-    bottom: 20%;
-  }
-}
-
 .card {
   border-radius: $border-radius-default;
   background-color: $color-background-contrast;
@@ -30,13 +17,6 @@ $offset-margin: 4rem;
     margin-bottom: $default-card-gap + 2rem;
   }
 
-  &--company {
-    margin: $offset-margin 0 0;
-
-    .company-description * {
-      color: $color-text-blue-secondary;
-    }
-  }
 
 }
 
@@ -264,7 +244,7 @@ $offset-margin: 4rem;
           display: flex;
           flex-direction: row;
           gap: 5rem;
-         
+
           @media (max-width: $breakpoint-sm) {
             flex-wrap: wrap;
             gap: 1rem;
@@ -288,3 +268,14 @@ $offset-margin: 4rem;
   }
 }
 
+.card--company {
+  background-color: $color-background-contrast;
+
+  .top-half {
+    border-radius: $border-radius-default $border-radius-default 0 0;
+
+    .company-description * {
+      color: $color-text-blue-secondary;
+    }
+  }
+}
