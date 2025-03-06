@@ -116,5 +116,4 @@ dist-ssr
 *.sw?
 
 # Webpack generated files
-Wasabi/wwwroot/assets/css/*
-Wasabi/wwwroot/assets/css/*.css
+Wasabi/wwwroot/assets/generated/**
