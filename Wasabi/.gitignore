@@ -489,3 +489,4 @@ dev_secrets.json
 # Webpack generated files
 wwwroot/assets/css/*
 wwwroot/assets/css/*.css
+/wwwroot/assets/generated/
