@@ -18,7 +18,8 @@
         { "yes", "Møtt" },
         { "late", "Sen" },
         { "no", "Ikke møtt" },
-        { "0", "---" }
+        { "0", "---" },
+        { "", "---" }
     };
 
     Dictionary<string, string> statusMaterialSymbols = new()
@@ -26,7 +27,8 @@
         { "yes", "check_circle" },
         { "late", "directions_run" },
         { "no", "cancel" },
-        { "0", "" }
+        { "0", "" },
+        { "", "" }
     };
 }
 
@@ -174,12 +176,5 @@
             attendees: @Json.Serialize(Model.Attendees),
             eventId: @Model.Id
         }
-    </script>
-    <script defer>
-        let html5QrcodeScanner = new html5QrcodeScanner(
-            "reader",
-            {fps: 10, qrbox: {width: 250, height: 250}},
-            /* verbose= */ false);
-        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
     </script>
 }
