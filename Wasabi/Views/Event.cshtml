@@ -127,15 +127,12 @@
         </div>
 
 
-
-
         @if (!Model.CurrentAttendeeQrCode.IsNullOrWhiteSpace())
         {
             <div class="card card--info">
                 <img class="qr-code" src="@Model.CurrentAttendeeQrCode" alt="Din QR kode">
             </div>
         }
-
 
         <div class="card information">
             <div class="teaser">
@@ -147,16 +144,18 @@
         </div>
     </main>
     <aside class="page--aside">
-        <div class="card card--company">
-            <div class="cut-effect">
-                <div class="image-container-circle border-gray">
-                    <div class="image image--company">
-                        <img src="@ImageService.GetCompanyImageUrl((Company?)Model.HostingCompany)"
-                             alt="@Model.HostingCompany?.Name">
+        <div class="card--company">
+            <div class="top-half">
+                <div class="cutout-effect">
+                    <div class="image-container-circle border-gray">
+                        <div class="image image--company">
+                            <img src="@ImageService.GetCompanyImageUrl((Company?)Model.HostingCompany)"
+                                 alt="@Model.HostingCompany?.Name">
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="company-description">
+            <div class="company-description bottom-half">
                 @Model.HostingCompany?.GetProperty("CompanyDescription")?.GetValue()
             </div>
         </div>
@@ -165,13 +164,17 @@
         {
             StudentMember mainOrganizer = Model.Organizers.FirstOrDefault()!;
 
-            <div class="card card--main-organizer">
-                <div class="image-container-circle floating">
-                    <div class="image image--person">
-                        <img src="@ImageService.GetProfileImageUrl(mainOrganizer)" alt="@mainOrganizer.Name">
+            <div class="card--organizer--main">
+                <div class="top-half">
+                    <div class="cutout-effect">
+                        <div class="image-container-circle">
+                            <div class="image image--person">
+                                <img src="@ImageService.GetProfileImageUrl(mainOrganizer)" alt="@mainOrganizer.Name">
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="organizer-information">
+                <div class="organizer-information bottom-half">
                     <div class="name">
                         <h3>Ansvarlig</h3>
                         <p> @mainOrganizer.Name </p>
@@ -185,7 +188,7 @@
 
         @foreach (StudentMember? assistantOrganizer in Model.Organizers.Skip(1))
         {
-            <div class="card card--assistant-organiser">
+            <div class="card--organizer--assistant">
                 <div class="image-container-circle">
                     <div class="image image--person">
                         <img src="@ImageService.GetProfileImageUrl(assistantOrganizer!)"

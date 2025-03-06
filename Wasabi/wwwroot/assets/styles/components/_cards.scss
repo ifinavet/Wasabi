@@ -1,13 +1,57 @@
 @use '../base' as *;
 
+.cutout-effect {
+  position: relative;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 $default-card-gap $default-card-gap;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: $border-radius-round 0 0 0;
+    background: $color-background-contrast;
+    border-radius: $border-radius-default $border-radius-default 0 0;
+    z-index: -10;
+  }
+
+  .border-gray {
+    border-radius: $border-radius-round;
+    border: 3px solid #E6E6E6;
+  }
+
+  @media screen and (max-width: $breakpoint-sm) {
+    padding: 0 1rem 1rem;
+  }
+}
+
 .card {
   border-radius: $border-radius-default;
   background-color: $color-background-contrast;
   padding: 2rem;
 
+  @media screen and (max-width: $breakpoint-md) {
+    padding: 1.5rem;
+  }
+
+  @media screen and (max-width: $breakpoint-sm) {
+    padding: 1rem;
+    border-radius: $border-radius-small;
+  }
+
   &--main {
     background-color: $color-primary;
     padding: 4rem;
+
+    @media screen and (max-width: $breakpoint-md) {
+      padding: 2rem;
+    }
+
+    @media screen and (max-width: $breakpoint-sm) {
+      padding: 1.5rem;
+    }
   }
 
   &--metadata {
@@ -15,27 +59,49 @@
     flex-direction: column;
     align-items: center;
     margin-bottom: $default-card-gap + 2rem;
+
+    @media screen and (max-width: $breakpoint-md) {
+      margin-bottom: $default-card-gap + 1rem;
+    }
   }
-
-
 }
 
-.card {
-  &--main-organizer {
+.card--organizer {
+  &--main {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    margin-top: 4rem;
 
-    .floating {
-      width: 65%;
-      margin-bottom: -6rem;
-      border: $color-background-almost-white solid 1rem;
-      border-radius: $border-radius-round;
+    .top-half .cutout-effect {
+      .image-container-circle {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
 
-      &:first-child {
-        position: relative;
-        bottom: 50%;
+      .image--person {
+        width: 80%;
+        border-radius: $border-radius-round;
+        border: 1rem solid $color-background-almost-white;
+
+        @media screen and (max-width: $breakpoint-md) {
+          border-width: 0.75rem;
+        }
+
+        @media screen and (max-width: $breakpoint-sm) {
+          border-width: 0.5rem;
+          width: 70%;
+        }
+      }
+    }
+
+    .bottom-half {
+      background-color: $color-background-contrast;
+      border-radius: 0 0 $border-radius-default $border-radius-default;
+      padding: 0 $default-card-gap $default-card-gap;
+
+      @media screen and (max-width: $breakpoint-sm) {
+        border-radius: 0 0 $border-radius-small $border-radius-small;
+        padding: 0 1rem 1rem;
       }
     }
 
@@ -71,37 +137,89 @@
           background-color: $color-primary;
           color: $color-text-white;
           border-radius: $border-radius-small;
+
+          @media screen and (max-width: $breakpoint-md) {
+            padding: .5rem 5rem;
+          }
+
+          @media screen and (max-width: $breakpoint-sm) {
+            padding: .5rem 5rem;
+          }
         }
       }
     }
   }
 
-  &--assistant-organiser {
+  &--assistant {
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: $default-card-gap;
+    background-color: $color-background-contrast;
+    border-radius: $border-radius-default;
+    padding: 1rem;
+
+    @media screen and (max-width: $breakpoint-sm) {
+      border-radius: $border-radius-small;
+      gap: 0.5rem;
+    }
 
     .image-container-circle {
+      width: initial;
+      height: 8rem;
+
       .image {
         height: 100%;
       }
+
+      @media screen and (max-width: $breakpoint-md) {
+        height: 6rem;
+      }
+
+      @media screen and (max-width: $breakpoint-sm) {
+        height: 5rem;
+      }
     }
 
-
     .assistant-organizer-information {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+
+
       .name {
         h3 {
           font-size: $text-size-large;
+
+          @media screen and (max-width: $breakpoint-sm) {
+            font-size: $secondary-text-size;
+            margin-bottom: 0.5rem;
+          }
         }
       }
 
       * {
         color: $color-primary;
+      }
 
+      .btn-contact {
+        height: fit-content;
+        margin: 0;
+        padding: 0;
+
+        a {
+          font-size: $secondary-text-size;
+          display: inline-block;
+          margin: 0;
+          padding: .5rem 2rem;
+          background-color: $color-primary;
+          color: $color-text-white;
+          border-radius: $border-radius-small;
+        }
       }
     }
   }
-
 }
 
 .card--error {
@@ -114,168 +232,33 @@
 
   * {
     color: $color-text-white;
-
-  }
-}
-
-.card--event {
-  width: 100%;
-
-  a {
-    all: unset;
-
-    &:hover {
-      cursor: pointer;
-    }
-  }
-
-  .event-wrapper {
-    display: flex;
-    flex-direction: column;
-
-    * {
-      background-color: $color-background-contrast-medium;
-    }
-
-    .event-popup {
-      align-self: flex-end;
-      padding: 0 3rem;
-      margin-bottom: -2rem;
-      z-index: 10;
-      border-radius: $border-radius-default $border-radius-default 0 0;
-
-      * {
-        color: $color-text-white;
-      }
-
-      @media (max-width: $breakpoint-lg) {
-        padding: 0 1.5rem;
-        margin-bottom: -.5rem;
-      }
-
-      @media (max-width: $breakpoint-md) {
-        margin-bottom: 0;
-      }
-    }
-
-    .event-content {
-      height: auto;
-      min-height: 14rem;
-      flex-grow: 1;
-      display: grid;
-      grid-template-columns: 3fr 7fr;
-      border-radius: $border-radius-default;
-      border: $color-background-contrast-medium solid 1px;
-      overflow: hidden;
-
-      @media (max-width: $breakpoint-lg) {
-        border-radius: $border-radius-default 0 $border-radius-default $border-radius-default;
-      }
-
-      @media (max-width: $breakpoint-md) {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto;
-      }
-
-      .company-image {
-        background-color: $color-white !important;
-        height: 100%;
-        width: 100%;
-        display: grid;
-        place-content: center;
-        padding: 1rem 0;
-
-        @media (max-width: $breakpoint-md) {
-          height: auto;
-          min-height: 10rem;
-        }
-
-        @media (max-width: $breakpoint-sm) {
-          min-height: 8rem;
-        }
-
-        img {
-          background-color: inherit !important;
-          box-sizing: border-box;
-          margin: auto;
-          height: initial;
-          max-height: 7rem;
-          width: 90%;
-
-          @media (max-width: $breakpoint-md) {
-            max-height: 6rem;
-          }
-
-          @media (max-width: $breakpoint-sm) {
-            max-height: 5rem;
-            width: 80%;
-          }
-        }
-      }
-
-      .event-information {
-        padding: 2rem;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-
-        * {
-          color: $color-text-white;
-        }
-
-        h1 {
-          font-size: $text-size-xlarge;
-
-          @media (max-width: $breakpoint-lg) {
-            font-size: calc($text-size-xlarge * 0.9);
-          }
-
-          @media (max-width: $breakpoint-md) {
-            font-size: calc($text-size-xlarge * 0.8);
-          }
-
-          @media (max-width: $breakpoint-sm) {
-            font-size: calc($text-size-xlarge * 0.7);
-          }
-        }
-
-        .metadata {
-          display: flex;
-          flex-direction: row;
-          gap: 5rem;
-
-          @media (max-width: $breakpoint-sm) {
-            flex-wrap: wrap;
-            gap: 1rem;
-          }
-
-          @media (max-width: $breakpoint-sm) {
-            flex-direction: column;
-            align-items: flex-start;
-          }
-        }
-
-        @media (max-width: $breakpoint-lg) {
-          padding: 1.5rem;
-        }
-
-        @media (max-width: $breakpoint-sm) {
-          padding: 1rem;
-        }
-      }
-    }
   }
 }
 
 .card--company {
-  background-color: $color-background-contrast;
+  display: flex;
+  flex-direction: column;
 
-  .top-half {
-    border-radius: $border-radius-default $border-radius-default 0 0;
-
-    .company-description * {
-      color: $color-text-blue-secondary;
+  .top-half .cutout-effect {
+    @media screen and (max-width: $breakpoint-sm) {
+      .image-container-circle {
+        width: 80%;
+      }
     }
+  }
+
+  .bottom-half {
+    background-color: $color-background-contrast;
+    border-radius: 0 0 $border-radius-default $border-radius-default;
+    padding: 0 $default-card-gap $default-card-gap;
+
+    @media screen and (max-width: $breakpoint-sm) {
+      border-radius: 0 0 $border-radius-small $border-radius-small;
+      padding: 0 1rem 1rem;
+    }
+  }
+
+  .company-description * {
+    color: $color-text-blue-secondary;
   }
 }
