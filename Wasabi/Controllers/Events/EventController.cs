@@ -174,7 +174,7 @@ public class EventController : RenderController
 
         // CurrentMembers qrCode
         string? qrCode = null;
-        if (currentMemberAttendee != null && (dateTimeCet - model.RegistrationDate).Hours < 12)
+        if (currentMemberAttendee != null && (model.EventDate - dateTimeCet).TotalHours < 12)
             qrCode = CurrentMemberIdentityQrCode(currentMemberAttendee, model.Id);
 
         EventViewModel viewModel = new(CurrentPage!, _publishedValueFallback)
