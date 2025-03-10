@@ -1,64 +1,49 @@
 import {defineConfig} from "@rsbuild/core";
 import {pluginSass} from "@rsbuild/plugin-sass";
 import {pluginCssMinimizer} from "@rsbuild/plugin-css-minimizer";
-import * as fs from "fs";
 import * as path from "node:path";
 
-const tsFolder = './Wasabi/wwwroot/assets/typescript';
-
-function getScriptEntries() {
-    const entries = {
-        // Always include the main index file
-        main: `${tsFolder}/index.ts`
-    };
-
-    // Read subdirectories in the typescript folder
-    const dirs = fs.readdirSync(tsFolder, {withFileTypes: true})
-        .filter(dirent => dirent.isDirectory())
-        .map(dirent => dirent.name);
-
-    // Add each directory as an entry point if it has an index.ts file
-    dirs.forEach(dir => {
-        const indexPath = `${tsFolder}/${dir}/index.ts`;
-        if (fs.existsSync(indexPath)) {
-            entries[dir] = indexPath;
-        } else {
-            // Try to find any .ts file in the directory
-            const tsFiles = fs.readdirSync(`${tsFolder}/${dir}`)
-                .filter(file => file.endsWith('.ts'));
-
-            if (tsFiles.length > 0) {
-                entries[dir] = `${tsFolder}/${dir}/${tsFiles[0]}`;
-            }
-        }
-    });
-
-    return entries;
-}
+const DEFAULT_PATH = path.resolve(__dirname, "Wasabi/wwwroot/assets/");
 
 export default defineConfig({
-    plugins: [
-        pluginSass(),
-        pluginCssMinimizer()],
     source: {
         entry: {
-            css: "./Wasabi/wwwroot/assets/styles/index.js",
-            ...getScriptEntries()
+            main: {
+                import: path.join(DEFAULT_PATH, "typescript/index.ts"),
+                html: false
+            },
+            adminRegistration: {
+                import: path.join(DEFAULT_PATH, "typescript/adminRegistration/index.ts"),
+                html: false
+            },
+            styles: {
+                import: path.join(DEFAULT_PATH, "styles/index.js"),
+                html: false
+            }
         },
-        assetsInclude: "./Wasabi/wwwroot/assets/styles/assets/fonts/*.ttf",
-    },
-    dev: {
-        writeToDisk: true,
     },
     output: {
         distPath: {
-            root: "./Wasabi/wwwroot/assets/generated",
+            root: path.join(DEFAULT_PATH, "generated"),
             js: "js",
-            css: "css"
+            css: "css",
+            assets: "assets",
         },
         filename: {
             js: "[name].js",
             css: "[name].css",
         }
-    }
+    },
+    resolve: {
+        alias: {
+            '@font': path.join(DEFAULT_PATH, "fonts"),
+        }
+    },
+    plugins: [
+        pluginSass(),
+        pluginCssMinimizer()
+    ],
+    dev: {
+        writeToDisk: true,
+    },
 })
