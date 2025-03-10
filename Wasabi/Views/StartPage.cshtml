@@ -8,123 +8,124 @@
     Event[]? upcomingEvents = Model.Events;
 }
 
-<div class="leader">
+<div class="leader-container">
+    <div class="leader">
 
-    @* About Partner company *@
-    <div class="container-partner">
-        <div class="partner">
-            <div class="header">
-                <div class="title">
-                    <h1 class="leader-title secondary-header">Hovedsamarbeidspartner</h1>
+        @* About Partner company *@
+        <div class="container-partner">
+            <div class="partner">
+                <div class="header">
+                    <div class="title">
+                        <h1 class="leader-title secondary-header">Hovedsamarbeidspartner</h1>
+                    </div>
+                    <div class="sub-title">
+                        <h3 class="main-text">H24-V25</h3>
+                    </div>
                 </div>
-                <div class="sub-title">
-                    <h3 class="main-text">H24-V25</h3>
-                </div>
-            </div>
-            <div class="content">
-                <div class="image">
-                    <img loading="eager" src="@ImageService.GetCompanyImageUrl(partner)" alt="@partner?.Name logo"/>
-                </div>
-                <div class="promo-description">
-                    <h2>@partner?.Name</h2>
-                    @partner?.CompanyDescription
+                <div class="content">
+                    <div class="image">
+                        <img loading="eager" src="@ImageService.GetCompanyImageUrl(partner)" alt="@partner?.Name logo"/>
+                    </div>
+                    <div class="promo-description">
+                        <h2>@partner?.Name</h2>
+                        @partner?.CompanyDescription
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    @* Upcoming Events *@
-    <div class="container-upcoming-events">
-        <div class="upcoming-event-title">
-            <h1 class="leader-title secondary-header">Arrangementer</h1>
-        </div>
-        <div class="container-carousel">
-            <div class="btn--carousel-navigation btn-previous">
+        @* Upcoming Events *@
+        <div class="container-upcoming-events">
+            <div class="upcoming-event-title">
+                <h1 class="leader-title secondary-header">Arrangementer</h1>
+            </div>
+            <div class="container-carousel">
+                <div class="btn--carousel-navigation btn-previous">
                 <span class="material-symbols-rounded">
                     chevron_left
                 </span>
-            </div>
+                </div>
 
-            <div class="carousel-wrapper">
-                <div class="carousel">
-                    @foreach (Event upcomingEvent in upcomingEvents!)
-                    {
-                        <div class="container-card">
-                            <a href="@upcomingEvent.Url()">
-                                <div class="carousel-card">
-                                    <div class="image">
-                                        <img
-                                            src="@ImageService.GetCompanyImageUrl((Company)upcomingEvent.HostingCompany!)"
-                                            alt="Company name">
-                                    </div>
-                                    <div class="content">
-                                        <div class="heading">
-                                            <h1 class="header">@upcomingEvent.Name</h1>
-                                            <p class="teaser">@upcomingEvent.EventTeaser</p>
+                <div class="carousel-wrapper">
+                    <div class="carousel">
+                        @foreach (Event upcomingEvent in upcomingEvents!)
+                        {
+                            <div class="container-card">
+                                <a href="@upcomingEvent.Url()">
+                                    <div class="carousel-card">
+                                        <div class="image">
+                                            <img
+                                                src="@ImageService.GetCompanyImageUrl((Company)upcomingEvent.HostingCompany!)"
+                                                alt="Company name">
                                         </div>
-                                        <div class="carousel-metadata">
-                                            <div class="metadata-item">
-                                                <div class="icon">
+                                        <div class="content">
+                                            <div class="heading">
+                                                <h1 class="header">@upcomingEvent.Name</h1>
+                                                <p class="teaser">@upcomingEvent.EventTeaser</p>
+                                            </div>
+                                            <div class="carousel-metadata">
+                                                <div class="metadata-item">
+                                                    <div class="icon">
                                                     <span class="material-symbols-rounded">
                                                         <span class="material-symbols-rounded">
                                                             group
                                                         </span>
                                                     </span>
-                                                </div>
-                                                <div class="metadata-data">
+                                                    </div>
+                                                    <div class="metadata-data">
                                                     <span
                                                         class="main-text-large semi-bold">
                                                         @upcomingEvent.ParticipantLimit
                                                     </span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="metadata-item">
-                                                <div class="icon">
+                                                <div class="metadata-item">
+                                                    <div class="icon">
                                                     <span class="material-symbols-rounded">
                                                         event
                                                     </span>
-                                                </div>
-                                                <div class="metadata-data">
+                                                    </div>
+                                                    <div class="metadata-data">
                                                     <span class="main-text-large semi-bold">
                                                         @upcomingEvent.EventDate.ToString("dddd dd.mm")
                                                     </span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </a>
-                        </div>
-                    }
+                                </a>
+                            </div>
+                        }
+                    </div>
                 </div>
-            </div>
 
-            <div class="btn--carousel-navigation btn--next">
+                <div class="btn--carousel-navigation btn--next">
                 <span class="material-symbols-rounded">
                     chevron_right
                 </span>
+                </div>
             </div>
-        </div>
 
-        <a href="/arrangementer/">Se alle arrangementer her</a>
+            <a href="/arrangementer/">Se alle arrangementer her</a>
+        </div>
     </div>
 </div>
 
-
 @* Job Listings *@
-<div class="card card--featured">
+<div class="job-listings-featured">
     <div class="container">
-        <div class="row">
+        <div class="cards">
             @foreach (JobListing job in upcomingJobs)
             {
-                <div class="">
+                <div>
                     @{ await Html.RenderPartialAsync("Job/JobCard", job); }
                 </div>
             }
         </div>
-        <div class="row center">
+        <div class="center">
             <a href="/stillingsannonser/"
-               class="btn btn--accent btn--rounded btn--shadow col-xs-12 col-sm-6 col-md-4">
+               class="btn--primary">
                 Se alle annonser
             </a>
         </div>

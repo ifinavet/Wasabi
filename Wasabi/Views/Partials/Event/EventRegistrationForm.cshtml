@@ -4,7 +4,7 @@
 
 @{ bool success = false; }
 
-@using (Html.BeginUmbracoForm<EventRegistrationController>(nameof(EventRegistrationController.Register), FormMethod.Post))
+@using (Html.BeginUmbracoForm<EventRegistrationController>(nameof(EventRegistrationController.Register), FormMethod.Post, new { @class = "event-registration" }))
 {
     <div>
         @Html.LabelFor(m => m.Allergie, Umbraco.GetDictionaryValue("eventRegistrationAnyAllergies"), new { name = "allergiesLbl", @class = "frmLabel" })
@@ -12,9 +12,9 @@
         @Html.ValidationMessageFor(m => m.Allergie)
     </div>
 
-    <button id="register-submit" type="submit" class="btn btn--rounded btn--shadow h2"
+    <button id="register-submit" type="submit" class="btn--primary"
             onclick="this.disabled = true; this.form.submit();">
-        @Umbraco.GetDictionaryValue("eventButtonSignUp")
+        Meld meg på
     </button>
 }
 @if (success is false && (string)TempData["Result"]! != "")

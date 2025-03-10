@@ -17,6 +17,7 @@
         string description = Model.Value<string>("metaDescription") ?? Model.Root().Value<string>("metaDescription")!;
         <meta name="description" content="@description"/>
     }
+    <link rel="icon" type="image/x-icon" href="@Url.Content("~/favicon.ico")"/>
 
     @* Main style *@
     <link rel="stylesheet" type="text/css"
