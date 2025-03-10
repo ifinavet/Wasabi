@@ -1,0 +1,61 @@
+@use "../base" as *;
+
+.job-listings-footer {
+  width: 100%;
+  margin-top: 5rem;
+  padding: 2rem 0 5rem 0;
+  background: url('@assets/assets/Ns.svg') center center / cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .content {
+    width: min($breakpoint-xl, 100%);
+    display: flex;
+    align-items: center;
+    gap: 15rem;
+    padding: 0 2rem;
+    justify-content: space-between;
+
+    .left {
+      max-width: 80ch;
+
+      h3 {
+        font-size: $text-size-large;
+      }
+
+      h3, p {
+        color: $color-text-blue;
+      }
+    }
+
+    .right .btn--second {
+      padding: 1rem 2rem;
+      white-space: nowrap;
+      background-color: $color-primary;
+    }
+  }
+}
+
+@media screen and (max-width: $breakpoint-lg) {
+  .job-listings-footer .content {
+    gap: 10rem;
+  }
+}
+
+@media screen and (max-width: $breakpoint-md) {
+  .job-listings-footer .content {
+    gap: 5rem;
+    padding: 0 3rem;
+  }
+
+  .job-listings-footer .content .right .btn--second {
+    white-space: normal;
+  }
+}
+
+@media screen and (max-width: $breakpoint-sm) {
+  .job-listings-footer .content {
+    flex-direction: column;
+  }
+}

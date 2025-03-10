@@ -4,53 +4,57 @@
     Layout = "_master.cshtml";
 }
 
-<div class="container">
-    <h1 class="primary center">@Model.Name</h1>
-    <div class="row">
-        <div class="col-xs-12 center">
-            <nav aria-label="@Umbraco.GetDictionaryValue("jobListingsFilterResults")">
-                <a class="btn btn--inline @(Model.IsFilteredByJobType ? "btn--primary" : "btn--accent") "
-                   href="?query=@Model.QueryString">
-                    @Umbraco.GetDictionaryValue("jobListingsFilterAll")
-                </a>
-                @foreach (JobTypesFilter jobType in Model.JobTypes)
-                {
-                    <a class="btn @(jobType.IsActive ? "btn--accent" : "btn--primary") btn--inline"
-                       href="?jobType=@jobType.JobTypeAlias&query=@Model.QueryString">
-                        @Umbraco.GetDictionaryValue(jobType.JobTypeAlias)
-                    </a>
-                }
-            </nav>
-        </div>
+<div class="blue-header center-header">
+    <div class="page--title page--title-no-line">
+        <h1>@Model.Name</h1>
     </div>
 
-    <div class="row margin-bottom--default">
-        <div class="col-xs-12">
-            <form action="@Model.Url()" method="get" aria-label="@Umbraco.GetDictionaryValue("searchbarLabel")"
-                  class="center">
-                <div class="search-input-wrapper">
-                    <input type="text" placeholder="@Umbraco.GetDictionaryValue("searchbarPlaceholder")" id="query"
-                           name="query" class="search-input" value="@Model.QueryString"/>
-                    <button type="submit" class="search-button">@Umbraco.GetDictionaryValue("Search")</button>
-                </div>
-            </form>
-        </div>
+    <form action="@Model.Url()" method="get" aria-label="@Umbraco.GetDictionaryValue("searchbarLabel")"
+          class="search-input-form">
+        <input type="text" placeholder="@Umbraco.GetDictionaryValue("searchbarPlaceholder")"
+               id="query"
+               name="query" class="search-input" value="@Model.QueryString"/>
+        <button type="submit" class="search-button"> @Umbraco.GetDictionaryValue("Search")</button>
+    </form>
+
+    <div aria-label="@Umbraco.GetDictionaryValue("jobListingsFilterResults")" class="job-type-selectors">
+        <a class="btn--job @(Model.IsFilteredByJobType ? "" : "btn--job--selected") "
+           href="?query=@Model.QueryString">
+            @Umbraco.GetDictionaryValue("jobListingsFilterAll")
+        </a>
+        @foreach (JobTypesFilter jobType in Model.JobTypes)
+        {
+            <a class="btn--job @(jobType.IsActive ? "btn--job--selected" : "") "
+               href="?jobType=@jobType.JobTypeAlias&query=@Model.QueryString">
+                @Umbraco.GetDictionaryValue(jobType.JobTypeAlias)
+            </a>
+        }
     </div>
+</div>
 
 
-    @if (Model.SearchResult.Any())
-    {
-        <div class="row">
-            @foreach (JobListing item in Model.SearchResult)
+<div class="page--layout">
+    <div class="page--container">
+        <div class="page--content--full">
+            @if (Model.SearchResult.Any())
             {
-                <div class="col-xs-12 col-sm-6 col-md-4">
-                    @{ await Html.RenderPartialAsync("Job/JobCard", item); }
+                <div class="center-grid">
+                    <div class="grid">
+                        @foreach (JobListing item in Model.SearchResult)
+                        {
+                            <div class="col-xs-12 col-sm-6 col-md-4">
+                                @{ await Html.RenderPartialAsync("Job/JobCard", item); }
+                            </div>
+                        }
+                    </div>
                 </div>
             }
+            else
+            {
+                <p>@Umbraco.GetDictionaryValue("jobListingsNoResults")</p>
+            }
         </div>
-    }
-    else
-    {
-        <p>@Umbraco.GetDictionaryValue("jobListingsNoResults")</p>
-    }
+    </div>
 </div>
+
+@await Html.PartialAsync("Job/JobFormFooter")

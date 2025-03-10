@@ -34,8 +34,38 @@
   color: $color-text-white;
 }
 
+.btn--primary {
+  @extend .btn;
+  @extend .main-text-semibold;
+
+  background-color: $color-green;
+  color: $color-text-white;
+}
+
+.btn--tertiary {
+  @extend .btn;
+
+  padding: 1rem 3rem;
+  border: 1px solid $color-primary;
+  background-color: $color-background-almost-white;
+  color: $color-blue-primary;
+
+  &:hover {
+    background-color: $color-background-contrast-light;
+  }
+}
+
 .btn--select {
   padding: 1rem 3rem
+}
+
+.btn--job {
+  @extend .btn;
+  padding: 1rem 3rem;
+
+  &--selected {
+    background-color: $color-primary;
+  }
 }
 
 .btn--carousel-navigation {
