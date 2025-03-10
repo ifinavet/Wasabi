@@ -44,21 +44,21 @@
             <div class="metadata">
                 <div class="metadata-item">
                     <div class="icon">
-                    <span class="material-symbols-rounded">
-                        event
-                    </span>
+                        <span class="material-symbols-rounded">
+                            event
+                        </span>
                     </div>
                     <div class="metadata-data">
-                    <span class="main-text-large semi-bold">
-                        @dayOfWeek @Model.EventDate.ToString("dd.MM") <br/> @Model.EventDate.ToString("kl. HH:mm")
-                    </span>
+                        <span class="main-text-large semi-bold">
+                            @dayOfWeek @Model.EventDate.ToString("dd.MM") <br/> @Model.EventDate.ToString("kl. HH:mm")
+                        </span>
                     </div>
                 </div>
                 <div class="metadata-item">
                     <div class="icon">
-                    <span class="material-symbols-rounded">
-                        map
-                    </span>
+                        <span class="material-symbols-rounded">
+                            map
+                        </span>
                     </div>
                     <div class="metadata-data">
                         <span class="main-text-large semi-bold"> @Model.Location </span>
@@ -66,26 +66,26 @@
                 </div>
                 <div class="metadata-item">
                     <div class="icon">
-                    <span class="material-symbols-rounded">
-                        fork_spoon
-                    </span>
+                        <span class="material-symbols-rounded">
+                            fork_spoon
+                        </span>
                     </div>
                     <div class="metadata-data">
-                    <span class="main-text-large semi-bold">
-                        @Model.Food
-                    </span>
+                        <span class="main-text-large semi-bold">
+                            @Model.Food
+                        </span>
                     </div>
                 </div>
                 <div class="metadata-item">
                     <div class="icon">
-                    <span class="material-symbols-rounded">
-                        group
-                    </span>
+                        <span class="material-symbols-rounded">
+                            group
+                        </span>
                     </div>
                     <div class="metadata-data">
-                    <span class="main-text-large semi-bold">
-                        @remainingAvailableSpots plasser igjen
-                    </span>
+                        <span class="main-text-large semi-bold">
+                            @remainingAvailableSpots plasser igjen
+                        </span>
                     </div>
                 </div>
             </div>
@@ -212,8 +212,11 @@
         </div>
     </aside>
 </div>
-<div class="container">
-    <h2 class="primary">@Umbraco.GetDictionaryValue("jobRelatedHeader") @Model.HostingCompany?.Name</h2>
-    <div class="spacer"></div>
-    @await Html.PartialAsync("JobListings/JobListingsSearchResult", Model.JobListings)
-</div>
+@if ((Model.JobListings.Hits ?? []).Any())
+{
+    <div class="container">
+        <h2 class="primary">@Umbraco.GetDictionaryValue("jobRelatedHeader") @Model.HostingCompany?.Name</h2>
+        <div class="spacer"></div>
+        @await Html.PartialAsync("JobListings/JobListingsSearchResult", Model.JobListings)
+    </div>
+}
