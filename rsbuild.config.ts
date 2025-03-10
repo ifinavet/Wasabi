@@ -38,6 +38,7 @@ export default defineConfig({
     resolve: {
         alias: {
             '@font': path.join(DEFAULT_PATH, "fonts"),
+            '@assets': DEFAULT_PATH
         }
     },
     plugins: [
