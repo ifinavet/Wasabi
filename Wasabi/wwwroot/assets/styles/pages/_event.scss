@@ -1,9 +1,57 @@
 @use '../base' as *;
 
+@media screen and (max-width: $breakpoint-sm) {
+  .page--title h1 {
+    hyphens: auto;
+    font-size: $h4-size;
+  }
+  .metadata-item .metadata-data * {
+    font-size: $text-size;
+  }
+
+  .card--metadata {
+    margin-bottom: 1rem !important;
+
+    .metadata {
+      gap: 1rem;
+
+      .metadata-item .icon {
+        margin-right: 0.5rem;
+      }
+    }
+  }
+
+  .card--metadata .signup .floating .unregister {
+    padding: 1.2rem 4rem;
+  }
+}
+
 .page--main {
   display: flex;
   flex-direction: column;
   gap: $default-card-gap;
+}
+
+@media screen and (max-width: $breakpoint-sm) {
+  .signup {
+    width: 100%;
+
+    .floating {
+      margin: 2rem 0 -10rem 0;
+
+      .container:first-child {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+      }
+
+      .unregister {
+        padding: 1.2rem 5rem;
+      }
+    }
+  }
+
 }
 
 @media screen and (min-width: $breakpoint-sm) {
@@ -104,11 +152,12 @@
     }
   }
 
-
   .border-gray .image {
     border: $color-light-gray solid 2px;
   }
 }
 
-
-                                    
+.information {
+  width: 100%;
+  hyphens: auto;
+}
