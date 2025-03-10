@@ -11,7 +11,7 @@
     <ItemGroup>
         <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0"/>
         <PackageReference Include="QRCoder" Version="1.6.0"/>
-        <PackageReference Include="Umbraco.Cms" Version="13.7.0" />
+        <PackageReference Include="Umbraco.Cms" Version="13.7.0"/>
         <PackageReference Include="uSync" Version="13.2.6"/>
     </ItemGroup>
 
@@ -26,7 +26,6 @@
     <ItemGroup>
         <Folder Include="Models\Generated\"/>
         <Folder Include="wwwroot\assets\fonts\"/>
-        <Folder Include="wwwroot\assets\generated\"/>
         <Folder Include="wwwroot\assets\images\"/>
         <Folder Include="wwwroot\umbraco\assets\"/>
     </ItemGroup>
@@ -1196,6 +1195,8 @@
         <_ContentIncludedByDefault Remove="wwwroot\assets\css\css\main.css.map"/>
         <_ContentIncludedByDefault Remove="wwwroot\assets\css\css\Pages\startPage.css"/>
         <_ContentIncludedByDefault Remove="wwwroot\assets\css\css\Pages\startPage.css.map"/>
+        <_ContentIncludedByDefault Remove="wwwroot\assets\generated\css\dummy.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\assets\generated\css\site.css"/>
     </ItemGroup>
 
     <ItemGroup>

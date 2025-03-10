@@ -5,7 +5,6 @@ import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
-const tsFolder = './Wasabi/wwwroot/assets/typescript';
 
 // Function to get subdirectories and create entry points
 function getScriptEntries() {
