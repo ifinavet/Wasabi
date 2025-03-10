@@ -32,7 +32,8 @@ export default defineConfig({
         filename: {
             js: "[name].js",
             css: "[name].css",
-        }
+        },
+        assetPrefix: "/assets/generated",
     },
     resolve: {
         alias: {
@@ -45,5 +46,6 @@ export default defineConfig({
     ],
     dev: {
         writeToDisk: true,
+        assetPrefix: "/assets/generated",
     },
 })

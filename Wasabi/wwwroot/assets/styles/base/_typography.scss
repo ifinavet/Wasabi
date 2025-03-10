@@ -9,8 +9,8 @@
   }
 }
 
-@include font('Eina01-Regular', '@font/Eina01-Regular', regular, normal);
-@include font('Eina01-SemiBold', '@font/Eina01-SemiBold', semibold, normal);
+@include font('Eina01-Regular', '@font/Eina01-Regular', normal, normal);
+@include font('Eina01-SemiBold', '@font/Eina01-SemiBold', 600, normal);
 @include font('Eina01-Bold', '@font/Eina01-Bold', bold, normal);
 
 $h1-size: 2.986rem;
