@@ -89,24 +89,24 @@
                     </div>
                 </div>
             </div>
-            @if (!Model.IsRegistrationOpen)
-            {
-                <div class="btn container">
+            <div class="signup">
+                @if (!Model.IsRegistrationOpen)
+                {
                     <div class="floating">
-                        <p>Påmeldingen åpner @Model.RegistrationDate.ToString("dd.MM kl. HH:mm")</p>
+                        <div class="container">
+                            <p class="btn">Påmeldingen åpner @Model.RegistrationDate.ToString("dd.MM kl. HH:mm")</p>
+                        </div>
                     </div>
-                </div>
-            }
-            else
-            {
-                <div class="signup">
+                }
+                else
+                {
                     <div class="floating">
                         <div class="container">
                             @if (!MemberManager.IsLoggedIn())
                             {
-                                <a class="btn--second" href="/login/?redirectURL=@Model.Url()">Logg inn for å
-                                    melde deg
-                                    på</a>
+                                <a class="btn--second" href="/login/?redirectURL=@Model.Url()">
+                                    Logg inn for å melde deg på
+                                </a>
                             }
                             else if (Model.IsCurrentMemberAttending)
                             {
@@ -118,12 +118,12 @@
                             }
                             else
                             {
-                                <p>Det er fult akkurat nå, men kanskje en plass åpner seg!</p>
+                                <p class="btn">Det er fult akkurat nå, men kanskje en plass åpner seg!</p>
                             }
                         </div>
                     </div>
-                </div>
-            }
+                }
+            </div>
         </div>
 
 

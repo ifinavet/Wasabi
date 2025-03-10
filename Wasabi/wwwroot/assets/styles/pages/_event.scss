@@ -1,5 +1,15 @@
 @use '../base' as *;
 
+.page--main {
+  display: flex;
+  flex-direction: column;
+  gap: $default-card-gap;
+}
+
+.event-registration {
+  background-color: $color-background-contrast;
+}
+
 @media screen and (max-width: $breakpoint-sm) {
   .page--title h1 {
     hyphens: auto;
@@ -10,8 +20,6 @@
   }
 
   .card--metadata {
-    margin-bottom: 1rem !important;
-
     .metadata {
       gap: 1rem;
 
@@ -24,15 +32,7 @@
   .card--metadata .signup .floating .unregister {
     padding: 1.2rem 4rem;
   }
-}
 
-.page--main {
-  display: flex;
-  flex-direction: column;
-  gap: $default-card-gap;
-}
-
-@media screen and (max-width: $breakpoint-sm) {
   .signup {
     width: 100%;
 
