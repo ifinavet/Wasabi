@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Umbraco.Cms.Core.Cache;
 using Umbraco.Cms.Core.Logging;
 using Umbraco.Cms.Core.Models;
@@ -17,10 +16,10 @@ namespace Wasabi.Controllers.Member;
 
 public class MemberResetPasswordController : SurfaceController
 {
-    private readonly IMemberService _memberService;
-    private readonly IMemberManager _memberManager;
     private readonly IEmailService _emailService;
     private readonly ILogger<MemberResetPasswordController> _logger;
+    private readonly IMemberManager _memberManager;
+    private readonly IMemberService _memberService;
 
     public MemberResetPasswordController(
         IUmbracoContextAccessor umbracoContextAccessor,
@@ -42,11 +41,12 @@ public class MemberResetPasswordController : SurfaceController
     }
 
     /// <summary>
-    /// Handles the request to reset a member's password by generating a reset token and sending it via email.
+    ///     Handles the request to reset a member's password by generating a reset token and sending it via email.
     /// </summary>
     /// <param name="model">The view model containing the member's email address for the password reset request.</param>
     /// <returns>
-    /// An <see cref="IActionResult"/> that returns the current Umbraco page with a status message indicating the result of the request.
+    ///     An <see cref="IActionResult" /> that returns the current Umbraco page with a status message indicating the result
+    ///     of the request.
     /// </returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -94,14 +94,14 @@ public class MemberResetPasswordController : SurfaceController
     }
 
     /// <summary>
-    /// Resets the member's password using the provided reset token and new password.
+    ///     Resets the member's password using the provided reset token and new password.
     /// </summary>
     /// <param name="model">The view model containing the new password information.</param>
     /// <param name="email">The email address of the member requesting the password reset.</param>
     /// <param name="resetToken">The token used to validate the password reset request.</param>
     /// <returns>
-    /// An <see cref="IActionResult"/> that redirects to the login page if the reset is successful,
-    /// or returns the current Umbraco page with an error message if the reset fails.
+    ///     An <see cref="IActionResult" /> that redirects to the login page if the reset is successful,
+    ///     or returns the current Umbraco page with an error message if the reset fails.
     /// </returns>
     public async Task<IActionResult> MemberResetPassword(
         MemberResetPasswordViewModel model,

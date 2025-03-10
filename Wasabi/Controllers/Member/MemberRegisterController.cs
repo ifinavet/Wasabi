@@ -18,10 +18,10 @@ namespace Wasabi.Controllers.Member;
 public class MemberRegisterController : SurfaceController
 {
     private readonly ICoreScopeProvider _coreScopeProvider;
-    private readonly IMemberManager _memberManager;
-    private readonly IMemberService _memberService;
     private readonly IEmailService _emailService;
     private readonly IGoogleReCaptchaService _googleReCaptchaService;
+    private readonly IMemberManager _memberManager;
+    private readonly IMemberService _memberService;
 
     public MemberRegisterController(
         IMemberManager memberManager,
@@ -33,7 +33,7 @@ public class MemberRegisterController : SurfaceController
         IProfilingLogger profilingLogger,
         IPublishedUrlProvider publishedUrlProvider,
         ICoreScopeProvider coreScopeProvider,
-        IEmailService emailService, 
+        IEmailService emailService,
         IGoogleReCaptchaService googleReCaptchaService)
         : base(umbracoContextAccessor, databaseFactory, services, appCaches, profilingLogger, publishedUrlProvider)
     {
@@ -45,12 +45,12 @@ public class MemberRegisterController : SurfaceController
     }
 
     /// <summary>
-    /// Registers a new member with the provided information from the form model.
+    ///     Registers a new member with the provided information from the form model.
     /// </summary>
     /// <param name="model">The view model containing the member registration information.</param>
     /// <returns>
-    /// An <see cref="IActionResult"/> that redirects to the current Umbraco page if the registration is successful,
-    /// or returns the current Umbraco page with an error message if the registration fails.
+    ///     An <see cref="IActionResult" /> that redirects to the current Umbraco page if the registration is successful,
+    ///     or returns the current Umbraco page with an error message if the registration fails.
     /// </returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -92,7 +92,7 @@ public class MemberRegisterController : SurfaceController
 
             // Sends verification email to 
             _emailService.SendEmail("Already Registered", model.Email, fields);
-            
+
             TempData["status"] = successMessage;
             return RedirectToCurrentUmbracoPage();
         }

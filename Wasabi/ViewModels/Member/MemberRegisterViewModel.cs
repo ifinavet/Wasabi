@@ -31,6 +31,6 @@ public class MemberRegisterViewModel
 
     [Required(ErrorMessage = "Foretrukket språk mangler")]
     public string PreferredLanguage { get; set; } = "norwegian";
-    
+
     public string? CaptchaToken { get; set; }
 }

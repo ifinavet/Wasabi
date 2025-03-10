@@ -31,10 +31,10 @@ public class JobListingController : RenderController
     }
 
     /// <summary>
-    /// Overrides the default index action to fetch other job listings from the same company.
+    ///     Overrides the default index action to fetch other job listings from the same company.
     /// </summary>
     /// <returns>
-    /// An <see cref="IActionResult"/> that renders the view with the job listing and related job listings.
+    ///     An <see cref="IActionResult" /> that renders the view with the job listing and related job listings.
     /// </returns>
     public override IActionResult Index()
     {

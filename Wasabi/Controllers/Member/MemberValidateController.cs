@@ -10,6 +10,7 @@ namespace Wasabi.Controllers.Member;
 public class MemberValidateController : RenderController
 {
     private readonly IMemberService _memberService;
+
     public MemberValidateController(
         ILogger<RenderController> logger,
         ICompositeViewEngine compositeViewEngine,
@@ -21,12 +22,13 @@ public class MemberValidateController : RenderController
     }
 
     /// <summary>
-    /// Validates the member's email address using the provided email and validation GUID.
+    ///     Validates the member's email address using the provided email and validation GUID.
     /// </summary>
     /// <param name="email">The email address of the member to be validated.</param>
     /// <param name="validateGuid">The GUID used to validate the member's email address.</param>
     /// <returns>
-    /// An <see cref="IActionResult"/> that returns the current Umbraco page with a status message indicating the result of the validation.
+    ///     An <see cref="IActionResult" /> that returns the current Umbraco page with a status message indicating the result
+    ///     of the validation.
     /// </returns>
     [HttpGet]
     [Route("/profil/validate/")]

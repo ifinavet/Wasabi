@@ -14,8 +14,8 @@ public interface IEmailService
 
 public class EmailService : IEmailService
 {
-    private readonly GlobalSettings _globalSettings;
     private readonly IPublishedContentQuery _contentQuery;
+    private readonly GlobalSettings _globalSettings;
     private readonly ILogger<EmailService> _logger;
 
     public EmailService(
@@ -29,13 +29,13 @@ public class EmailService : IEmailService
     }
 
     /// <summary>
-    /// Sends an email using the specified email template and fields.
+    ///     Sends an email using the specified email template and fields.
     /// </summary>
     /// <param name="emailTemplateName">The name of the email template to use.</param>
     /// <param name="toEmail">The recipient's email address.</param>
     /// <param name="fields">A dictionary of fields to replace in the email template.</param>
     /// <returns>
-    /// <c>true</c> if the email was sent successfully; otherwise, <c>false</c>.
+    ///     <c>true</c> if the email was sent successfully; otherwise, <c>false</c>.
     /// </returns>
     public bool SendEmail(string emailTemplateName, string toEmail,
         Dictionary<string, string> fields)
@@ -45,7 +45,7 @@ public class EmailService : IEmailService
             _logger.LogDebug("SMTP is not configured");
             return false;
         }
-        
+
         SiteSettings? siteSettings =
             _contentQuery.ContentAtRoot().First(f => f.ContentType.Alias == "siteSettings") as SiteSettings;
 
@@ -89,7 +89,7 @@ public class EmailService : IEmailService
     }
 
     /// <summary>
-    /// Replaces placeholders in the input text with corresponding values from the dictionary.
+    ///     Replaces placeholders in the input text with corresponding values from the dictionary.
     /// </summary>
     /// <param name="textIn">The input text containing placeholders.</param>
     /// <param name="emailFields">A dictionary where keys are placeholders and values are the replacements.</param>

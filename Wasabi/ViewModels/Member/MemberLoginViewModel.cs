@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using Umbraco.Cms.Core.Models.PublishedContent;
 
 namespace Wasabi.ViewModels.Member;
 
@@ -10,6 +9,6 @@ public class MemberLoginViewModel
 
     [Required(ErrorMessage = "Passordet mangler")]
     public string Password { get; set; } = string.Empty;
-    
+
     public string? CaptchaToken { get; set; }
 }

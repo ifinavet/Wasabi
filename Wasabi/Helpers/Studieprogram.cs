@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Mvc.Rendering;
-
 namespace Wasabi.Helpers;
 
 public class Studieprogram

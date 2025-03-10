@@ -20,7 +20,7 @@
     using (Html.BeginUmbracoForm<MemberEditProfileController>(nameof(MemberEditProfileController.UpdateMember), FormMethod.Post))
     {
         @Html.ValidationSummary(true)
-       
+
         <div class="form-input">
             @Html.LabelFor(
                 m => m.FirstName,

@@ -33,16 +33,15 @@ public class MemberEditProfileController : SurfaceController
         _memberManager = memberManager;
         _memberService = memberService;
     }
-    
+
     /// <summary>
-    /// Updates the member profile with the provided information from the form model.
-    ///
-    /// If member has provided new password information the password will be updated.
+    ///     Updates the member profile with the provided information from the form model.
+    ///     If member has provided new password information the password will be updated.
     /// </summary>
     /// <param name="model">The view model containing the member profile information.</param>
     /// <returns>
-    /// An <see cref="IActionResult"/> that redirects to the current Umbraco page if the update is successful,
-    /// or returns the current Umbraco page with an error message if the update fails.
+    ///     An <see cref="IActionResult" /> that redirects to the current Umbraco page if the update is successful,
+    ///     or returns the current Umbraco page with an error message if the update fails.
     /// </returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
