@@ -68,6 +68,18 @@
   }
 }
 
+.btn--sign-up {
+  @extend .btn;
+  width: 100%;
+  padding: 1rem 0;
+  margin: 0;
+  background-color: $color-green;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .btn--carousel-navigation {
   width: 2rem;
   height: 2rem;

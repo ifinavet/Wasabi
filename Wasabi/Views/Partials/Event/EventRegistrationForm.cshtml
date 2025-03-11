@@ -2,23 +2,17 @@
 @using Wasabi.Controllers.Events
 @model Wasabi.ViewModels.Events.EventRegistrationFormViewModel
 
-@{ bool success = false; }
-
-@using (Html.BeginUmbracoForm<EventRegistrationController>(nameof(EventRegistrationController.Register), FormMethod.Post, new { @class = "event-registration" }))
+@using (Html.BeginUmbracoForm<EventRegistrationController>(nameof(EventRegistrationController.Register), FormMethod.Post, new { @class = "event-registration-form" }))
 {
-    <div>
-        @Html.LabelFor(m => m.Allergie, Umbraco.GetDictionaryValue("eventRegistrationAnyAllergies"), new { name = "allergiesLbl", @class = "frmLabel" })
-        @Html.TextBoxFor(m => m.Allergie, new { @class = "allergies", placeholder = "Allergier" })
-        @Html.ValidationMessageFor(m => m.Allergie)
+    <div class="event-registration">
+        <div class="allergies">
+            @Html.TextBoxFor(m => m.Allergie, new { @class = "allergies", placeholder = "Matallergier" })
+            @Html.ValidationMessageFor(m => m.Allergie)
+        </div>
+
+        <button id="register-submit" type="submit" class="btn--sign-up"
+                onclick="this.disabled = true; this.form.submit();">
+            Meld meg på
+        </button>
     </div>
-
-    <button id="register-submit" type="submit" class="btn--primary"
-            onclick="this.disabled = true; this.form.submit();">
-        Meld meg på
-    </button>
-}
-@if (success is false && (string)TempData["Result"]! != "")
-{
-    <p>@TempData["Result"]</p>
-    <a href="/profil/endre-profil/">Trykk her for å oppdatere brukeren din</a>
 }

@@ -6,8 +6,25 @@
   gap: $default-card-gap;
 }
 
-.event-registration {
-  background-color: $color-background-contrast;
+.event-registration-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+
+  .event-registration {
+    width: 80%;
+
+    .allergies {
+      text-align: center;
+      border-radius: $border-radius-default;
+      margin-bottom: 1px;
+
+      input[type=text] {
+        padding: 1rem 0;
+      }
+    }
+  }
 }
 
 @media screen and (max-width: $breakpoint-sm) {
