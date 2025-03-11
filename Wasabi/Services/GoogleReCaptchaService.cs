@@ -1,4 +1,6 @@
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Wasabi.Options;
 
 namespace Wasabi.Services;
 
@@ -9,21 +11,21 @@ public interface IGoogleReCaptchaService
 
 public class GoogleReCaptchaService : IGoogleReCaptchaService
 {
-    private readonly IConfiguration _configuration;
     private readonly ILogger<GoogleReCaptchaService> _logger;
+    private readonly IOptions<ReCaptchaModel> _reCaptchaOptions;
 
     public GoogleReCaptchaService(
-        IConfiguration configuration,
-        ILogger<GoogleReCaptchaService> logger)
+        ILogger<GoogleReCaptchaService> logger,
+        IOptions<ReCaptchaModel> reCaptchaOptions)
     {
-        _configuration = configuration;
         _logger = logger;
+        _reCaptchaOptions = reCaptchaOptions;
     }
 
     public async Task<bool> VerifyCaptcha(string responseToken)
     {
         const string verificationUrl = "https://www.google.com/recaptcha/api/siteverify";
-        string secretKey = _configuration["reCaptcha:reCaptchaSecretKey"]!;
+        string secretKey = _reCaptchaOptions.Value.reCaptchaSecretKey;
 
         using HttpClient client = new();
         MultipartFormDataContent content = new();
