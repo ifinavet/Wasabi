@@ -1,25 +1,39 @@
 {
   "name": "wasabi",
-  "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "[`Wasabi`](Wasabi) Is the codebase for powering the website <https://ifinavet.no> and it is built on asp.net 8, using the CMS Umbraco.",
+  "homepage": "https://github.com/ifinavet/Wasabi#readme",
+  "bugs": {
+    "url": "https://github.com/ifinavet/Wasabi/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ifinavet/Wasabi.git"
+  },
+  "license": "AGPL-3.0",
+  "author": "IFI-Navet",
   "type": "module",
   "scripts": {
-    "dev": "rsbuild dev",
-    "build": "rsbuild build"
+    "build": "NODE_ENV=production webpack",
+    "dev": "NODE_ENV=development webpack serve"
   },
   "devDependencies": {
-    "@rsbuild/core": "^1.2.16",
-    "@rsbuild/plugin-css-minimizer": "^1.0.2",
-    "@rsbuild/plugin-sass": "^1.2.2",
     "autoprefixer": "^10.4.20",
     "css-loader": "^7.1.2",
     "cssnano": "^7.0.6",
+    "dotenv": "^16.4.7",
     "html5-qrcode": "^2.3.8",
     "mini-css-extract-plugin": "^2.9.2",
     "postcss-loader": "^8.1.1",
     "sass": "^1.85.0",
     "sass-loader": "^16.0.5",
     "ts-loader": "^9.5.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.0"
+  },
+  "dependencies": {
+    "posthog-js": "^1.230.1"
   }
 }

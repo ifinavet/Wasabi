@@ -21,7 +21,7 @@
 
     @* Main style *@
     <link rel="stylesheet" type="text/css"
-          href="@Url.Content("~/assets/generated/css/styles.css")"
+          href="@Url.Content("~/assets/generated/css/site.css")"
           asp-append-version="true"/>
 
     @* Google material symbols *@
@@ -33,6 +33,10 @@
 
     @* Page specific meta data *@
     @await RenderSectionAsync("Head", false)
+
+    @* PostHog init *@
+    <script src="@Url.Content("~/assets/generated/js/postHog.js")" asp-append-version="true"
+            type="text/javascript"></script>
 </head>
 <body>
 @* Header *@

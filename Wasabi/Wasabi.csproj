@@ -1197,6 +1197,21 @@
         <_ContentIncludedByDefault Remove="wwwroot\assets\css\css\Pages\startPage.css.map"/>
         <_ContentIncludedByDefault Remove="wwwroot\assets\generated\css\dummy.js"/>
         <_ContentIncludedByDefault Remove="wwwroot\assets\generated\css\site.css"/>
+        <_ContentIncludedByDefault Remove="wwwroot\assets\generated\css\styles.css"/>
+        <_ContentIncludedByDefault Remove="wwwroot\assets\generated\js\adminRegistration.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\assets\generated\js\adminRegistration.js.map"/>
+        <_ContentIncludedByDefault Remove="wwwroot\assets\generated\js\main.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\assets\generated\js\main.js.map"/>
+        <_ContentIncludedByDefault Remove="wwwroot\assets\generated\js\styles.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\assets\generated\js\styles.js.map"/>
+        <_ContentIncludedByDefault Remove="wwwroot\assets\generated\js\vendors-node_modules_html5-qrcode_esm_index_js-node_modules_rsbuild_core_dist_client_overlay_js.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\assets\generated\js\vendors-node_modules_html5-qrcode_esm_index_js-node_modules_rsbuild_core_dist_client_overlay_js.js.map"/>
+        <_ContentIncludedByDefault Remove="wwwroot\assets\generated\js\vendors-node_modules_rspack_core_dist_cssExtractHmr_js-node_modules_rsbuild_core_dist_client_-1d360e.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\assets\generated\js\vendors-node_modules_rspack_core_dist_cssExtractHmr_js-node_modules_rsbuild_core_dist_client_-1d360e.js.map"/>
+        <_ContentIncludedByDefault Remove="wwwroot\assets\generated\static\font\Eina01-Bold.8074ed43.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\assets\generated\static\font\Eina01-Regular.2dfafeb8.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\assets\generated\static\font\Eina01-SemiBold.9547bcff.ttf"/>
+        <_ContentIncludedByDefault Remove="wwwroot\assets\generated\static\svg\Ns.c1fdb630.svg"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -1210,6 +1225,8 @@
         <TypeScriptCompile Include="wwwroot\assets\typescript\index.ts"/>
         <TypeScriptCompile Include="wwwroot\assets\typescript\index.ts"/>
         <TypeScriptCompile Include="wwwroot\assets\typescript\navigation.ts"/>
+        <TypeScriptCompile Include="wwwroot\assets\typescript\postHog\index.ts"/>
+        <TypeScriptCompile Include="wwwroot\assets\typescript\postHog\postHogInit.ts"/>
     </ItemGroup>
 
     <PropertyGroup>

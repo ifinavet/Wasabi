@@ -52,3 +52,4 @@ export const generateColumns = (column_names: string[], success_message: string)
 }
 
 (window as any).generateColumns = generateColumns;
+(window as any).copyToClipboard = copyToClipboard;
