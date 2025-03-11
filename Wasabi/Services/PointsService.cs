@@ -90,8 +90,10 @@ public class PointsService : IPointsService
     /// <inheritdoc />
     public void RemoveExpiredPoints(IMember member, int expiratoryLimitInMonths)
     {
-        List<Point> pointEntries =
-            ParsedPointEntries(member.GetValue<string>("points")) ?? throw new NullReferenceException();
+        List<Point>? pointEntries =
+            ParsedPointEntries(member.GetValue<string>("points"));
+
+        if (pointEntries == null) return;
 
         IEnumerable<Point> expiredPoints = pointEntries.ToList()
             .Where(entry => entry.Date.AddMonths(expiratoryLimitInMonths) < DateTime.Now);
