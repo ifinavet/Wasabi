@@ -176,7 +176,7 @@ public class EventRegistrationController : SurfaceController
             return RedirectToCurrentUmbracoPage(new QueryString("?altTemplate=EventAttendeeRegistration"));
         }
 
-        if (currentPage.Children<Attendee>().IsNullOrEmpty())
+        if (currentPage.Children<Attendee>() == null)
         {
             TempData["status"] = "Det har oppstått en feil, prøv igjen senere.";
             return RedirectToCurrentUmbracoPage(new QueryString("?altTemplate=EventAttendeeRegistration"));

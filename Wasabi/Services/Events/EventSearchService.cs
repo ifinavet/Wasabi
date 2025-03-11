@@ -44,7 +44,7 @@ public class EventSearchService(
         IEnumerable<string> ids = query.Execute().Select(x => x.Id);
 
         List<string> enumerable = ids.ToList();
-        if (enumerable.IsNullOrEmpty()) yield break;
+        if (enumerable == null) yield break;
         foreach (string id in enumerable)
             yield return umbracoHelper.Content(id);
     }
