@@ -19,7 +19,16 @@ builder.Services
         options.Cookie.Name = "UMB_SESSION";
         options.Cookie.HttpOnly = true;
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    })
+    .AddCors(options =>
+    {
+        options.AddPolicy("customPolicy", policyBuilder =>
+            policyBuilder.AllowAnyOrigin());
     });
+
+// Adding YARP service
+builder.Services.AddReverseProxy()
+    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
 WebApplication app = builder.Build();
 app.UseXfo(options => options.SameOrigin());
@@ -34,6 +43,8 @@ if (builder.Environment.IsDevelopment())
 else
     app.UseHsts();
 
+app.MapReverseProxy();
+
 app.UseUmbraco()
     .WithMiddleware(u =>
     {
@@ -46,5 +57,6 @@ app.UseUmbraco()
         u.UseBackOfficeEndpoints();
         u.UseWebsiteEndpoints();
     });
+
 
 await app.RunAsync();
