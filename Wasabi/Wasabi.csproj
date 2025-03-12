@@ -13,6 +13,7 @@
         <PackageReference Include="QRCoder" Version="1.6.0"/>
         <PackageReference Include="Umbraco.Cms" Version="13.7.0"/>
         <PackageReference Include="uSync" Version="13.2.6"/>
+        <PackageReference Include="Yarp.ReverseProxy" Version="2.3.0"/>
     </ItemGroup>
 
     <ItemGroup>
