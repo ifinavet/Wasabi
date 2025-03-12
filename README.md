@@ -95,3 +95,5 @@ E-mail: <web@ifinavet.no>
 ---
 
 This project is developed and maintained by the Student association Ifi-Navet at the University of Oslo, Department of Informatics.
+
+Made with ❤️ by the Ifi-Navet team.
