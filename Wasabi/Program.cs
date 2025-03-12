@@ -43,8 +43,6 @@ if (builder.Environment.IsDevelopment())
 else
     app.UseHsts();
 
-app.UseRouting();
-app.UseCors();
 app.MapReverseProxy();
 
 app.UseUmbraco()
