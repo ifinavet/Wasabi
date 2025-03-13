@@ -15,7 +15,7 @@
     @await Html.PartialAsync("Member/MemberEditProfileForm", Model.FormViewModel)
 
     <div class="points">
-        @foreach (Point point in Model.MemberPoints)
+        @foreach (Point point in Model.MemberPoints ?? Enumerable.Empty<Point>() )
         {
             <div class="point">
                 <p class="main-text-semibold">Dato for prikk: @point.Date.ToString("D")</p>
