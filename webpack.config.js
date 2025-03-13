@@ -96,9 +96,6 @@ export default {
     plugins: [
         new MiniCssExtractPlugin({
             filename: 'css/site.css'
-        }),
-        new webpack.DefinePlugin({
-            'process.env': JSON.stringify(process.env)
         })
     ],
     mode: isDevelopment ? 'development' : 'production',
