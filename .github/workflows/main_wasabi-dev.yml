@@ -15,13 +15,23 @@ jobs:
     permissions:
       contents: read #This is required for actions/checkout
 
-    steps:
+  steps:
       - uses: actions/checkout@v4
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+      - run: npm ci
+      - run: npm run build
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
+
+      - name: Clean with dotnet
+        run: dotnet clean
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
