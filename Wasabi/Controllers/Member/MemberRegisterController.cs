@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using PostHog;
 using Umbraco.Cms.Core.Cache;
 using Umbraco.Cms.Core.Logging;
 using Umbraco.Cms.Core.Models;
@@ -22,6 +23,7 @@ public class MemberRegisterController : SurfaceController
     private readonly IGoogleReCaptchaService _googleReCaptchaService;
     private readonly IMemberManager _memberManager;
     private readonly IMemberService _memberService;
+    private readonly IPostHogClient _postHogClient;
 
     public MemberRegisterController(
         IMemberManager memberManager,
@@ -34,7 +36,8 @@ public class MemberRegisterController : SurfaceController
         IPublishedUrlProvider publishedUrlProvider,
         ICoreScopeProvider coreScopeProvider,
         IEmailService emailService,
-        IGoogleReCaptchaService googleReCaptchaService)
+        IGoogleReCaptchaService googleReCaptchaService,
+        IPostHogClient postHogClient)
         : base(umbracoContextAccessor, databaseFactory, services, appCaches, profilingLogger, publishedUrlProvider)
     {
         _memberManager = memberManager;
@@ -42,6 +45,7 @@ public class MemberRegisterController : SurfaceController
         _coreScopeProvider = coreScopeProvider;
         _emailService = emailService;
         _googleReCaptchaService = googleReCaptchaService;
+        _postHogClient = postHogClient;
     }
 
     /// <summary>
@@ -159,9 +163,13 @@ public class MemberRegisterController : SurfaceController
                 return RedirectToCurrentUmbracoPage();
             }
 
+            await _postHogClient.IdentifyAsync(member.Key.ToString(), email: model.Email,
+                name: model.FirstName + " " + model.LastName);
+
             TempData["status"] = successMessage;
             return RedirectToCurrentUmbracoPage();
         }
+
 
         TempData["status"] = "Se til at du har oppgitt all nødvendig informasjon.";
         return CurrentUmbracoPage();

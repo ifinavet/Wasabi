@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PostHog;
 using Umbraco.Cms.Core.Cache;
 using Umbraco.Cms.Core.Logging;
 using Umbraco.Cms.Core.Models;
@@ -20,6 +21,7 @@ public class MemberLoginController : SurfaceController
     private readonly IMemberService _memberService;
     private readonly IMemberSignInManager _memberSignInManager;
     private readonly IPointsService _pointsService;
+    private readonly IPostHogClient _postHogClient;
 
     public MemberLoginController(
         IUmbracoContextAccessor umbracoContextAccessor,
@@ -31,13 +33,15 @@ public class MemberLoginController : SurfaceController
         IMemberService memberService,
         IMemberSignInManager memberSignInManager,
         IGoogleReCaptchaService googleReCaptchaService,
-        IPointsService pointsService)
+        IPointsService pointsService,
+        IPostHogClient postHogClient)
         : base(umbracoContextAccessor, databaseFactory, services, appCaches, profilingLogger, publishedUrlProvider)
     {
         _memberSignInManager = memberSignInManager;
         _memberService = memberService;
         _googleReCaptchaService = googleReCaptchaService;
         _pointsService = pointsService;
+        _postHogClient = postHogClient;
     }
 
     /// <summary>
@@ -93,6 +97,11 @@ public class MemberLoginController : SurfaceController
                 "Du vil ha fått en e-post fra IFI-Navet sitt styre for hvorfor dette har skjedd.";
             return CurrentUmbracoPage();
         }
+
+        await _postHogClient.IdentifyAsync(currentMember.Key.ToString(), email: currentMember.Email,
+            name: currentMember.Name);
+
+        _postHogClient.Capture(currentMember.Key.ToString(), "user_signed_in");
 
         // Checks if there are points that are more than 6 months. if there is we remove them.
         try

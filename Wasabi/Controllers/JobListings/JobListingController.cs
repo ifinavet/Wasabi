@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
+using PostHog;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
@@ -16,6 +17,7 @@ public class JobListingController : RenderController
     private readonly IContentService _contentService;
     private readonly IJobListingSearchService _jobListingSearchService;
     private readonly IPublishedValueFallback _publishedValueFallback;
+    private readonly IPostHogClient _postHogClient;
 
     public JobListingController(
         ILogger<RenderController> logger,
@@ -23,11 +25,13 @@ public class JobListingController : RenderController
         IUmbracoContextAccessor umbracoContextAccessor,
         IPublishedValueFallback publishedValueFallback,
         IContentService contentService,
-        IJobListingSearchService jobListingSearchService) : base(logger, compositeViewEngine, umbracoContextAccessor)
+        IJobListingSearchService jobListingSearchService,
+        IPostHogClient postHogClient) : base(logger, compositeViewEngine, umbracoContextAccessor)
     {
         _publishedValueFallback = publishedValueFallback;
         _contentService = contentService;
         _jobListingSearchService = jobListingSearchService;
+        _postHogClient = postHogClient;
     }
 
     /// <summary>
