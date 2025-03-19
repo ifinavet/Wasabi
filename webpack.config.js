@@ -96,6 +96,9 @@ export default {
     plugins: [
         new MiniCssExtractPlugin({
             filename: 'css/site.css'
+        }),
+        new webpack.DefinePlugin({
+            POSTHOG_PROJECT_API_KEY: JSON.stringify(process.env.POSTHOG_PROJECT_API_KEY),
         })
     ],
     mode: isDevelopment ? 'development' : 'production',
