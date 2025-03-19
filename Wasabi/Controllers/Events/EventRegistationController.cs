@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using PostHog;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Cache;
 using Umbraco.Cms.Core.Logging;
@@ -25,6 +26,7 @@ public class EventRegistrationController : SurfaceController
     private readonly IMemberManager _memberManger;
     private readonly IMemberService _memberService;
     private readonly IPointsService _pointsService;
+    private readonly IPostHogClient _postHogClient;
 
     public EventRegistrationController(
         IUmbracoContextAccessor umbracoContextAccessor,
@@ -37,7 +39,8 @@ public class EventRegistrationController : SurfaceController
         IMemberService memberService,
         IContentService contentService,
         ILogger<EventRegistrationController> logger,
-        IPointsService pointsService)
+        IPointsService pointsService,
+        IPostHogClient postHogClient)
         : base(umbracoContextAccessor, databaseFactory, services, appCaches, profilingLogger, publishedUrlProvider)
     {
         _memberManger = memberManger;
@@ -45,6 +48,7 @@ public class EventRegistrationController : SurfaceController
         _contentService = contentService;
         _logger = logger;
         _pointsService = pointsService;
+        _postHogClient = postHogClient;
     }
 
     public async Task<IActionResult> Register(EventRegistrationFormViewModel model)
@@ -117,6 +121,12 @@ public class EventRegistrationController : SurfaceController
             TempData["error"] = true;
             return RedirectToCurrentUmbracoPage();
         }
+
+        _postHogClient.Capture(currentMember.Key.ToString(), "registered_to_event", properties: new()
+        {
+            ["event_id"] = currentPage.Key.ToString(),
+            ["event_name"] = currentMember.Name!,
+        });
 
         return CurrentUmbracoPage();
     }

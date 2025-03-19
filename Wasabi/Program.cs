@@ -1,3 +1,5 @@
+using PostHog;
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.CreateUmbracoBuilder()
@@ -8,6 +10,8 @@ builder.CreateUmbracoBuilder()
     .AddAzureBlobMediaFileSystem() // This configures the required services for Media
     .AddAzureBlobImageSharpCache() // This configures the required services for the Image Sharp cache
     .Build();
+
+builder.AddPostHog();
 
 // Removing Excessive headers
 builder.WebHost.UseKestrel(options => options.AddServerHeader = false);

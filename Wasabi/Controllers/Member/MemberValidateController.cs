@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
+using PostHog;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
@@ -63,6 +64,7 @@ public class MemberValidateController : RenderController
                 "Beklager - det ser ikke ut til at vi kan validere e-postadressen din. " +
                 "Prøv å bruke funksjonen for glemt passord for å tilbakestille kontoen din.";
         }
+        
 
         return CurrentTemplate(CurrentPage);
     }

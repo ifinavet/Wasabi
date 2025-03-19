@@ -98,7 +98,7 @@ export default {
             filename: 'css/site.css'
         }),
         new webpack.DefinePlugin({
-            'process.env': JSON.stringify(process.env)
+            POSTHOG_PROJECT_API_KEY: JSON.stringify(process.env.POSTHOG_PROJECT_API_KEY),
         })
     ],
     mode: isDevelopment ? 'development' : 'production',
