@@ -3,9 +3,8 @@ using Umbraco.Cms.Core.Composing;
 
 namespace Wasabi.Options;
 
-public class MyBlockValuePropertyIndexValueFactory : DefaultPropertyIndexValueFactory, IBlockValuePropertyIndexValueFactory
-{
-}
+public class MyBlockValuePropertyIndexValueFactory : DefaultPropertyIndexValueFactory,
+    IBlockValuePropertyIndexValueFactory;
 
 public class MyBlockValuePropertyIndexValueFactoryComposer : IComposer
 {
