@@ -30,6 +30,7 @@
         <Folder Include="wwwroot\assets\fonts\"/>
         <Folder Include="wwwroot\assets\images\"/>
         <Folder Include="wwwroot\umbraco\assets\" />
+        <Folder Include="config\" />
     </ItemGroup>
 
     <ItemGroup>
