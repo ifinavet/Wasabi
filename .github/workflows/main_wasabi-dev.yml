@@ -26,7 +26,7 @@ jobs:
           POSTHOG_PROJECT_API_KEY: ${{ secrets.POSTHOG_PROJECT_API_KEY }}
       - run: npm ci
       - run: |
-          POSTHOG_PROJECT_API_KEY=$POSTHOG_PROJECT_API_KEY
+          export POSTHOG_PROJECT_API_KEY=$POSTHOG_PROJECT_API_KEY
           npm run build
 
       - name: Set up .NET Core
