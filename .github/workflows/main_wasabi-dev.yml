@@ -22,7 +22,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22.x'
+        env:
+          POSTHOG_PROJECT_API_KEY: ${{ secrets.POSTHOG_PROJECT_API_KEY }}
       - run: npm ci
+      - run: POSTHOG_PROJECT_API_KEY=$POSTHOG_PROJECT_API_KEY
       - run: npm run build
 
       - name: Set up .NET Core
