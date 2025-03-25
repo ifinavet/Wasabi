@@ -4,7 +4,7 @@
 using the CMS Umbraco.
 
 > [!WARNING]  
-> This project is not in production yet, and under active development.
+> This project is not in production yet, and under active development. We aim for a stable release in the near future (around the 6. of April 2025).
 > If you want to contribute please contact Webansvarlig at IFI-Navet via email at <web@ifinavet.no>.
 
 ## Usage 🚀
