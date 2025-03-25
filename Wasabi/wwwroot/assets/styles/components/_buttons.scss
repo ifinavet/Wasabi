@@ -93,4 +93,8 @@
   * {
     color: $color-text-white;
   }
+  
+  &:hover {
+    cursor: pointer;
+  }
 }

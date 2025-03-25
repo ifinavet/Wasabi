@@ -455,8 +455,7 @@
     .job-company-logo {
       display: grid;
       place-content: center;
-      height: 100%;
-      width: 100%;
+      height: 90%;
       padding: 0 2rem;
       box-sizing: border-box;
 
@@ -464,13 +463,14 @@
         margin: auto;
         height: initial;
         width: 100%;
+        
       }
     }
   }
 
   &-bottom {
     height: 100%;
-    padding: 0 2rem 1rem;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

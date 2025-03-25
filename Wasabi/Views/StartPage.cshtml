@@ -6,6 +6,8 @@
     Company? partner = Model.Partner as Company;
     JobListing[]? upcomingJobs = Model.JobListings;
     Event[]? upcomingEvents = Model.Events;
+
+    string currentSemester = (DateTime.Today.Month < 6 ? "V" : "H") + DateTime.Today.Year.ToString()[2..];
 }
 
 <div class="leader-container">
@@ -16,10 +18,10 @@
             <div class="partner">
                 <div class="header">
                     <div class="title">
-                        <h1 class="leader-title secondary-header">Hovedsamarbeidspartner</h1>
+                        <h1 class="leader-title secondary-header">Hovedsamarbeids&shy;partner</h1>
                     </div>
                     <div class="sub-title">
-                        <h3 class="main-text">H24-V25</h3>
+                        <h3 class="main-text">@Model.PartnerPeriod</h3>
                     </div>
                 </div>
                 <div class="content">
@@ -41,9 +43,9 @@
             </div>
             <div class="container-carousel">
                 <div class="btn--carousel-navigation btn-previous">
-                <span class="material-symbols-rounded">
-                    chevron_left
-                </span>
+                    <span class="material-symbols-rounded">
+                        chevron_left
+                    </span>
                 </div>
 
                 <div class="carousel-wrapper">
@@ -56,7 +58,7 @@
                                         <div class="image">
                                             <img
                                                 src="@ImageService.GetCompanyImageUrl((Company)upcomingEvent.HostingCompany!)"
-                                                alt="Company name">
+                                                alt="@upcomingEvent.HostingCompany?.Name">
                                         </div>
                                         <div class="content">
                                             <div class="heading">
@@ -74,21 +76,21 @@
                                                     </div>
                                                     <div class="metadata-data">
                                                     <span
-                                                        class="main-text-large semi-bold">
+                                                        class="main-text semi-bold">
                                                         @upcomingEvent.ParticipantLimit
                                                     </span>
                                                     </div>
                                                 </div>
                                                 <div class="metadata-item">
                                                     <div class="icon">
-                                                    <span class="material-symbols-rounded">
-                                                        event
-                                                    </span>
+                                                        <span class="material-symbols-rounded">
+                                                            event
+                                                        </span>
                                                     </div>
                                                     <div class="metadata-data">
-                                                    <span class="main-text-large semi-bold">
-                                                        @upcomingEvent.EventDate.ToString("dddd dd.mm")
-                                                    </span>
+                                                        <span class="main-text semi-bold">
+                                                            @upcomingEvent.EventDate.ToString("dddd dd.mm")
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -101,13 +103,13 @@
                 </div>
 
                 <div class="btn--carousel-navigation btn--next">
-                <span class="material-symbols-rounded">
-                    chevron_right
-                </span>
+                    <span class="material-symbols-rounded">
+                        chevron_right
+                    </span>
                 </div>
             </div>
 
-            <a href="/arrangementer/">Se alle arrangementer her</a>
+            <a href="/arrangementer/" class="btn--primary">Se alle arrangementer her</a>
         </div>
     </div>
 </div>
@@ -145,27 +147,23 @@
 
 
 @* Board members *@
-<div class="board-members">
-    <div class="board-members board-members-header">
-        <div class="container">
-            <h2 class="h1">@Umbraco.GetDictionaryValue("theBoard")</h2>
-        </div>
+<div class="board-members-container">
+    <div class="board-members-header">
+        <h1>Styret @currentSemester</h1>
     </div>
-    <div class="row container">
+    <div class="board-members">
         @foreach (StudentMember member in Model.BoardMembers)
         {
             string memberEmail = member.Value<string>("Email") ?? string.Empty;
-            <div class="board-member col-xs-12 col-sm-4 col-md-3">
+            <div class="board-member">
                 <div class="board-member-photo">
-                    <div class="round-frame">
-                        <img src="@ImageService.GetProfileImageUrl(member, "boardMember")" alt="@member.Name"
-                             loading="lazy"/>
-                    </div>
+                    <img src="@ImageService.GetProfileImageUrl(member, "boardMember")" alt="@member.Name"
+                         loading="lazy"/>
                 </div>
                 <div class="board-member-personalia">
                     <h3>@member.NavetVerv</h3>
-                    <div>@member.Name</div>
-                    <a href="mailto:@(memberEmail)">@memberEmail.</a>
+                    <p>@member.Name</p>
+                    <a href="mailto:@(memberEmail)">@Html.Raw(memberEmail.Replace("@", "@&shy;"))</a>
                 </div>
             </div>
         }

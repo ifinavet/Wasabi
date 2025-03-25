@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const carousel = document.querySelector('.carousel') as HTMLElement;
     const btnPrevious = document.querySelector('.btn-previous') as HTMLElement;
     const btnNext = document.querySelector('.btn--next') as HTMLElement;
+    const card = document.querySelector('.container-card') as HTMLElement;
 
     if (!carousel || !btnPrevious || !btnNext) return;
 
@@ -46,8 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             carousel.style.transition = 'transform 0.5s ease';
         }
+        
 
-        carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+        carousel.style.transform = `translateX(-${currentIndex * card.offsetWidth + 32 * currentIndex}px)`;
 
         if (!animate) {
             // Force reflow to make sure the 'none' transition is applied
