@@ -57,7 +57,7 @@
                 <div class="card--event">
                     <a href=@el.Url()>
                         <div class="event-wrapper @green">
-                            @if (!el.ExternalUrl.IsNullOrWhiteSpace())
+                            @if (el.Url().Split("/")[1] == "eksterne-arrangementer")
                             {
                                 <div class="event-popup">
                                     <p>Eksternt arrangement</p>
