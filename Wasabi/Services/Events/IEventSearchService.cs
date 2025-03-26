@@ -5,4 +5,6 @@ namespace Wasabi.Services.Events;
 public interface IEventSearchService
 {
     IEnumerable<IPublishedContent?> GetAllEvents();
+    
+    IEnumerable<IPublishedContent?> GetAllEventOfCurrentPeriod();
 }

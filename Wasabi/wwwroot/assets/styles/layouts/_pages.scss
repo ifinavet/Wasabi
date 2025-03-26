@@ -26,9 +26,9 @@
 
     .page--content {
       width: 100%;
-      display: grid;
+      display: flex;
+      flex-direction: column;
       gap: $default-card-gap;
-      grid-template-columns: 1fr;
 
       .page--main {
         width: 100%;
@@ -79,6 +79,7 @@
 
       // After medium breakpoint, switch to two columns
       .page--content {
+        display: grid;
         grid-template-columns: 8fr 5fr;
       }
     }

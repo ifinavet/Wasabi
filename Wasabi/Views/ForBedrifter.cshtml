@@ -1,0 +1,93 @@
+﻿@using Umbraco.Cms.Core.Models.Blocks
+@using Wasabi.Services
+@inherits UmbracoViewPage<ForBedrifter>
+@inject IImageService ImageService
+@{
+    Layout = "_master.cshtml";
+}
+
+<div class="page--layout">
+    <div class="page--container">
+        <div class="page--title">
+            <h1>@Model.Name</h1>
+        </div>
+        <div class="page--content">
+            <div class="page--main">
+                <div class="leader">
+                    <div class="main-card-list">
+                        @foreach (BlockListItem card in Model.Main)
+                        {
+                            EditorialBlock content = (EditorialBlock)card.Content;
+                            <div class="main-card">
+                                @Html.Raw(content.Content)
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <aside class="page--aside">
+                @if (Model.ContactPerson != null)
+                {
+                    StudentMember contactPerson = (StudentMember)Model.ContactPerson;
+                    <div class="card--organizer--main">
+                        <div class="top-half">
+                            <div class="cutout-effect">
+                                <div class="image-container-circle">
+                                    <div class="image image--person">
+                                        <img src="@ImageService.GetProfileImageUrl(contactPerson)"
+                                             alt="@contactPerson.Name">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="organizer-information bottom-half">
+                            <div class="name">
+                                <h3>Ansvarlig</h3>
+                                <p> @contactPerson.Name </p>
+                            </div>
+                            <div class="btn-contact">
+                                <a href="mailto:@contactPerson.GetProperty("Email")?.GetValue()">Kontakt</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="card-list">
+                    @foreach (BlockListItem item in Model.SidebarContent!)
+                    {
+                        EditorialBlock content = (EditorialBlock)item.Content;
+                        <div class="side-card">
+                            @Html.Raw(content.Content)
+                        </div>
+                    }
+                </div>
+            </aside>
+            <div class="page--bottom">
+                <div class="additional-information">
+                    @foreach (BlockGridItem item in Model.AdditionalInformation!)
+                    {
+                        EditorialBlock content = (EditorialBlock)item.Content;
+                        <div class="information-card">
+                            @Html.Raw(content.Content)
+                        </div>
+                    }
+                </div>
+                <div class="offerings">
+                    @foreach (BlockGridItem item in Model.Offerings!)
+                    {
+                        Offering content = (Offering)item.Content;
+                        <div class="offering-card">
+                            <div class="header">
+                                <h3>@content.Title</h3>
+                                <h4>Kostnad: @content.Cost NOK eks. mva</h4>
+                            </div>
+                            <div class="content">
+                                @Html.Raw(content.Content)
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@await Html.PartialAsync("Job/JobFormFooter")
