@@ -51,13 +51,15 @@ public class EventRegistrationController : SurfaceController
         _postHogClient = postHogClient;
     }
 
+    [HttpPost]
     public async Task<IActionResult> Register(EventRegistrationFormViewModel model)
     {
         if (!ModelState.IsValid)
         {
             TempData["status"] = "Det har oppstått en feil, prøv igjen senere.";
             TempData["error"] = true;
-            return RedirectToCurrentUmbracoPage();
+            _logger.LogInformation("Event registration failed. \n\t ModelState is not valid");
+            return CurrentUmbracoPage();
         }
 
         MemberIdentityUser? currentMember = await _memberManger.GetCurrentMemberAsync();
@@ -66,14 +68,18 @@ public class EventRegistrationController : SurfaceController
         {
             TempData["status"] = "Du har ikke valgt et gyldig studieprogram";
             TempData["error"] = true;
-            return RedirectToCurrentUmbracoPage();
+            
+            _logger.LogInformation("Event registration failed. \n\t Study program is not valid");
+            return CurrentUmbracoPage();
         }
 
         if (currentStudent.GetValue<int>("semester") < 1)
         {
             TempData["status"] = "Ugyldig semester verdi";
             TempData["error"] = true;
-            return RedirectToCurrentUmbracoPage();
+            
+            _logger.LogInformation("Event registration failed. \n\t Semester is not valid");
+            return CurrentUmbracoPage();
         }
 
         List<Point>? pointEntries = _pointsService.ParsedPointEntries(currentStudent.GetValue<string>("points"));
@@ -83,14 +89,18 @@ public class EventRegistrationController : SurfaceController
             _logger.LogWarning("Member have to many points");
             TempData["status"] = "Du har for mange prikker til å kunne melde deg på dette arrangementet";
             TempData["error"] = true;
-            return RedirectToCurrentUmbracoPage();
+            
+            _logger.LogInformation("Event registration failed. \n\t To many points");
+            return CurrentUmbracoPage();
         }
 
         if (CurrentPage is not Event || CurrentPage == null)
         {
             TempData["status"] = "Det har oppstått en feil, prøv igjen senere.";
             TempData["error"] = true;
-            return RedirectToCurrentUmbracoPage();
+            
+            _logger.LogInformation("Event registration failed. \n\t CurrentPage is not Event or is null");
+            return CurrentUmbracoPage();
         }
 
         Event currentPage = (Event)CurrentPage;
@@ -98,14 +108,18 @@ public class EventRegistrationController : SurfaceController
         if (currentPage.Children<Attendee>()!.Any(a => a.MemberId == currentMember.Key.ToString()))
         {
             TempData["status"] = "Du er allerede registert";
-            return RedirectToCurrentUmbracoPage();
+            
+            _logger.LogInformation("Event registration failed. \n\t Attendee is already registered");
+            return CurrentUmbracoPage();
         }
 
         if (currentPage.ParticipantLimit <= currentPage.Children<Attendee>()!.Count())
         {
             TempData["status"] = "Arrangementet er fullt";
             TempData["error"] = true;
-            return RedirectToCurrentUmbracoPage();
+            
+            _logger.LogInformation("Event registration failed. \n\t Event is full");
+            return CurrentUmbracoPage();
         }
 
         IContent newAttendee = _contentService.Create(currentMember.Name!, currentPage.Id, Attendee.ModelTypeAlias);
@@ -119,7 +133,9 @@ public class EventRegistrationController : SurfaceController
         {
             TempData["status"] = "Kunne ikke melde deg på arrangementet, prøv igjen senere";
             TempData["error"] = true;
-            return RedirectToCurrentUmbracoPage();
+            
+            _logger.LogInformation("Event registration failed. \n\t Publishing of attendee failed");
+            return CurrentUmbracoPage();
         }
 
         _postHogClient.Capture(currentMember.Key.ToString(), "registered_to_event", properties: new()
@@ -128,7 +144,8 @@ public class EventRegistrationController : SurfaceController
             ["event_name"] = currentMember.Name!,
         });
 
-        return CurrentUmbracoPage();
+        _logger.LogInformation("Event registration succeeded");
+        return RedirectToCurrentUmbracoPage();
     }
 
     public IActionResult Unregister()
@@ -136,14 +153,18 @@ public class EventRegistrationController : SurfaceController
         if (CurrentPage is not Event currentPage)
         {
             TempData["status"] = "Det har oppstått en feil, prøv igjen senere.";
-            return RedirectToCurrentUmbracoPage();
+            
+            _logger.LogInformation("Event un-registration failed. \n\t CurrentPage is not Event");
+            return CurrentUmbracoPage();
         }
 
         MemberIdentityUser? currentMemberIdentity = _memberManger.GetCurrentMemberAsync().Result;
         if (currentMemberIdentity == null)
         {
             TempData["status"] = "Det har oppstått en feil, prøv igjen senere.";
-            return RedirectToCurrentUmbracoPage();
+            
+            _logger.LogInformation("Event un-registration failed. \n\t Member not found");
+            return CurrentUmbracoPage();
         }
 
         int attendeeId = currentPage.Children<Attendee>()!
@@ -154,22 +175,25 @@ public class EventRegistrationController : SurfaceController
         if (!result.Success)
         {
             TempData["status"] = "Det har oppstått en feil, prøv igjen senere.";
-            return RedirectToCurrentUmbracoPage();
+            
+            _logger.LogInformation("Event registration failed. \n\t Failed to delete attendee");
+            return CurrentUmbracoPage();
         }
 
         Event? currentEvent = (Event)CurrentPage;
-        int timeRemaining = (DateTime.Now - currentEvent.EventDate).Hours;
+        TimeSpan timeRemaining = currentEvent.EventDate - DateTime.Now;
         _logger.LogDebug("Current member ${currentMember}", currentMemberIdentity.Id);
 
-        if (timeRemaining < 24)
+        if (timeRemaining.TotalHours < 24)
         {
             IMember currentMember = _memberService.GetByKey(currentMemberIdentity.Key)!;
             _pointsService.GivePoints(currentMember, "Du meldte deg av for sent", 1);
-
+            
             _logger.LogWarning("Member given point for late unregistration");
         }
 
-        return CurrentUmbracoPage();
+        _logger.LogInformation("Event un-registration succeeded");
+        return RedirectToCurrentUmbracoPage();
     }
 
     public IActionResult RegisterAttendee(EventRegisterAttendeeFormViewModel model)
@@ -192,7 +216,7 @@ public class EventRegistrationController : SurfaceController
             return RedirectToCurrentUmbracoPage(new QueryString("?altTemplate=EventAttendeeRegistration"));
         }
 
-        Attendee? attendee = currentPage.Children<Attendee>()!.FirstOrDefault(a => a.Id == int.Parse(model.AttendeeId));
+        Attendee? attendee = currentPage.Children<Attendee>()!.FirstOrDefault(a => model.AttendeeId != null && a.Id == int.Parse(model.AttendeeId));
         if (attendee == null)
         {
             TempData["status"] = "Det har oppstått en feil, prøv igjen senere.";
@@ -205,29 +229,38 @@ public class EventRegistrationController : SurfaceController
             return RedirectToCurrentUmbracoPage(new QueryString("?altTemplate=EventAttendeeRegistration"));
         }
 
-        IContent attendeeContent = _contentService.GetById(int.Parse(model.AttendeeId))!;
-        attendeeContent.SetValue("shownUp", model.ShownUp);
-        PublishResult result = _contentService.SaveAndPublish(attendeeContent);
-        if (!result.Success)
+        if (model.AttendeeId != null)
         {
-            TempData["status"] = "Det har oppstått en feil, prøv igjen senere.";
-            return RedirectToCurrentUmbracoPage(new QueryString("?altTemplate=EventAttendeeRegistration"));
+            IContent attendeeContent = _contentService.GetById(int.Parse(model.AttendeeId))!;
+            attendeeContent.SetValue("shownUp", model.ShownUp);
+            PublishResult result = _contentService.SaveAndPublish(attendeeContent);
+            if (!result.Success)
+            {
+                TempData["status"] = "Det har oppstått en feil, prøv igjen senere.";
+                return RedirectToCurrentUmbracoPage(new QueryString("?altTemplate=EventAttendeeRegistration"));
+            }
         }
 
         TempData["status"] = "Registrering vellykket";
 
-        if (model.ShownUp.Equals("late", StringComparison.CurrentCultureIgnoreCase))
+        if (model.ShownUp != null && model.ShownUp.Equals("late", StringComparison.CurrentCultureIgnoreCase))
         {
-            IMember member = _memberService.GetByKey(Guid.Parse(model.AttendeeMemberId))!;
-            TempData["status"] = "Registrering vellykket. Prikk registrert";
-            _pointsService.GivePoints(member, "Du møtte for sent til et arrangement", 1);
+            if (model.AttendeeMemberId != null)
+            {
+                IMember member = _memberService.GetByKey(Guid.Parse(model.AttendeeMemberId))!;
+                TempData["status"] = "Registrering vellykket. Prikk registrert";
+                _pointsService.GivePoints(member, "Du møtte for sent til et arrangement", 1);
+            }
         }
 
-        if (model.ShownUp.Equals("no", StringComparison.CurrentCultureIgnoreCase))
+        if (model.ShownUp != null && model.ShownUp.Equals("no", StringComparison.CurrentCultureIgnoreCase))
         {
-            IMember member = _memberService.GetByKey(Guid.Parse(model.AttendeeMemberId))!;
-            TempData["status"] = "Registrering vellykket. Prikk registrert";
-            _pointsService.GivePoints(member, "Du møtte ikke til et arrangement arrangement", 2);
+            if (model.AttendeeMemberId != null)
+            {
+                IMember member = _memberService.GetByKey(Guid.Parse(model.AttendeeMemberId))!;
+                TempData["status"] = "Registrering vellykket. Prikk registrert";
+                _pointsService.GivePoints(member, "Du møtte ikke til et arrangement arrangement", 2);
+            }
         }
 
         return RedirectToCurrentUmbracoPage(new QueryString("?altTemplate=EventAttendeeRegistration"));

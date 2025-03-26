@@ -62,6 +62,9 @@ public class MemberEditProfileRenderController : RenderController
 
         model.FormViewModel = formViewModel;
         model.MemberPoints = _pointsService.ParsedPointEntries(currentStudent.GetValue<string>("points"));
+        _logger.LogDebug("Member points ${1}", model.MemberPoints); 
+        
+        _logger.LogDebug("Member edit profile rendered");
 
         return CurrentTemplate(model);
     }

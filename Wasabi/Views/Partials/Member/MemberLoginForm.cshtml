@@ -8,7 +8,7 @@
 
 @{
     const string formId = "member-login-form";
-    string reCaptchaSiteKey = RecaptchaOptions.Value.reCaptchaSiteKey;
+    string reCaptchaSiteKey = RecaptchaOptions.Value.ReCaptchaSiteKey;
 }
 
 @using (Html.BeginUmbracoForm<MemberLoginController>(nameof(MemberLoginController.Submit), null, new { id = formId }))

@@ -117,6 +117,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+qodana.yaml
 
 # Webpack generated files
 Wasabi/wwwroot/assets/generated
