@@ -2,6 +2,7 @@ using System.Drawing;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
+using NUglify.Helpers;
 using QRCoder;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
@@ -23,6 +24,7 @@ public class EventController : RenderController
     private readonly IJobListingSearchService _jobListingSearchService;
     private readonly IMemberManager _memberManager;
     private readonly IPublishedValueFallback _publishedValueFallback;
+    private readonly ILogger<RenderController> _logger;
 
     public EventController(
         ILogger<RenderController> logger,
@@ -39,6 +41,7 @@ public class EventController : RenderController
         _jobListingSearchService = jobListingSearchService;
         _memberManager = memberManager;
         _contentService = contentService;
+        _logger = logger;
     }
 
     /// <summary>
@@ -140,19 +143,25 @@ public class EventController : RenderController
 
         if (migrate)
         {
-            Console.WriteLine("Updated started");
-            foreach (Attendee attendee in model
-                         .Children<Attendee>()!)
+            try
             {
-                if (attendee.MemberId != string.Empty)
-                    continue;
+                Console.WriteLine("Updated started");
+                foreach (Attendee attendee in model.Children<Attendee>()?.Where(a => true) ?? [])
+                {
+                    if (attendee.MemberId != string.Empty)
+                        continue;
 
-                IContent a = _contentService.GetById(attendee.Id)!;
-                a.SetValue("memberId", attendee.AttendingMember!.Key);
-                _contentService.Save(a);
+                    IContent a = _contentService.GetById(attendee.Id)!;
+                    a.SetValue("memberId", attendee.AttendingMember!.Key);
+                    _contentService.Save(a);
+                }
+
+                Console.WriteLine("Update done");
             }
-
-            Console.WriteLine("Update done");
+            catch (Umbraco.Cms.Core.Exceptions.PanicException ex) when (ex.Message.Contains("failed to get content"))
+            {
+                _logger.LogWarning("Content missing during migration: {message}", ex.Message);
+            }
         }
 
         // TODO! OK for now, future figure out how to improve the speed.
@@ -160,14 +169,25 @@ public class EventController : RenderController
         MemberIdentityUser? currentMember = await _memberManager.GetCurrentMemberAsync();
         bool? isCurrentMemberAttending = false;
         Attendee? currentMemberAttendee = null;
+
         if (currentMember != null && isRegistrationOpen)
         {
-            currentMemberAttendee = model.Children<Attendee>()?
-                .FirstOrDefault(a => a.MemberId == currentMember.Key.ToString());
-            isCurrentMemberAttending = currentMemberAttendee != null;
+            try
+            {
+                _logger.LogDebug("Member key " + currentMember.Key + " Member id " + currentMember.Id);
+
+                currentMemberAttendee =
+                    (model.Children<Attendee>() ?? []).Where(a => true).FirstOrDefault(a =>
+                        a.MemberId == currentMember.Key.ToString());
+                isCurrentMemberAttending = currentMemberAttendee != null;
+            }
+            catch (Umbraco.Cms.Core.Exceptions.PanicException ex) when (ex.Message.Contains("failed to get content"))
+            {
+                _logger.LogWarning("Content missing when checking member registration: {message}", ex.Message);
+            }
         }
 
-        // Related job to the event
+        // Related jobs to the event
         string companyUdi = _contentService.GetById(model.HostingCompany!.Id)!.GetUdi().ToString();
         IEnumerable<IPublishedContent> relatedJobListing =
             _jobListingSearchService.GetJobListingsByCompanyUdi(companyUdi);
@@ -177,6 +197,16 @@ public class EventController : RenderController
         if (currentMemberAttendee != null && (model.EventDate - dateTimeCet).TotalHours < 12)
             qrCode = CurrentMemberIdentityQrCode(currentMemberAttendee, model.Id);
 
+        int attendeeCount = 0;
+        try
+        {
+            attendeeCount = model.Children<Attendee>()?.Count() ?? 0;
+        }
+        catch (Umbraco.Cms.Core.Exceptions.PanicException ex) when (ex.Message.Contains("failed to get content"))
+        {
+            _logger.LogWarning("Content missing when counting attendees: {message}", ex.Message);
+        }
+
         EventViewModel viewModel = new(CurrentPage!, _publishedValueFallback)
         {
             JobListings = new JobListingsSearchResultModel
@@ -184,7 +214,7 @@ public class EventController : RenderController
                 Hits = relatedJobListing.ToList()
             },
             IsRegistrationOpen = isRegistrationOpen,
-            AmountOfAttendees = model.Children.Count(),
+            AmountOfAttendees = attendeeCount,
             IsCurrentMemberAttending = isCurrentMemberAttending ?? false,
             Organizers = model.Organizer?.Select(static x => x as StudentMember).ToArray()!,
             CurrentAttendeeQrCode = qrCode
