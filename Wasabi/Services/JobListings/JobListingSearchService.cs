@@ -59,7 +59,7 @@ public class JobListingSearchService(
             .CreateQuery("content")
             .NodeTypeAlias(JobListing.ModelTypeAlias)
             .And()
-            .ManagedQuery(companyUdi)
+            .Field("hostingCompany", companyUdi)
             .Execute()
             .Select(x => x.Id);
 
