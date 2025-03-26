@@ -118,7 +118,7 @@
 <div class="job-listings-featured">
     <div class="container">
         <div class="cards">
-            @foreach (JobListing job in upcomingJobs)
+            @foreach (JobListing job in upcomingJobs!)
             {
                 <div>
                     @{ await Html.RenderPartialAsync("Job/JobCard", job); }
@@ -152,8 +152,9 @@
         <h1>Styret @currentSemester</h1>
     </div>
     <div class="board-members">
-        @foreach (StudentMember member in Model.BoardMembers)
+        @foreach (IPublishedContent? publishedContent in Model.BoardMembers!)
         {
+            StudentMember? member = (StudentMember)publishedContent;
             string memberEmail = member.Value<string>("Email") ?? string.Empty;
             <div class="board-member">
                 <div class="board-member-photo">

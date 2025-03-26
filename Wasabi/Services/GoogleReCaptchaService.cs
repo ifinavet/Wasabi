@@ -25,7 +25,7 @@ public class GoogleReCaptchaService : IGoogleReCaptchaService
     public async Task<bool> VerifyCaptcha(string responseToken)
     {
         const string verificationUrl = "https://www.google.com/recaptcha/api/siteverify";
-        string secretKey = _reCaptchaOptions.Value.reCaptchaSecretKey;
+        string secretKey = _reCaptchaOptions.Value.ReCaptchaSecretKey;
 
         using HttpClient client = new();
         MultipartFormDataContent content = new();

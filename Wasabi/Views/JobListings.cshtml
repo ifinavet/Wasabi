@@ -22,7 +22,7 @@
            href="?query=@Model.QueryString">
             @Umbraco.GetDictionaryValue("jobListingsFilterAll")
         </a>
-        @foreach (JobTypesFilter jobType in Model.JobTypes)
+        @foreach (JobTypesFilter jobType in Model.JobTypes!) 
         {
             <a class="btn--job @(jobType.IsActive ? "btn--job--selected" : "") "
                href="?jobType=@jobType.JobTypeAlias&query=@Model.QueryString">
@@ -36,7 +36,7 @@
 <div class="page--layout">
     <div class="page--container">
         <div class="page--content--full">
-            @if (Model.SearchResult.Any())
+            @if (Model.SearchResult != null && Model.SearchResult.Any())
             {
                 <div class="center-grid">
                     <div class="grid">

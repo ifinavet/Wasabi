@@ -4,7 +4,7 @@
 @{
     Layout = "_pages.cshtml";
 
-    IGrouping<string, Event>[] months = Model.MonthGroups;
+    IGrouping<string, Event>[]? months = Model.MonthGroups;
 
     Dictionary<string, string> monthNames = new()
     {

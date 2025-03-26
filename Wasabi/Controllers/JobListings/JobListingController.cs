@@ -17,7 +17,6 @@ public class JobListingController : RenderController
     private readonly IContentService _contentService;
     private readonly IJobListingSearchService _jobListingSearchService;
     private readonly IPublishedValueFallback _publishedValueFallback;
-    private readonly IPostHogClient _postHogClient;
 
     public JobListingController(
         ILogger<RenderController> logger,
@@ -31,7 +30,6 @@ public class JobListingController : RenderController
         _publishedValueFallback = publishedValueFallback;
         _contentService = contentService;
         _jobListingSearchService = jobListingSearchService;
-        _postHogClient = postHogClient;
     }
 
     /// <summary>
