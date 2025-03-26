@@ -1,10 +1,9 @@
+@using Umbraco.Cms.Core.Models.Blocks
 @using Wasabi.Services
 @inherits UmbracoViewPage<Info>
 @inject IImageService ImageService
 @{
     Layout = "_pages.cshtml";
-
-    StudentMember contactPerson = (StudentMember)Model.ContactPerson!;
 }
 
 @section titleText
@@ -14,30 +13,38 @@
 
 <div class="page--content">
     <div class="page--main">
-        <div class="card">
-            @Model.Main
+        <div class="card-list">
+            @await Html.GetBlockListHtmlAsync(Model.Main)
         </div>
     </div>
-    <div class="page--aside">
-        <aside>
+    <aside class="page--aside">
             @if (Model.ContactPerson != null)
             {
-                <div class="card card--contact">
-                    <div class="image-container-circle floating">
-                        <div class="image image--person">
-                            <img src="@ImageService.GetProfileImageUrl(contactPerson)"
-                                 alt="@contactPerson.Name @Umbraco.GetDictionaryValue("contactProfileImage")"/>
+                StudentMember contactPerson = (StudentMember)Model.ContactPerson;
+                <div class="card--organizer--main">
+                    <div class="top-half">
+                        <div class="cutout-effect">
+                            <div class="image-container-circle">
+                                <div class="image image--person">
+                                    <img src="@ImageService.GetProfileImageUrl(contactPerson)" alt="@contactPerson.Name">
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="contact-personalia">
-                        <h2>@contactPerson.NavetVerv</h2>
-                        <p>@contactPerson.Name</p>
-                        <a href="mailto:@Model.ContactPerson.Value("email")">@Model.ContactPerson.Value("email")</a>
+                    <div class="organizer-information bottom-half">
+                        <div class="name">
+                            <h3>Ansvarlig</h3>
+                            <p> @contactPerson.Name </p>
+                        </div>
+                        <div class="btn-contact">
+                            <a href="mailto:@contactPerson.GetProperty("Email")?.GetValue()">Kontakt</a>
+                        </div>
                     </div>
                 </div>
             }
 
-            @await Html.GetBlockListHtmlAsync(Model.SidebarContent)
-        </aside>
-    </div>
+            <div class="card-list">
+                @await Html.GetBlockListHtmlAsync(Model.SidebarContent)
+            </div>
+    </aside>
 </div>

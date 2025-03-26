@@ -1,0 +1,7 @@
+@use "../base" as *;
+
+.card-list > *{
+  display: flex;
+  flex-direction: column; 
+  gap: $default-card-gap;
+}

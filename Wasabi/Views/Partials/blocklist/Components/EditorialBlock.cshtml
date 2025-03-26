@@ -3,4 +3,6 @@
     EditorialBlock content = (EditorialBlock)Model.Content;
 }
 
-@Html.Raw(content.Content)
+<div class="card">
+    @Html.Raw(content.Content)
+</div>
