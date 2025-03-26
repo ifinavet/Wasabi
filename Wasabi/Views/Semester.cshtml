@@ -57,7 +57,13 @@
                 <div class="card--event">
                     <a href=@el.Url()>
                         <div class="event-wrapper @green">
-                            @if (el.RegistrationDate == DateTime.Today)
+                            @if (!el.ExternalUrl.IsNullOrWhiteSpace())
+                            {
+                                <div class="event-popup">
+                                    <p>Eksternt arrangement</p>
+                                </div>
+                            }
+                            else if (el.RegistrationDate == DateTime.Today)
                             {
                                 <div class="event-popup">
                                     <p>Påmeldingen er åpen!</p>
