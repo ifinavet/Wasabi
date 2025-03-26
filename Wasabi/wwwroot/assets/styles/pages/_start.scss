@@ -122,7 +122,7 @@
 // ======================
 // UPCOMING EVENTS
 // ======================
-$card-width: 60vw;
+$card-width: 70vw;
 
 .container-upcoming-events {
   margin-block: 3rem;
@@ -143,7 +143,7 @@ $card-width: 60vw;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
 
     .carousel-wrapper {
       width: $card-width;
@@ -324,7 +324,7 @@ $card-width: 60vw;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: $default-card-gap / 2;
+      gap: calc($default-card-gap / 2);
 
       .board-member-photo {
         display: grid;
