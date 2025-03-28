@@ -17,10 +17,10 @@
     align-items: center;
 
     .leader {
-      max-width: $breakpoint-xl;
       flex-direction: row;
       gap: $default-card-gap;
       align-items: flex-start;
+      max-width: calc($breakpoint-xl * 1.1);
     }
   }
 }
@@ -58,6 +58,7 @@
       display: flex;
       flex-direction: column;
       gap: $default-card-gap;
+      width: 100%;
 
       .image {
         display: grid;
@@ -65,8 +66,7 @@
         background-color: $color-white;
         border-radius: $border-radius-round;
         aspect-ratio: 1 / 1;
-        width: 100%;
-        height: 100%;
+        width: 200%;
 
         img {
           margin: auto;
@@ -74,13 +74,30 @@
         }
       }
 
+      .promo-description p {
+        width: min(80ch, 100%);
+      }
     }
   }
 }
 
-@media screen and (min-width: $breakpoint-lg) {
+@media screen and (min-width: $breakpoint-md) {
+  .container-partner .partner .content {
+    .image {
+      margin: auto;
+      width: 55%;
+    }
+
+    .promo-description {
+      margin: auto;
+
+    }
+  }
+}
+
+@media screen and (min-width: $breakpoint-xl) {
   .container-partner {
-    width: 200%;
+    width: 100%;
     background-color: $color-background-almost-white;
     margin-block: 3rem;
     padding: 0;
@@ -113,6 +130,7 @@
 
         .image {
           flex-grow: 1;
+          width: 175%;
         }
       }
     }
@@ -178,7 +196,6 @@ $card-width: 70vw;
     height: 32rem;
     background-color: $color-white;
 
-
     .image {
       display: grid;
       width: 100%;
@@ -223,7 +240,7 @@ $card-width: 70vw;
 }
 
 @media screen and (min-width: $breakpoint-sm) {
-  $card-width: 300px;
+  $card-width: 400px;
   .container-upcoming-events .container-carousel .carousel-wrapper {
     width: $card-width;
   }
@@ -239,7 +256,7 @@ $card-width: 70vw;
 }
 
 @media screen and (min-width: $breakpoint-lg) {
-  $card-width: 350px;
+  $card-width: 400px;
   .container-upcoming-events .container-carousel .carousel-wrapper {
     width: $card-width;
   }
@@ -287,6 +304,89 @@ $card-width: 70vw;
 // ======================
 // ABOUT NAVET
 // ======================
+.about {
+  margin-top: $default-card-gap;
+
+  .container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+    justify-items: center;
+
+    .images {
+      height: 300px;
+      width: 300px;
+      overflow: hidden;
+
+      .floating-image {
+        width: 100%;
+        position: relative;
+
+        img {
+          margin: auto;
+          position: absolute;
+          aspect-ratio: 1 / 1;
+          width: 60%;
+          border-radius: $border-radius-round;
+        }
+
+        &:nth-child(1) {
+          top: 0;
+          left: 0;
+          z-index: 3;
+        }
+
+        &:nth-child(2) {
+          left: 25%;
+          top: 35%;
+          z-index: 1;
+        }
+      }
+    }
+
+    .content {
+      padding: $default-card-gap;
+
+      * {
+        color: $color-primary;
+      }
+
+      ul {
+        padding-left: 1.5rem;
+      }
+    }
+  }
+}
+
+.skyline {
+  width: 100%;
+  overflow: hidden;
+}
+
+@media screen and (min-width: $breakpoint-lg) {
+  .about {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .container {
+      max-width: 70%;
+
+      .images {
+        height: 500px;
+        width: 500px;
+      }
+    }
+  }
+
+  .skyline {
+    margin-top: $default-card-gap;
+    width: 100%;
+
+    img {
+      width: 100%;
+    }
+  }
+}
 
 // ======================
 // THE BOARD
@@ -296,7 +396,7 @@ $card-width: 70vw;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-block: 2rem;
+  padding-block: 2rem;
 
   .board-members-header h1 {
     color: $color-primary;
@@ -342,7 +442,7 @@ $card-width: 70vw;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: $default-card-gap / 2;
+        gap: calc($default-card-gap / 2);
         width: 100%;
 
         * {
@@ -382,3 +482,4 @@ $card-width: 70vw;
     width: 70vw;
   }
 }
+
