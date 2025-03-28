@@ -37,7 +37,7 @@ public class ImageService : IImageService
         string? placeHolder = _umbracoHelper.Media(1303)?.MediaUrl();
         return placeHolder ?? "data:,";
     }
-
+    
     /// <summary>
     ///     Retrieves the company image URL for a given company.
     /// </summary>
