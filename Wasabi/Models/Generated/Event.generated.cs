@@ -50,11 +50,12 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		// properties
 
 		///<summary>
-		/// Agelimit 18 year
+		/// Age limit
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "13.7.2+fd5b8de")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("agelimit18Year")]
-		public virtual bool Agelimit18Year => this.Value<bool>(_publishedValueFallback, "agelimit18Year");
+		public virtual string Agelimit18Year => this.Value<string>(_publishedValueFallback, "agelimit18Year");
 
 		///<summary>
 		/// Event date: Date and time of the event
@@ -70,6 +71,14 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("eventDescription")]
 		public virtual global::Umbraco.Cms.Core.Strings.IHtmlEncodedString EventDescription => this.Value<global::Umbraco.Cms.Core.Strings.IHtmlEncodedString>(_publishedValueFallback, "eventDescription");
+
+		///<summary>
+		/// Event Language: Specify the language the event is held in
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "13.7.2+fd5b8de")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("eventLanguage")]
+		public virtual string EventLanguage => this.Value<string>(_publishedValueFallback, "eventLanguage");
 
 		///<summary>
 		/// Event teaser: shown in list versions of events

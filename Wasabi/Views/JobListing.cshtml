@@ -1,64 +1,120 @@
 @using Umbraco.Cms.Core.Models.Blocks
-@inherits UmbracoViewPage<Wasabi.ViewModels.JobListings.JobListingViewModel>;
-@{
-    Layout = "_master.cshtml";
+@using Wasabi.Services
+@inherits UmbracoViewPage<Wasabi.ViewModels.JobListings.JobListingViewModel>
+@inject IImageService ImageService;
 
-    Company company = (Model.Employer as Company)!;
+@{
+    Layout = "_pages.cshtml";
+    string description = Model.JobTeaser ?? Model.Root().Value<string>("metaDescription")!;
+
+    // Event metadata
+    string dayOfWeek = Model.Deadline.ToString("dddd");
+    dayOfWeek = char.ToUpper(dayOfWeek[0]) + dayOfWeek[1..];
+
+    string companyLogoUrl = "https://wwww.ifinavet.no" + ImageService.GetCompanyImageUrl((Company?)Model.Employer);
 }
 
-<h1 class="center primary">@Umbraco.GetDictionaryValue("jobListing")</h1>
-<div class="container margin-bottom--large">
-    <div class="row natural-height">
-        <div class="col-xs-12 col-md-8 card">
-            <h2 class="job-title primary center">@company.Name</h2>
-            <div class="row center-xs">
-                <div class="col-xs-6 col-sm-5 event-meta job-meta">
-                    <span class="icon-clock2 icon-large"></span>
-                    <span class="sr-only">@Umbraco.GetDictionaryValue("jobApplicationDeadline")</span>
-                    <span>@Model.Deadline.ToShortDateString()</span>
-                </div>
-                <div class="col-xs-6 col-sm-5 event-meta job-meta">
-                    <div class="job-type-icon job-type-icon--@Model.JobType!.ToLower()"></div>
-                    <span class="sr-only">@Umbraco.GetDictionaryValue("jobType")</span>
-                    <span>@Umbraco.GetDictionaryValue(Model.JobType)</span>
-                </div>
+@section Head {
+    <meta name="description" content="@description"/>
+
+    @* meta tags for showing images on facebook *@
+    <meta property="og:image" content="@companyLogoUrl"/>
+    <meta property="og:image:secure_url" content="@companyLogoUrl"/>
+    <meta property="og:image:type" content="image/jpeg"/>
+    <meta property="og:title" content="@description"/>
+}
+
+@section titleText {
+    @Model.Name
+}
+
+
+<div class="page--content">
+    <main class="page--main">
+        @if (TempData["status"] != null)
+        {
+            <div class="card--error">
+                <p>@TempData["status"]</p>
             </div>
-            <a class="btn btn--accent" href="@Model.ApplicationUrl">@Umbraco.GetDictionaryValue("jobApplyCTA")</a>
-            <div class="spacer"></div>
-            @Model.JobDescription
-        </div>
-        <aside class="col-xs-12 col-sm-6 col-md-4">
-            <div class="company-card">
-                <div class="company-photo">
-                    <div class="round-frame">
-                        <img src="@company.CompanyLogo?.Url()" alt="@company.Name">
+        }
+        <div class="card card--metadata card--main">
+            <div class="metadata">
+                <div class="metadata-item">
+                    <div class="icon">
+                        <span class="material-symbols-rounded">
+                            event
+                        </span>
+                    </div>
+                    <div class="metadata-data">
+                        <span class="main-text-large semi-bold">
+                            @dayOfWeek @Model.Deadline.ToString("dd.MM")
+                        </span>
                     </div>
                 </div>
-                <div class="company-info">
-                    <h2>@company.Name</h2>
-                    <p>@company.CompanyDescription</p>
-                </div>
-                <h2 class="h3">
-                    @Umbraco.GetDictionaryValue("jobContactHeader")
-                </h2>
-                <div class="job-listing-contact-list">
-                    <ul>
-                        @foreach (BlockListItem block in Model.Value<IEnumerable<BlockListItem>>("ContactInfo")!)
-                        {
-                            IPublishedElement content = block.Content;
-
-                            @await Html.PartialAsync("blocklist/Components/" + content.ContentType.Alias, block)
-                        }
-                    </ul>
+                <div class="metadata-item">
+                    <div class="icon">
+                        <span class="material-symbols-rounded">
+                            map
+                        </span>
+                    </div>
+                    <div class="metadata-data">
+                        <span
+                            class="main-text-large semi-bold">@Umbraco.GetDictionaryValue(Model.JobType ?? string.Empty)</span>
+                    </div>
                 </div>
             </div>
-        </aside>
+            <div class="signup">
+                <div class="floating">
+                    <div class="container">
+                        <a class="btn--sign-up" href="@Model.ApplicationUrl">Søk Her</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card information">
+            <div class="teaser">
+                <h3>@Model.JobTeaser</h3>
+            </div>
+            <div class="description">
+                @Model.JobDescription
+            </div>
+        </div>
+    </main>
+    <aside class="page--aside">
+        <div class="card--company">
+            <div class="top-half">
+                <div class="cutout-effect">
+                    <div class="image-container-circle border-gray">
+                        <div class="image image--company">
+                            <img src="@ImageService.GetCompanyImageUrl((Company?)Model.Employer)"
+                                 alt="@Model.Employer?.Name">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="company-description bottom-half">
+                @Model.Employer?.GetProperty("CompanyDescription")?.GetValue()
+            </div>
+        </div>
+        <div class="contact-info-card">
+            <h3>Spørsmål til annonsen?</h3>
+            @foreach (BlockListItem item in Model.ContactInfo!)
+            {
+                ContactInfo content = (ContactInfo)item.Content;
+                <div class="contact-info-section">
+                    <h4>@content.ContactName</h4>
+                    <a href="mailto:@content.EMail">@content.EMail</a>
+                    <a href="tel:@content.ContactPhoneNumber">@content.ContactPhoneNumber</a>
+                </div>
+            }
+        </div>
+    </aside>
+</div>
+@if ((Model.JobListings.Hits ?? []).Any())
+{
+    <div class="container">
+        <h2 class="primary">@Umbraco.GetDictionaryValue("jobRelatedHeader") @Model.Employer?.Name</h2>
+        <div class="spacer"></div>
+        @await Html.PartialAsync("JobListings/JobListingsSearchResult", Model.JobListings)
     </div>
-</div>
-
-
-<div class="container">
-    <h2 class="primary">@Umbraco.GetDictionaryValue("jobRelatedHeader") @company.Name</h2>
-    <div class="spacer"></div>
-    @await Html.PartialAsync("JobListings/JobListingsSearchResult", Model.JobListings)
-</div>
+}

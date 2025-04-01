@@ -1,0 +1,49 @@
+@use "../base" as *;
+
+.description {
+  ul {
+    margin-left: 1.5rem;
+  }
+}
+
+.contact-info-card {
+  background-color: $color-background-contrast;
+  border-radius: $border-radius-default;
+  padding: $default-card-gap;
+  display: flex;
+  flex-direction: column;
+  gap: $default-card-gap;
+
+  h3 {
+    font-size: $text-size-xlarge;
+    font-family: Eina01-Bold, sans-serif;
+  }
+
+  .contact-info-section {
+    display: flex;
+    flex-direction: column;
+    
+    &:last-child:after {
+      content: '';
+      border: none;
+    }
+    
+    &:after {
+      content: '';
+      border: 1px solid $color-dark-gray;
+      align-self: stretch;
+    }
+
+    h4 {
+      font-size: $text-size-large;
+    }
+    
+    a {
+     margin: .5rem 0; 
+    }
+  }
+}
+
+.card .teaser {
+  margin-bottom: $default-card-gap;
+}
