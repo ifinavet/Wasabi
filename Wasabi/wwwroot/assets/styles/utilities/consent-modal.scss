@@ -1,0 +1,64 @@
+@use "../base" as *;
+
+.active {
+  display: flex;
+}
+
+.hidden {
+  display: none;
+}
+
+.consent-modal {
+  z-index: 100;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  flex-direction: column;
+  background: $color-background-primary; 
+  border: 1px solid $color-gray;
+  border-radius: $border-radius-default $border-radius-default 0 0;
+  padding-inline: $default-card-gap;
+  padding-block: calc($default-card-gap / 2);
+  width: min(600px, 100%);
+ 
+  h3 {
+    font-size: $text-size-large;
+  }
+  
+  p {
+    width: min(80ch, 100%);
+  }
+  
+  .buttons {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    gap: calc($default-card-gap / 2);
+
+    button {
+      padding-inline: 1rem;
+      padding-block: .7rem;
+    }
+
+    .accept-btn {
+      background: $color-primary;
+    }
+
+    .decline-btn {
+      background: $color-blue-secondary;
+    }
+  }
+}
+
+@media screen and (min-width: $breakpoint-md) {
+ .consent-modal {
+   bottom: 8px;
+   right: 8px;
+   border-radius: $border-radius-default;
+   
+   .buttons {
+     justify-content: flex-start;
+   }
+ } 
+}
+

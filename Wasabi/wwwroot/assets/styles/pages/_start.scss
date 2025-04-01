@@ -418,7 +418,7 @@ $card-width: 70vw;
     grid-template-columns: repeat( auto-fill, minmax(max($grid-item-min-width, #{$grid-item-max-width}), 1fr) );
     grid-gap: $grid-layout-gap;
     justify-content: flex-end;
-    padding-inline: $default-card-gap;
+    padding-inline: $default-card-gap*1.75;
 
     .board-member {
       display: flex;
@@ -461,6 +461,7 @@ $card-width: 70vw;
         }
 
         a {
+          font-size: $secondary-text-size;
           margin: 0;
           color: $color-green;
           word-break: break-word;
@@ -480,6 +481,9 @@ $card-width: 70vw;
 @media screen and (min-width: $breakpoint-lg) {
   .board-members-container .board-members {
     width: 70vw;
+    .board-member .board-member-photo {
+      width: 50%;
+    }
   }
 }
 

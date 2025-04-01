@@ -119,7 +119,7 @@
 <div class="job-listings-featured">
     <div class="container">
         <div class="cards">
-            @foreach (JobListing job in upcomingJobs!)
+            @foreach (JobListing job in upcomingJobs ?? [])
             {
                 <div>
                     @{ await Html.RenderPartialAsync("Job/JobCard", job); }
@@ -139,7 +139,7 @@
 <div class="about">
     <div class="container">
         <div class="images">
-            @foreach (MediaWithCrops image in Model.Images)
+            @foreach (MediaWithCrops image in Model.Images ?? [])
             {
                 <div class="floating-image">
                     <img src="@image.GetCropUrl("squear")" alt="Promo bilde" loading="lazy"/>
@@ -162,7 +162,7 @@
         <h1>Styret @currentSemester</h1>
     </div>
     <div class="board-members">
-        @foreach (IPublishedContent? publishedContent in Model.BoardMembers!)
+        @foreach (IPublishedContent? publishedContent in Model.BoardMembers ?? [])
         {
             StudentMember? member = (StudentMember)publishedContent;
             string memberEmail = member.Value<string>("Email") ?? string.Empty;
