@@ -1236,6 +1236,8 @@
         <TypeScriptCompile Include="wwwroot\assets\typescript\index.ts" />
         <TypeScriptCompile Include="wwwroot\assets\typescript\navigation.ts" />
         <TypeScriptCompile Include="wwwroot\assets\typescript\postHog\index.ts" />
+        <TypeScriptCompile Include="wwwroot\assets\typescript\tracking\consentModal.ts" />
+        <TypeScriptCompile Include="wwwroot\assets\typescript\tracking\index.ts" />
     </ItemGroup>
 
     <PropertyGroup>

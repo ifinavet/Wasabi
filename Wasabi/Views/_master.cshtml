@@ -36,6 +36,9 @@
     
     @* Posthog *@
     <script src="@Url.Content("~/assets/generated/js/postHog.js")" asp-append-version="true" type="text/javascript"></script>
+    
+    @* Tracking *@
+    <script src="@Url.Content("~/assets/generated/js/tracking.js")" asp-append-version="true" type="text/javascript" defer></script>
 </head>
 <body>
 @* Header *@
@@ -53,6 +56,18 @@
 <main id="app">
     @RenderBody()
 </main>
+
+@* Consent Modal *@
+<div id="ConsentModal" class="consent-modal">
+    <h3 class="header">Vi bruker informasjonskapsler🍪</h3>
+    <p>
+        Vi bruker informasjonskapsler (cookies) for å forbedre brukeropplevelsen, analysere trafikk og tilpasse innhold.
+    </p>
+    <div class="buttons">
+        <button class="accept-btn" onclick="handleConsent(true)">Godta alle cookies</button>
+        <button class="decline-btn" onclick="handleConsent(false)">Avslå cookies</button>
+    </div>
+</div>
 
 @* Footer *@
 <footer>
