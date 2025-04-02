@@ -1,2 +1,1 @@
-import './identify'
 import './consentModal'
