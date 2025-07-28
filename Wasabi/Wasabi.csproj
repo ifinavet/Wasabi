@@ -9,26 +9,26 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0"/>
-        <PackageReference Include="PostHog.AspNetCore" Version="1.0.3" />
-        <PackageReference Include="QRCoder" Version="1.6.0"/>
+        <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
+        <PackageReference Include="PostHog.AspNetCore" Version="1.0.7" />
+        <PackageReference Include="QRCoder" Version="1.6.0" />
         <PackageReference Include="Umbraco.Cms" Version="13.7.2" />
-        <PackageReference Include="uSync" Version="13.2.6"/>
-        <PackageReference Include="Yarp.ReverseProxy" Version="2.3.0"/>
+        <PackageReference Include="uSync" Version="13.2.6" />
+        <PackageReference Include="Yarp.ReverseProxy" Version="2.3.0" />
     </ItemGroup>
 
     <ItemGroup>
         <!-- Opt-in to app-local ICU to ensure consistent globalization APIs across different platforms -->
-        <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.3"/>
-        <PackageReference Include="Umbraco.StorageProviders.AzureBlob" Version="13.1.0"/>
-        <PackageReference Include="Umbraco.StorageProviders.AzureBlob.ImageSharp" Version="13.1.0"/>
-        <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="72.1.0.3" Condition="$(RuntimeIdentifier.StartsWith('linux')) or $(RuntimeIdentifier.StartsWith('win')) or ('$(RuntimeIdentifier)' == '' and !$([MSBuild]::IsOSPlatform('osx')))"/>
+        <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.3" />
+        <PackageReference Include="Umbraco.StorageProviders.AzureBlob" Version="13.1.0" />
+        <PackageReference Include="Umbraco.StorageProviders.AzureBlob.ImageSharp" Version="13.1.0" />
+        <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="72.1.0.3" Condition="$(RuntimeIdentifier.StartsWith('linux')) or $(RuntimeIdentifier.StartsWith('win')) or ('$(RuntimeIdentifier)' == '' and !$([MSBuild]::IsOSPlatform('osx')))" />
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Models\Generated\"/>
-        <Folder Include="wwwroot\assets\fonts\"/>
-        <Folder Include="wwwroot\assets\images\"/>
+        <Folder Include="Models\Generated\" />
+        <Folder Include="wwwroot\assets\fonts\" />
+        <Folder Include="wwwroot\assets\images\" />
         <Folder Include="wwwroot\umbraco\assets\" />
     </ItemGroup>
     
